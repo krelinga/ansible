@@ -1,0 +1,9 @@
+- name: Ping
+  hosts: rpic
+  tasks:
+    - name: Ping my hosts
+      ansible.builtin.ping:
+
+    - name: Print Message
+      ansible.builtin.debug:
+        msg: Ping Finished
