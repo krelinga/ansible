@@ -1,0 +1,14 @@
+rpic:
+  hosts:
+    rpic1:
+      ansible_host: rpic1.lan
+    rpic2:
+      ansible_host: rpic2.lan
+    rpic3:
+      ansible_host: rpic3.lan
+    rpic4:
+      ansible_host: rpic4.lan
+    rpic5:
+      ansible_host: rpic5.lan
+    rpic6:
+      ansible_host: rpic6.lan
