@@ -1,0 +1,6 @@
+- name: Power Off Rpic Cluster
+  hosts: rpic
+  become: true  # Run as root
+  tasks:
+    - name: power off
+      community.general.shutdown:
