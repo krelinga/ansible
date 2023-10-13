@@ -1,0 +1,10 @@
+- name: Get Uptime
+  hosts: rpic
+  tasks:
+    - name: Read uptimes
+      ansible.builtin.shell: cut -d ' ' -f 1 /proc/uptime
+      register: uptime
+
+    - name: Print Message
+      ansible.builtin.debug:
+        msg: "Uptime: {{ uptime.stdout }}"
