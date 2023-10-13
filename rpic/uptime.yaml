@@ -10,4 +10,4 @@
 
     - name: Print Message
       ansible.builtin.debug:
-        msg: "Uptime: {{ uptime.stdout }}"
+        msg: "Uptime: {{ (uptime.stdout | int) }} seconds / {{ (uptime.stdout | int) / (60 * 60) }} hours"
