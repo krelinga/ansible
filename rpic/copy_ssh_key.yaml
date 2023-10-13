@@ -1,0 +1,9 @@
+- name: Copy SSH Key
+  hosts: rpic
+  tasks:
+    - name: Copy SSH Key
+      ansible.posix.authorized_key:
+        user: krelinga
+        state: present
+        key: "{{ lookup('file', '/home/krelinga/.ssh/id_rsa_rpic.pub') }}"
+
