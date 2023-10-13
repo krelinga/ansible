@@ -4,6 +4,9 @@
     - name: Read uptimes
       ansible.builtin.shell: cut -d ' ' -f 1 /proc/uptime
       register: uptime
+      # Ansible can't detect the changed status of shell commands very
+      # accurately, so we hint that this will never result in a change.
+      changed_when: false
 
     - name: Print Message
       ansible.builtin.debug:
