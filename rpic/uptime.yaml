@@ -1,5 +1,6 @@
 - name: Get Uptime
   hosts: rpic
+  gather_facts: false
   tasks:
     - name: Read uptimes
       ansible.builtin.shell: cut -d ' ' -f 1 /proc/uptime
