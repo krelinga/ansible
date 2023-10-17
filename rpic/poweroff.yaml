@@ -1,5 +1,6 @@
 - name: Power Off Rpic Cluster
   hosts: rpic
+  gather_facts: false
   become: true  # Run as root
   tasks:
     - name: power off
