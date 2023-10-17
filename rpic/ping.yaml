@@ -1,5 +1,6 @@
 - name: Ping
   hosts: rpic
+  gather_facts: false
   tasks:
     - name: Ping my hosts
       ansible.builtin.ping:
