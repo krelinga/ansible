@@ -1,5 +1,6 @@
 - name: Copy SSH Key
   hosts: rpic
+  gather_facts: false
   tasks:
     - name: Copy SSH Key
       ansible.posix.authorized_key:
