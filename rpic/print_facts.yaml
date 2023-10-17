@@ -1,0 +1,6 @@
+- name: Print Facts
+  hosts: rpic
+  tasks:
+    - name: Print Facts
+      ansible.builtin.debug:
+        var: ansible_facts
