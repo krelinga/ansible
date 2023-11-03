@@ -3,7 +3,7 @@
   gather_facts: false
   tasks:
     - name: Read uptimes
-      ansible.builtin.shell: cut -d ' ' -f 1 /proc/uptime
+      ansible.builtin.shell: uptime -p
       register: uptime
       # Ansible can't detect the changed status of shell commands very
       # accurately, so we hint that this will never result in a change.
@@ -11,4 +11,4 @@
 
     - name: Print Message
       ansible.builtin.debug:
-        msg: "Uptime: {{ (uptime.stdout | int) }} seconds / {{ (uptime.stdout | int) / (60 * 60) }} hours"
+        msg: "Uptime: {{ uptime.stdout }}"
