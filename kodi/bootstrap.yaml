@@ -26,3 +26,9 @@
       # Not using ansible.builtin.user because it seems to not support changing passwords in busybox.
       ansible.builtin.shell: '{ echo "{{ new_root_password }}"; echo "{{ new_root_password }}"; } | passwd'
       no_log: true
+
+    - name: Copy Argon One V2 Setup Script
+      ansible.builtin.copy:
+        src: data/argonone-setup-libreelec.sh
+        dest: /storage/argonone-setup-libreelec.sh
+        mode: 0500
