@@ -46,3 +46,8 @@
       ansible.builtin.reboot:
       when: run_setup_script is changed
 
+    - name: Copy Remote Zip File
+      ansible.builtin.copy:
+        src: data/ArgonRemote.zip
+        dest: /storage/ArgonRemote.zip
+        mode: 0400
