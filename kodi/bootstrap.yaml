@@ -9,10 +9,6 @@
       prompt: new root password (leave empty to skip)
       private: false
 
-    - name: kodi_smb_password
-      prompt: kodi SMB password
-      private: false
-
   hosts: '{{ host_to_bootstrap }}'
   gather_facts: false
   tasks:
