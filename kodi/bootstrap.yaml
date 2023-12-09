@@ -32,3 +32,10 @@
         src: data/argonone-setup-libreelec.sh
         dest: /storage/argonone-setup-libreelec.sh
         mode: 0500
+
+    - name: Run Argone One V2 Setup Script
+      ansible.builtin.shell:
+        chdir: /storage
+        cmd: ./argonone-setup-libreelec.sh && touch setup_script_done
+        creates: /storage/setup_script_done
+
