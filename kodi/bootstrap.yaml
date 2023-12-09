@@ -39,3 +39,6 @@
         cmd: ./argonone-setup-libreelec.sh && touch setup_script_done
         creates: /storage/setup_script_done
 
+    - name: Reboot after Argon One V2 Setup Script
+      ansible.builtin.reboot:
+
