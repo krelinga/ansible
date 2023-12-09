@@ -23,5 +23,6 @@
         key: "{{ lookup('file', '/home/krelinga/.ssh/id_rsa_kodi_root.pub') }}"
 
     - name: Set Root Password
+      # Not using ansible.builtin.user because it seems to not support changing passwords in busybox.
       ansible.builtin.shell: '{ echo "{{ new_root_password }}"; echo "{{ new_root_password}}"; } | passwd'
-      # no_log: true
+      no_log: true
