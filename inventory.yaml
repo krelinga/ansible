@@ -14,3 +14,13 @@ rpic:
       ansible_host: rpic6.lan
   vars:
     ansible_ssh_private_key_file: /home/krelinga/.ssh/id_rsa_rpic
+
+kodi:
+  hosts:
+    kodi2:
+      ansible_host: 192.168.86.123  # this has a .local name, but I run this from inside a VM.
+  vars:
+    ansible_ssh_private_key_file: /home/krelinga/.ssh/id_rsa_kodi_root
+    ansible_user: root
+    ansible_password: libreelec  # default password, first playbook run will change it.
+    ansible_python_interpreter: /usr/bin/python3.11

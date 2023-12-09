@@ -1,0 +1,27 @@
+- name: Bootstrap
+
+  vars_prompt:
+    - name: host_to_bootstrap
+      prompt: which host to bootstrap?  Must match inventory.
+      private: false
+
+    - name: new_root_password
+      prompt: new root password
+      private: false
+
+    - name: kodi_smb_password
+      prompt: kodi SMB password
+      private: false
+
+  hosts: '{{ host_to_bootstrap }}'
+  gather_facts: false
+  tasks:
+    - name: Copy SSH Key
+      ansible.posix.authorized_key:
+        user: root
+        state: present
+        key: "{{ lookup('file', '/home/krelinga/.ssh/id_rsa_kodi_root.pub') }}"
+
+    - name: Set Root Password
+      ansible.builtin.shell: '{ echo "{{ new_root_password }}"; echo "{{ new_root_password}}"; } | passwd'
+      # no_log: true
