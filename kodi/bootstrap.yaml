@@ -24,5 +24,5 @@
 
     - name: Set Root Password
       # Not using ansible.builtin.user because it seems to not support changing passwords in busybox.
-      ansible.builtin.shell: '{ echo "{{ new_root_password }}"; echo "{{ new_root_password}}"; } | passwd'
+      ansible.builtin.shell: '{ echo "{{ new_root_password }}"; echo "{{ new_root_password }}"; } | passwd'
       no_log: true
