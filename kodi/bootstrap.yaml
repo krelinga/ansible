@@ -40,7 +40,9 @@
         chdir: /storage
         cmd: ./argonone-setup-libreelec.sh && touch setup_script_done
         creates: /storage/setup_script_done
+      register: run_setup_script
 
     - name: Reboot after Argon One V2 Setup Script
       ansible.builtin.reboot:
+      when: run_setup_script is changed
 
