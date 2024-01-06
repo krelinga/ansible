@@ -1,0 +1,10 @@
+- name: Ping
+  hosts: localdev
+  gather_facts: false
+  tasks:
+    - name: Ping my hosts
+      ansible.builtin.ping:
+
+    - name: Print Message
+      ansible.builtin.debug:
+        msg: Ping Finished
