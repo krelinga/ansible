@@ -22,3 +22,15 @@
     - name: apt autoremove
       ansible.builtin.apt:
         autoremove: yes
+
+    - name: install apt packages
+      ansible.builtin.apt:
+        pkg:
+          - git
+          - tmux
+
+    - name: install neovim
+      community.general.snap:
+        classic: true
+        channel: beta
+        name: nvim
