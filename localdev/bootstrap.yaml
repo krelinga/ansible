@@ -90,4 +90,6 @@
     - name: set up dotfiles
       ansible.builtin.shell: |
         cd /home/krelinga && git init && git remote add origin https://github.com/krelinga/dotfiles.git && git fetch && git checkout -f main
+      args:
+        creates: /home/krelinga/.dotfiles-repo-was-setup
       become: false
