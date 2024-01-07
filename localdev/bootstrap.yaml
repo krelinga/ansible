@@ -11,6 +11,10 @@
       prompt: email address git git configuration?  Leave empty to skip.
       private: false
 
+    - name: github_access_token
+      prompt: github access token?  Leave empty to skip.
+      private: false
+
   tasks:
     - name: apt update
       ansible.builtin.apt:
@@ -60,6 +64,21 @@
         value: '{{ git_email }}'
       become: false
       when: git_email | length > 0
+
+    - name: set git credential config
+      community.general.git_config:
+        scope: global
+        name: credential.helper
+        value: store
+      become: false
+
+    - name: store github credentials
+      ansible.builtin.copy:
+        content: 'https://krelinga:{{ github_access_token }}@github.com'
+        dest: /home/krelinga/.git-credentials
+        mode: "0600"
+      become: false
+      when: github_access_token | length > 0
 
     - name: set git default branch
       community.general.git_config:
