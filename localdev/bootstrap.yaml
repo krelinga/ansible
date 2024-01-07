@@ -48,6 +48,8 @@
       args:
         creates: /home/krelinga/.config/tmux/plugins/tpm
       become: false
+      notify:
+        - tmux_plugin_manager_manual
 
     - name: install neovim
       community.general.snap:
@@ -99,3 +101,8 @@
       args:
         creates: /home/krelinga/.dotfiles-repo-was-setup
       become: false
+
+  handlers:
+    - name: tmux_plugin_manager_manual
+      ansible.builtin.pause:
+        prompt: 'log in to localdev, start tmux, and type "CTRL-b I"'
