@@ -43,6 +43,12 @@
           - git
           - tmux
 
+    - name: install tmux plugin manager
+      ansible.builtin.shell: git clone https://github.com/tmux-plugins/tpm /home/krelinga/.config/tmux/plugins/tpm
+      args:
+        creates: /home/krelinga/.config/tmux/plugins/tpm
+      become: false
+
     - name: install neovim
       community.general.snap:
         classic: true
