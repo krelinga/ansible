@@ -1,6 +1,16 @@
 - name: Bootstrap Localdev
   hosts: localdev
   become: true  # Run as root
+
+  vars_prompt:
+    - name: git_real_name
+      prompt: real name for git configuration?  Leave empty to skip.
+      private: false
+
+    - name: git_email
+      prompt: email address git git configuration?  Leave empty to skip.
+      private: false
+
   tasks:
     - name: apt update
       ansible.builtin.apt:
@@ -34,3 +44,26 @@
         classic: true
         channel: beta
         name: nvim
+
+    - name: set git real name
+      community.general.git_config:
+        scope: global
+        name: user.name
+        value: '{{ git_real_name }}'
+      become: false
+      when: git_real_name | length > 0
+
+    - name: set git email
+      community.general.git_config:
+        scope: global
+        name: user.email
+        value: '{{ git_email }}'
+      become: false
+      when: git_email | length > 0
+
+    - name: set git default branch
+      community.general.git_config:
+        scope: global
+        name: init.defaultBranch
+        value: main
+      become: false
