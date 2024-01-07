@@ -86,3 +86,8 @@
         name: init.defaultBranch
         value: main
       become: false
+
+    - name: set up dotfiles
+      ansible.builtin.shell: |
+        cd /home/krelinga && git init && git remote add origin https://github.com/krelinga/dotfiles.git && git fetch && git checkout -f main
+      become: false
