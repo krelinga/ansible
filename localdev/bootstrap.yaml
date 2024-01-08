@@ -58,6 +58,8 @@
         classic: true
         channel: beta
         name: nvim
+      notify:
+        - nvim_lazy_manual
 
     - name: set git real name
       community.general.git_config:
@@ -103,8 +105,16 @@
       args:
         creates: /home/krelinga/.dotfiles-repo-was-setup
       become: false
+      notify:
+        - tmux_plugin_manager_manual
+        - nvim_lazy_manual
 
   handlers:
     - name: tmux_plugin_manager_manual
       ansible.builtin.pause:
         prompt: 'log in to localdev, start tmux, and type "CTRL-b I"'
+
+    # per https://www.lazyvim.org/installation
+    - name: nvim_lazy_manual
+      ansible.builtin.pause:
+        prompt: 'log in to localdev, start nvim, and type ":checkhealth"'
