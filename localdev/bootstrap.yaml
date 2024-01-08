@@ -121,13 +121,31 @@
 
     - name: set up dotfiles
       ansible.builtin.shell: |
-        cd /home/krelinga && git init && git remote add origin https://github.com/krelinga/dotfiles.git && git fetch && git checkout -f main
+        cd /home/krelinga && \
+        git init && \
+        git remote add origin https://github.com/krelinga/dotfiles.git && \
+        git fetch && \
+        git checkout -f main
       args:
         creates: /home/krelinga/.dotfiles-repo-was-setup
       become: false
       notify:
         - tmux_plugin_manager_manual
         - nvim_lazy_manual
+
+    - name: install go 21.5
+      ansible.builtin.shell: |
+        curl -L https://go.dev/dl/go1.21.5.linux-arm64.tar.gz > /root/go1.21.5.linux-arm64.tar.gz && \
+        tar -C /usr/local -xzf /root/go1.21.5.linux-arm64.tar.gz && \
+        rm /root/go1.21.5.linux-arm64.tar.gz
+      args:
+        creates: /usr/local/go
+
+    - name: add go binaries to $PATH
+      ansible.builtin.copy:
+        content: 'export PATH=$PATH:/usr/local/go/bin'
+        dest: /etc/profile.d/go.sh
+        mode: "0644"
 
   handlers:
     - name: tmux_plugin_manager_manual
