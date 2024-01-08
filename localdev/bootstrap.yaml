@@ -43,6 +43,25 @@
           - git
           - tmux
           - spice-vdagent  # needed by utm per https://docs.getutm.app/guest-support/linux/#spice-agent
+          - bindfs  # needed by mount commands below
+
+    # per https://docs.getutm.app/guest-support/linux/#virtfs
+    - name: set up /mnt/share_raw using UTM shared file system
+      ansible.posix.mount:
+        src: share
+        path: /mnt/share_raw
+        fstype: 9p
+        opts: trans=virtio,version=9p2000.L,rw,_netdev,nofail
+        state: mounted
+
+    # per https://docs.getutm.app/guest-support/linux/#fixing-permission-errors
+    - name: set up /mnt/share using bindfs to fix UTM sharing permission errors
+      ansible.posix.mount:
+        src: /mnt/share_raw
+        path: /mnt/share
+        fstype: fuse.bindfs
+        opts: map=501/1000:@20/@1000,x-systemd.requires=/mnt/share_raw
+        state: mounted
 
     # https://github.com/tmux-plugins/tpm
     - name: install tmux plugin manager
