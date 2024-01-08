@@ -133,6 +133,7 @@
         - tmux_plugin_manager_manual
         - nvim_lazy_manual
 
+    # per https://go.dev/doc/install
     - name: install go 21.5
       ansible.builtin.shell: |
         curl -L https://go.dev/dl/go1.21.5.linux-arm64.tar.gz > /root/go1.21.5.linux-arm64.tar.gz && \
