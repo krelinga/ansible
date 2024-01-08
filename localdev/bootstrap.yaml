@@ -15,11 +15,12 @@
       prompt: github access token?  Leave empty to skip.
       private: false
 
-  tasks:
-    - name: apt update
+  pre_tasks:
+    - name: attempt apt update
       ansible.builtin.apt:
         update_cache: true
 
+  tasks:
     - name: apt upgrade
       ansible.builtin.apt:
         upgrade: full
