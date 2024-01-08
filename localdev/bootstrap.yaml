@@ -42,6 +42,7 @@
         pkg:
           - git
           - tmux
+          - spice-vdagent  # needed by utm per https://docs.getutm.app/guest-support/linux/#spice-agent
 
     # https://github.com/tmux-plugins/tpm
     - name: install tmux plugin manager
