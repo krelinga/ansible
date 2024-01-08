@@ -16,10 +16,23 @@
       private: false
 
   pre_tasks:
-    - name: attempt apt update
-      ansible.builtin.apt:
-        update_cache: true
-        cache_valid_time: 3600  # 1 hour
+    # Sometimes the system clock on UTM Ubuntu VMs can get out of sync, restarting seems to help.
+    - name: apt update (including possible timesyncd restart)
+      block:
+        - name: apt update without restarting timesyncd
+          ansible.builtin.apt:
+            update_cache: true
+            cache_valid_time: 3600  # 1 hour
+      rescue:
+        - name: restart timesyncd
+          ansible.builtin.systemd_service:
+            name: systemd-timesyncd.service
+            state: restarted
+
+        - name: apt update after restarting timesyncd
+          ansible.builtin.apt:
+            update_cache: true
+            cache_valid_time: 3600  # 1 hour
 
   tasks:
     - name: apt upgrade
