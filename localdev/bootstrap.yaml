@@ -11,10 +11,6 @@
       prompt: email address git git configuration?  Leave empty to skip.
       private: false
 
-    - name: github_access_token
-      prompt: github access token?  Leave empty to skip.
-      private: false
-
   pre_tasks:
     # Sometimes the system clock on UTM Ubuntu VMs can get out of sync, restarting seems to help.
     - name: apt update (including possible timesyncd restart)
@@ -118,21 +114,6 @@
       become: false
       when: git_email | length > 0
 
-    - name: set git credential config
-      community.general.git_config:
-        scope: global
-        name: credential.helper
-        value: store
-      become: false
-
-    - name: store github credentials
-      ansible.builtin.copy:
-        content: 'https://krelinga:{{ github_access_token }}@github.com'
-        dest: /home/krelinga/.git-credentials
-        mode: "0600"
-      become: false
-      when: github_access_token | length > 0
-
     - name: set git default branch
       community.general.git_config:
         scope: global
@@ -144,7 +125,7 @@
       ansible.builtin.shell: |
         cd /home/krelinga && \
         git init && \
-        git remote add origin https://github.com/krelinga/dotfiles.git && \
+        git remote add origin git@github.com:krelinga/dotfiles.git && \
         git fetch && \
         git checkout -f main
       args:
