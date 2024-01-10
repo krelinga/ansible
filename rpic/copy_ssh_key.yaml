@@ -6,5 +6,5 @@
       ansible.posix.authorized_key:
         user: krelinga
         state: present
-        key: "{{ lookup('file', '/home/krelinga/.ssh/id_rsa_rpic.pub') }}"
+        key: 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICtJUwp8OISxPLaekC9cD9DBi6j6JXoMAll6dUeoH+uK'
 
