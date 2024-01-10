@@ -62,6 +62,8 @@
           - spice-vdagent  # needed by utm per https://docs.getutm.app/guest-support/linux/#spice-agent
           - bindfs  # needed by mount commands below
           - gcc  # LazyVim really wants this.
+          - pipx  # needed for ansible
+          - sshpass  # needed for ansible
 
     # per https://docs.getutm.app/guest-support/linux/#virtfs
     - name: set up /mnt/share_raw using UTM shared file system
@@ -195,6 +197,16 @@
         groups:
           - docker
         name: krelinga
+
+    - name: ensure that pipx is included in our PATH
+      ansible.builtin.shell: pipx ensurepath
+      become: false
+
+    - name: install ansible suite of tools.
+      community.general.pipx:
+        name: ansible
+        install_deps: true
+      become: false
 
   handlers:
     - name: tmux_plugin_manager_manual
