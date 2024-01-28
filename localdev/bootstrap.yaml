@@ -129,7 +129,7 @@
         cd /home/krelinga && \
         git init && \
         git remote add origin git@github.com:krelinga/dotfiles.git && \
-        git fetch && \
+        GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no" git fetch && \
         git checkout -f main
       args:
         creates: /home/krelinga/.dotfiles-repo-was-setup
