@@ -29,11 +29,11 @@
       become: false
 
     # https://github.com/neovim/neovim/blob/master/INSTALL.md#snap
-    - name: install neovim
-      community.general.snap:
-        classic: true
-        channel: beta
-        name: nvim
+#    - name: install neovim
+#      community.general.snap:
+#        classic: true
+#        channel: beta
+#        name: nvim
 
     - name: set git real name
       community.general.git_config:
