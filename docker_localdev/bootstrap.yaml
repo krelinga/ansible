@@ -68,9 +68,6 @@
       args:
         creates: /home/krelinga/.dotfiles-repo-was-setup
       become: false
-      notify:
-        - tmux_plugin_manager_manual
-        - nvim_lazy_manual
 
     # per https://go.dev/doc/install
     - name: install go 21.5
