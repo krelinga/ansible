@@ -58,16 +58,16 @@
         value: main
       become: false
 
-    - name: set up dotfiles
-      ansible.builtin.shell: |
-        cd /home/krelinga && \
-        git init && \
-        git remote add origin git@github.com:krelinga/dotfiles.git && \
-        GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no" git fetch && \
-        git checkout -f main
-      args:
-        creates: /home/krelinga/.dotfiles-repo-was-setup
-      become: false
+#    - name: set up dotfiles
+#      ansible.builtin.shell: |
+#        cd /home/krelinga && \
+#        git init && \
+#        git remote add origin git@github.com:krelinga/dotfiles.git && \
+#        GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no" git fetch && \
+#        git checkout -f main
+#      args:
+#        creates: /home/krelinga/.dotfiles-repo-was-setup
+#      become: false
 
     # per https://go.dev/doc/install
     - name: install go 21.5
