@@ -1,6 +1,23 @@
 - name: Bootstrap
   become: true
   hosts: ripper
+
+  vars:
+      pb_user: krelinga
+      makemkv_storage_dir: "/home/{{ pb_user }}/makemkv"
+      makemkv_config_dir: "{{ makemkv_storage_dir }}/config"
+      makemkv_output_dir: "{{ makemkv_storage_dir }}/output"
+      devices:
+        - number: 1
+          device: "/dev/disk/by-path/platform-1000110000.pcie-pci-0000:01:00.0-ata-6"
+          devnum: 2
+        - number: 2
+          device: "/dev/disk/by-path/platform-1000110000.pcie-pci-0000:01:00.0-ata-2"
+          devnum: 0
+        - number: 3
+          device: "/dev/disk/by-path/platform-1000110000.pcie-pci-0000:01:00.0-ata-4"
+          devnum: 1
+
   pre_tasks:
     # See https://github.com/raspberrypi/linux/issues/6214
     - name: Work-around SATA controller issue
@@ -23,10 +40,58 @@
     - role: geerlingguy.docker
       vars:
         docker_users:
-          - krelinga
+          - "{{ pb_user }}"
 
     - role: geerlingguy.pip
       vars:
         pip_install_packages:
           - name: docker
             state: present
+
+
+  tasks:
+    - name: Create makeMKV directories
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: directory
+        recurse: true
+        mode: "0755"
+      with_items:
+        - "{{ makemkv_storage_dir }}"
+        - "{{ makemkv_config_dir }}"
+        - "{{ makemkv_output_dir }}"
+
+    - name: Create per-device symbolic links
+      ansible.builtin.file:
+        src: "{{ item.device }}"
+        dest: "/dev/dvd{{ item.number }}"
+        owner: root
+        group: root
+        state: link
+      with_items: "{{ devices }}"
+
+    - name: Set up makeMKV containers
+      community.docker.docker_container:
+        name: "makeMKV-{{ item.number }}"
+        image: jlesage/makemkv
+        ports:
+          - "580{{ item.number }}:5800"
+        devices:
+          - "/dev/sr{{ item.devnum }}:/dev/sr0"
+          - "/dev/sg{{ item.devnum }}:/dev/sg0"
+        env:
+          DARK_MODE: "1"
+        mounts:
+          - type: bind
+            target: /config
+            read_only: false
+            source: "{{ makemkv_config_dir }}"
+          - type: bind
+            target: /storage
+            read_only: true
+            source: "{{ makemkv_storage_dir }}"
+          - type: bind
+            target: /output
+            read_only: false
+            source: "{{ makemkv_output_dir }}"
+      with_items: "{{ devices }}"
