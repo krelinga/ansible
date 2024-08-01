@@ -12,8 +12,6 @@ rpic:
       ansible_host: rpic5.lan
     rpic6:
       ansible_host: rpic6.lan
-  vars:
-    ansible_ssh_private_key_file: /home/krelinga/.ssh/id_rsa_rpic
 
 kodi:
   hosts:
