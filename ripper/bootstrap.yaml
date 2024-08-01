@@ -1,7 +1,7 @@
 - name: Bootstrap
+  become: true
   hosts: ripper
-  gather_facts: false
-  tasks:
+  pre_tasks:
     # See https://github.com/raspberrypi/linux/issues/6214
     - name: Work-around SATA controller issue
       ansible.builtin.lineinfile:
@@ -18,3 +18,9 @@
     - name: Reboot after config.txt changes
       ansible.builtin.reboot:
       when: changed_config_txt is changed
+
+  roles:
+    - role: geerlingguy.docker
+      vars:
+        docker_users:
+          - krelinga
