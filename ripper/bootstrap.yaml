@@ -24,3 +24,9 @@
       vars:
         docker_users:
           - krelinga
+
+    - role: geerlingguy.pip
+      vars:
+        pip_install_packages:
+          - name: docker
+            state: present
