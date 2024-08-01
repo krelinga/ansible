@@ -81,6 +81,8 @@
           - "/dev/sg{{ item.devnum }}:/dev/sg0"
         env:
           DARK_MODE: "1"
+          DISPLAY_WIDTH: "1280"
+          DISPLAY_HEIGHT: "720"
         mounts:
           - type: bind
             target: /config
