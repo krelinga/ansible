@@ -31,3 +31,8 @@ workstations:
       ansible_host: 192.168.64.8
     localdev2:
       ansible_host: 192.168.64.9
+
+ripper:
+  hosts:
+    ripper1:
+      ansible_host: ripper.local
