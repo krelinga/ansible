@@ -1,0 +1,20 @@
+- name: Bootstrap
+  hosts: ripper
+  gather_facts: false
+  tasks:
+    # See https://github.com/raspberrypi/linux/issues/6214
+    - name: Work-around SATA controller issue
+      ansible.builtin.lineinfile:
+        dest: /boot/firmware/config.txt
+        line: "{{ item }}"
+        search_string: "{{ item }}"
+        insertafter: EOF
+        state: present
+      with_items:
+        - "dtparam=pcie-32bit-dma-pi5"
+        - "dtoverlay=pciex1-compat-pi5,no-mip"
+      register: changed_config_txt
+
+    - name: Reboot after config.txt changes
+      ansible.builtin.reboot:
+      when: changed_config_txt is changed
