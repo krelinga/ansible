@@ -23,13 +23,6 @@ kodi:
     ansible_password: libreelec  # default password, first playbook run will change it.
     ansible_python_interpreter: /usr/bin/python3.11
 
-workstations:
-  hosts:
-    localdev:
-      ansible_host: 192.168.64.8
-    localdev2:
-      ansible_host: 192.168.64.9
-
 ripper:
   hosts:
     ripper1:
