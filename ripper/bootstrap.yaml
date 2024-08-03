@@ -13,15 +13,14 @@
       makemkv_storage_dir: "/home/{{ pb_user }}/makemkv"
       makemkv_config_dir: "{{ makemkv_storage_dir }}/config"
       devices:
-        - number: 1
-          device: "/dev/disk/by-path/platform-1000110000.pcie-pci-0000:01:00.0-ata-6"
-          devnum: 2
-        - number: 2
-          device: "/dev/disk/by-path/platform-1000110000.pcie-pci-0000:01:00.0-ata-2"
+        - number: 0
           devnum: 0
-        - number: 3
-          device: "/dev/disk/by-path/platform-1000110000.pcie-pci-0000:01:00.0-ata-4"
+        - number: 2
           devnum: 1
+        - number: 3
+          devnum: 2
+        - number: 4
+          devnum: 3
 
   pre_tasks:
     # See https://github.com/raspberrypi/linux/issues/6214
@@ -64,15 +63,6 @@
       with_items:
         - "{{ makemkv_storage_dir }}"
         - "{{ makemkv_config_dir }}"
-
-    - name: Create per-device symbolic links
-      ansible.builtin.file:
-        src: "{{ item.device }}"
-        dest: "/dev/dvd{{ item.number }}"
-        owner: root
-        group: root
-        state: link
-      with_items: "{{ devices }}"
 
     - name: Set up makeMKV containers
       community.docker.docker_container:
