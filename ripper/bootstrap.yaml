@@ -2,11 +2,16 @@
   become: true
   hosts: ripper
 
+  vars_prompt:
+    - name: smb_password
+      prompt: "SMB password for {{ smb_user }}?"
+      private: true
+
   vars:
       pb_user: krelinga
+      smb_user: ripper
       makemkv_storage_dir: "/home/{{ pb_user }}/makemkv"
       makemkv_config_dir: "{{ makemkv_storage_dir }}/config"
-      makemkv_output_dir: "{{ makemkv_storage_dir }}/output"
       devices:
         - number: 1
           device: "/dev/disk/by-path/platform-1000110000.pcie-pci-0000:01:00.0-ata-6"
@@ -59,7 +64,6 @@
       with_items:
         - "{{ makemkv_storage_dir }}"
         - "{{ makemkv_config_dir }}"
-        - "{{ makemkv_output_dir }}"
 
     - name: Create per-device symbolic links
       ansible.builtin.file:
@@ -83,6 +87,7 @@
           DARK_MODE: "1"
           DISPLAY_WIDTH: "1280"
           DISPLAY_HEIGHT: "720"
+        restart_policy: "unless-stopped"
         mounts:
           - type: bind
             target: /config
@@ -92,8 +97,12 @@
             target: /storage
             read_only: true
             source: "{{ makemkv_storage_dir }}"
-          - type: bind
+          - type: volume
             target: /output
             read_only: false
-            source: "{{ makemkv_output_dir }}"
+            volume_driver: local
+            volume_options:
+              type: cifs
+              device: "//192.168.86.46/media/Rip"
+              o: "username={{ smb_user }},password={{ smb_password }},file_mode=0666,dir_mode=0777"
       with_items: "{{ devices }}"
