@@ -14,15 +14,15 @@
       makemkv_config_dir: "{{ makemkv_storage_dir }}/config"
       devices:
         - number: 0
-          devnum: 0
-        - number: 1
           devnum: 1
-        - number: 2
+        - number: 1
           devnum: 2
-        - number: 3
+        - number: 2
           devnum: 3
-        - number: 4
+        - number: 3
           devnum: 4
+        - number: 4
+          devnum: 0
 
   pre_tasks:
     # See https://github.com/raspberrypi/linux/issues/6214
