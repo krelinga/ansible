@@ -14,33 +14,15 @@
       makemkv_config_dir: "{{ makemkv_storage_dir }}/config"
       devices:
         - number: 0
-          devnum: 1
+          devnum: 0
         - number: 1
-          devnum: 2
+          devnum: 1
         - number: 2
           devnum: 3
         - number: 3
-          devnum: 4
+          devnum: 2
         - number: 4
-          devnum: 0
-
-  pre_tasks:
-    # See https://github.com/raspberrypi/linux/issues/6214
-    - name: Work-around SATA controller issue
-      ansible.builtin.lineinfile:
-        dest: /boot/firmware/config.txt
-        line: "{{ item }}"
-        search_string: "{{ item }}"
-        insertafter: EOF
-        state: present
-      with_items:
-        - "dtparam=pcie-32bit-dma-pi5"
-        - "dtoverlay=pciex1-compat-pi5,no-mip"
-      register: changed_config_txt
-
-    - name: Reboot after config.txt changes
-      ansible.builtin.reboot:
-      when: changed_config_txt is changed
+          devnum: 4
 
   roles:
     - role: geerlingguy.docker
