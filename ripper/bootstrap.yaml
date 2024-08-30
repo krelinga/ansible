@@ -6,6 +6,9 @@
     - name: smb_password
       prompt: "SMB password for {{ smb_user }}?"
       private: true
+    - name: makemkv_key
+      prompt: "MakeMKV key"
+      private: true
 
   vars:
       pb_user: krelinga
@@ -61,6 +64,7 @@
           DARK_MODE: "1"
           DISPLAY_WIDTH: "1280"
           DISPLAY_HEIGHT: "720"
+          MAKEMKV_KEY: "{{ makemkv_key }}"
         restart_policy: "unless-stopped"
         mounts:
           - type: bind
