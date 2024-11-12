@@ -1,4 +1,6 @@
 rpic:
+  vars:
+    ansible_user: krelinga
   hosts:
     rpic1:
       ansible_host: rpic1.lan
@@ -24,6 +26,8 @@ kodi:
     ansible_python_interpreter: /usr/bin/python3.11
 
 ripper:
+  vars:
+    ansible_user: krelinga
   hosts:
     ripper1:
       ansible_host: ripper.local
