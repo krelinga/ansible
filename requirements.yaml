@@ -1,2 +1,6 @@
-- name: geerlingguy.docker
-- name: geerlingguy.pip
+roles:
+  - name: geerlingguy.docker
+  - name: geerlingguy.pip
+
+collections:
+  - name: bitwarden.secrets
