@@ -7,7 +7,7 @@
 	"features": {
 		"ghcr.io/hspaans/devcontainer-features/ansible-lint:1": {},
 		"ghcr.io/devcontainers-extra/features/ansible:2": {}
-	}
+	},
 
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	// "features": {},
@@ -16,7 +16,7 @@
 	// "forwardPorts": [],
 
 	// Use 'postCreateCommand' to run commands after the container is created.
-	// "postCreateCommand": "uname -a",
+	"postCreateCommand": "ansible-galaxy install -r requirements.yml"
 
 	// Configure tool-specific properties.
 	// "customizations": {},
