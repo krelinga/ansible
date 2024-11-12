@@ -16,7 +16,7 @@
 	// "forwardPorts": [],
 
 	// Use 'postCreateCommand' to run commands after the container is created.
-	"postCreateCommand": "ansible-galaxy install -r requirements.yml"
+	"postCreateCommand": "ansible-galaxy install -r requirements.yaml"
 
 	// Configure tool-specific properties.
 	// "customizations": {},
