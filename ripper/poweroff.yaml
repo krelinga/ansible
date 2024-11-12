@@ -1,0 +1,7 @@
+- name: Power Off Ripper
+  hosts: ripper
+  gather_facts: false
+  become: true  # Run as root
+  tasks:
+    - name: power off
+      community.general.shutdown:
