@@ -2,15 +2,11 @@
   become: true
   hosts: ripper
 
-  vars_prompt:
-    - name: makemkv_key
-      prompt: "MakeMKV key"
-      private: true
-
   vars:
       pb_user: krelinga
       smb_user: ripper
       smb_password: "{{ lookup('bitwarden.secrets.lookup', '23b52464-2823-4a8c-b12d-b226005e1616') }}"
+      makemkv_key: "{{ lookup('bitwarden.secrets.lookup', 'b5487785-5cad-4b40-af7b-b226007567ec') }}"
       makemkv_storage_dir: "/home/{{ pb_user }}/makemkv"
       makemkv_config_dir: "{{ makemkv_storage_dir }}/config"
       devices:
