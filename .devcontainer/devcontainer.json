@@ -9,6 +9,10 @@
 		"ghcr.io/devcontainers-extra/features/ansible:2": {}
 	},
 
+	"remoteEnv": {
+		"BWS_ACCESS_TOKEN": "${localEnv:BWS_ACCESS_TOKEN:no_bws_access_token_set}"
+	},
+
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],
 
