@@ -6,7 +6,9 @@
 	"image": "mcr.microsoft.com/devcontainers/base:jammy",
 	"features": {
 		"ghcr.io/hspaans/devcontainer-features/ansible-lint:1": {},
-		"ghcr.io/devcontainers-extra/features/ansible:2": {}
+		"ghcr.io/devcontainers-extra/features/ansible:2": {},
+		// Needed for password authentication for SSH.
+		"ghcr.io/hspaans/devcontainer-features/sshpass:1": {}
 	},
 
 	"remoteEnv": {
