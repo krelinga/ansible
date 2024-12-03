@@ -36,5 +36,7 @@ terminals:
   vars:
     ansible_user: krelinga
   hosts:
+    # Note that this requires the command line developer
+    # tools to be installed on the Mac.
     slothair:
       ansible_host: sloth-air.local
