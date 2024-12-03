@@ -31,3 +31,10 @@ ripper:
   hosts:
     ripper1:
       ansible_host: ripper.local
+
+terminals:
+  vars:
+    ansible_user: krelinga
+  hosts:
+    slothair:
+      ansible_host: sloth-air.local
