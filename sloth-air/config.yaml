@@ -26,3 +26,12 @@
   roles:
     - geerlingguy.mac.homebrew
     - geerlingguy.mac.mas
+
+  tasks:
+    - name: Set Scroll Direction
+      community.general.osx_defaults:
+        domain: "Apple Global Domain"
+        key: "com.apple.swipescrolldirection"
+        type: boolean
+        value: false
+        state: present
