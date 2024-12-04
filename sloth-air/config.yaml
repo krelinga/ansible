@@ -58,6 +58,12 @@
           type: boolean
           value: true
 
+    # Sound > Play sound on startup
+    - name: Disable Startup Sound
+      ansible.builtin.command:
+        cmd: "nvram StartupMute=%01"
+      become: true
+
 # TODOs:
-# - Sound > Play sound on startup
 # - Desktop & Dock > Show suggested and recent apps in the Dock
+# - Keyboard > Keyboard Shortcuts > Modifier Keys > Caps Lock key
