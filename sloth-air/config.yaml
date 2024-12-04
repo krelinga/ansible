@@ -36,11 +36,13 @@
         value: "{{ item.value }}"
         state: present
       with_items:
-        - domain: "Apple Global Domain"
+        - setting: "Trackpad > Scroll & Zoom > Natural Scrolling"
+          domain: "Apple Global Domain"
           key: "com.apple.swipescrolldirection"
           type: boolean
           value: false
-        - domain: "Apple Global Domain"
+        - setting: "Sound > Alert Volume"
+          domain: "Apple Global Domain"
           key: "com.apple.sound.beep.volume"
           type: float
           value: 0
