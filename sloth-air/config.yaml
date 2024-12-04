@@ -11,6 +11,7 @@
       # TODO: update docs for this ... their default example is broken.
       # Note that only previously installed apps will be reinstallable.
       - {id: 585829637, name: "Todoist"}
+      - {id: 1352778147, name: "Bitwarden"}
 
     homebrew_cask_apps:
       - docker
