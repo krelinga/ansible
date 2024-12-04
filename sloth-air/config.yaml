@@ -15,6 +15,7 @@
     homebrew_cask_apps:
       - docker
       - vlc
+      - visual-studio-code
 
     ansible_become_password: "{{ ansible_become_password }}"
     mas_signin_dialog: true
