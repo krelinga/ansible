@@ -17,6 +17,7 @@
       - docker
       - vlc
       - visual-studio-code
+      - obsidian
 
     ansible_become_password: "{{ ansible_become_password }}"
     mas_signin_dialog: true
