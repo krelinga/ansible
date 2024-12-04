@@ -28,6 +28,7 @@
     - geerlingguy.mac.mas
 
   tasks:
+    # TODO: detect changes and prompt for a logout & login.
     - name: Set OSX Defaults
       community.general.osx_defaults:
         domain: "{{ item.domain }}"
@@ -51,3 +52,8 @@
           key: "com.apple.sound.uiaudio.enabled"
           type: integer
           value: 0
+        - setting: "Desktop & Dock > Automatically hide and show the Dock"
+          domain: "com.apple.dock"
+          key: "autohide"
+          type: boolean
+          value: true
