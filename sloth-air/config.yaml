@@ -28,10 +28,15 @@
     - geerlingguy.mac.mas
 
   tasks:
-    - name: Set Scroll Direction
+    - name: Set OSX Defaults
       community.general.osx_defaults:
-        domain: "Apple Global Domain"
-        key: "com.apple.swipescrolldirection"
-        type: boolean
-        value: false
+        domain: "{{ item.domain }}"
+        key: "{{ item.key }}"
+        type: "{{ item.type }}"
+        value: "{{ item.value }}"
         state: present
+      with_items:
+        - domain: "Apple Global Domain"
+          key: "com.apple.swipescrolldirection"
+          type: boolean
+          value: false
