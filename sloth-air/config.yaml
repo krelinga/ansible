@@ -57,3 +57,7 @@
           key: "autohide"
           type: boolean
           value: true
+
+# TODOs:
+# - Sound > Play sound on startup
+# - Desktop & Dock > Show suggested and recent apps in the Dock
