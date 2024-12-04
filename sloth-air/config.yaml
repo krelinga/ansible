@@ -40,3 +40,7 @@
           key: "com.apple.swipescrolldirection"
           type: boolean
           value: false
+        - domain: "Apple Global Domain"
+          key: "com.apple.sound.beep.volume"
+          type: float
+          value: 0
