@@ -46,3 +46,8 @@
           key: "com.apple.sound.beep.volume"
           type: float
           value: 0
+        - setting: "Sound > Play user interface sound effects"
+          domain: "Apple Global Domain"
+          key: "com.apple.sound.uiaudio.enabled"
+          type: integer
+          value: 0
