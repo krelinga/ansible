@@ -12,12 +12,27 @@
       # Note that only previously installed apps will be reinstallable.
       - {id: 585829637, name: "Todoist"}
       - {id: 1352778147, name: "Bitwarden"}
+      - {id: 379693831, name: "Audible"}
+      - {id: 1508892116, name: "Infinity Army"}
+      - {id: 1246969117, name: "Steam Link"}
 
     homebrew_cask_apps:
       - docker
       - vlc
       - visual-studio-code
       - obsidian
+      - balenaetcher
+      - discord
+      - handbrake
+      - kodi
+      - raspberry-pi-imager
+      - shapr3d
+      - signal
+      - steam
+      - tailscale
+      - tinymediamanager
+      - zoom
+      - iterm2
 
     ansible_become_password: "{{ ansible_become_password }}"
     mas_signin_dialog: true
