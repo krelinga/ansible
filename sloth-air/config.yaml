@@ -34,6 +34,9 @@
       - zoom
       - iterm2
 
+    homebrew_installed_packages:
+      - openjdk  # needed for TinyMediaManager
+
     ansible_become_password: "{{ ansible_become_password }}"
     mas_signin_dialog: true
     mas_signin_user: "krelinga@gmail.com"
@@ -41,3 +44,14 @@
   roles:
     - geerlingguy.mac.homebrew
     - geerlingguy.mac.mas
+
+  tasks:
+    - name: Set up Java symlink
+      become: yes
+      ansible.builtin.file:
+        src: /opt/homebrew/opt/openjdk/libexec/openjdk.jdk
+        dest: /Library/Java/JavaVirtualMachines/openjdk.jdk
+        state: link
+        owner: root
+        group: wheel
+        mode: 0755
