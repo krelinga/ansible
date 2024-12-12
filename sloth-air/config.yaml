@@ -10,10 +10,10 @@
     mas_installed_apps:
       # TODO: update docs for this ... their default example is broken.
       # Note that only previously installed apps will be reinstallable.
+      # Until https://github.com/mas-cli/mas/issues/321 is fixed I won't be
+      # able to install apps intended for iphone or ipad.
       - {id: 585829637, name: "Todoist"}
       - {id: 1352778147, name: "Bitwarden"}
-      - {id: 379693831, name: "Audible"}
-      - {id: 1508892116, name: "Infinity Army"}
       - {id: 1246969117, name: "Steam Link"}
 
     homebrew_cask_apps:
