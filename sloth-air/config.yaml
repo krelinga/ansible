@@ -68,7 +68,7 @@
     - name: Copy allowed SSH Public keys from Github
       ansible.builtin.copy:
         dest: "/Users/{{ ansible_user }}/.ssh/authorized_keys"
-        content: "{{ lookup('ansible.builtin.url', 'https://github.com/krelinga.keys') }}"
+        content: "{{ lookup('ansible.builtin.url', 'https://github.com/krelinga.keys', split_lines=false) }}"
         mode: "0600"
 
     - name: Create homedir folders
