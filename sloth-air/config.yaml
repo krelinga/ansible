@@ -104,3 +104,12 @@
         mode: "0644"
         owner: root
         group: wheel
+
+    - name: Update zsh PATH variable
+      ansible.builtin.lineinfile:
+        line: "{{ item }}"
+        state: present
+        path: "/Users/{{ ansible_user }}/.zshenv"
+      loop:
+        - 'export PATH="$PATH:/Users/{{ ansible_user }}/macbin"'
+        - 'export PATH="$PATH:/opt/homebrew/bin"'
