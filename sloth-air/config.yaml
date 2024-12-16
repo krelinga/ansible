@@ -70,3 +70,37 @@
         dest: "/Users/{{ ansible_user }}/.ssh/authorized_keys"
         content: "{{ lookup('ansible.builtin.url', 'https://github.com/krelinga.keys') }}"
         mode: "0600"
+
+    - name: Create homedir folders
+      ansible.builtin.file:
+        path: "/Users/{{ ansible_user }}/{{ item }}"
+        state: directory
+        mode: "0755"
+      loop:
+        - "macbin"
+        - "root_links"
+        - "root_links/host"
+        - "root_links/nas"
+        - "test"
+
+    - name: Create Root Links
+      ansible.builtin.file:
+        src: "{{ item.src }}"
+        dest: "/Users/{{ ansible_user }}/root_links/{{ item.dest }}"
+        state: link
+        mode: "0755"
+      loop:
+        - { dest: "host/Movies", src: "/Users/{{ ansible_user }}/Movies/" }
+        - { dest: "host/macbin", src: "/Users/{{ ansible_user }}/macbin/" }
+        - { dest: "host/test", src: "/Users/{{ ansible_user }}/test/" }
+        - { dest: "nas/media", src: "/Volumes/media/" }
+
+    - name: Write links to root filesystem
+      become: true
+      ansible.builtin.copy:
+        dest: "/etc/synthetic.conf"
+        content: "host\t/Users/{{ ansible_user }}/host\n\
+          nas\t/Users/{{ ansible_user }}/nas\n"
+        mode: "0644"
+        owner: root
+        group: wheel
