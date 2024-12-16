@@ -99,8 +99,8 @@
       become: true
       ansible.builtin.copy:
         dest: "/etc/synthetic.conf"
-        content: "host\t/Users/{{ ansible_user }}/host\n\
-          nas\t/Users/{{ ansible_user }}/nas\n"
+        content: "host\t/Users/{{ ansible_user }}/root_links/host\n\
+          nas\t/Users/{{ ansible_user }}/root_links/nas\n"
         mode: "0644"
         owner: root
         group: wheel
