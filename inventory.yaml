@@ -40,3 +40,5 @@ terminals:
     # tools to be installed on the Mac.
     slothair:
       ansible_host: sloth-air.local
+    slothmini:
+      ansible_host: 10.86.14.63
