@@ -75,6 +75,6 @@
             volume_driver: local
             volume_options:
               type: cifs
-              device: "//192.168.86.46/media/Rip"
+              device: "//10.86.14.55/media/Rip"
               o: "username={{ smb_user }},password={{ smb_password }},file_mode=0666,dir_mode=0777"
       with_items: "{{ devices }}"
