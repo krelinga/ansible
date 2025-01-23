@@ -39,6 +39,6 @@ terminals:
     # Note that this requires the command line developer
     # tools to be installed on the Mac.
     slothair:
-      ansible_host: sloth-air.local
+      ansible_host: m3-macbook-air.i.krel.ing
     slothmini:
-      ansible_host: 10.86.14.63
+      ansible_host: m4-mac-mini.i.krel.ing
