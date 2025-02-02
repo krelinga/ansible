@@ -1,0 +1,16 @@
+- name: Ping
+  hosts: wifi
+  gather_facts: false
+  roles:
+    - gekmihesg.openwrt
+
+  vars:
+    openwrt_install_recommended_packages: false
+
+  tasks:
+    - name: Ping Wifi Access Points
+      ansible.builtin.ping:
+
+    - name: Print Message
+      ansible.builtin.debug:
+        msg: Ping Finished

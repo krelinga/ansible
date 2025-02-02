@@ -2,6 +2,7 @@ roles:
   - name: geerlingguy.docker
   - name: geerlingguy.pip
   - name: elliotweiser.osx-command-line-tools
+  - name: gekmihesg.openwrt
 
 collections:
   - name: bitwarden.secrets

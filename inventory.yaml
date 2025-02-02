@@ -42,3 +42,16 @@ terminals:
       ansible_host: m3-macbook-air.i.krel.ing
     slothmini:
       ansible_host: m4-mac-mini.i.krel.ing
+
+wifi:
+  hosts:
+    lr-wifi:
+      ansible_host: lr-wifi.i.krel.ing
+    attic-wifi:
+      ansible_host: attic-wifi.i.krel.ing
+
+openwrt:
+  vars:
+    ansible_user: root
+  children:
+    wifi:
