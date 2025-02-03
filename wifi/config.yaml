@@ -16,6 +16,15 @@
         group: root
         mode: "0600"
 
+    - name: disable DNS and DHCPD
+      service:
+        name: "{{ item }}"
+        enabled: no
+        state: stopped
+      loop:
+        - dnsmasq
+        - odhcpd
+
     - name: Revert any uncommittted UCI changes
       uci:
         command: revert
