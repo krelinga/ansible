@@ -1,0 +1,4 @@
+- name: Config Wifi APs
+  hosts: wifi
+  roles:
+    - gekmihesg.openwrt
