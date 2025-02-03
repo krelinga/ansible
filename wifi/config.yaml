@@ -51,14 +51,18 @@
         value: "{{ item }}"
       loop: "{{ existing_dns.result_list }}"
       when: "has_existing_dns and item != dns_server"
-      notify: UCI Commit
+      notify:
+        - UCI Commit
+        - Restart Network Service
     - name: Add the desired non-default DNS server
       uci:
         command: add_list
         key: network.lan.dns
         value: "{{ dns_server }}"
         unique: true
-      notify: UCI Commit
+      notify:
+        - UCI Commit
+        - Restart Network Service
 
     # uci set dhcp.lan.ignore='1'
     - name: Get list of existing DHCP options
@@ -116,4 +120,9 @@
     - name: Restart System Service
       service:
         name: system
+        state: restarted
+
+    - name: Restart Network Service
+      service:
+        name: network
         state: restarted
