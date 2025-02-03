@@ -51,6 +51,29 @@
         unique: true
       notify: UCI Commit
 
+    # uci set dhcp.lan.ignore='1'
+    - name: Get list of existing DHCP options
+      uci:
+        command: show
+        key: dhcp.lan
+      register: existing_dhcp_config
+    - name: Check if the option to ignore LAN for DHCP is already set
+      set_fact:
+        has_existing_dhcp_ignore: "{{ 'dhcp.lan.ignore' in existing_dhcp_config.result }}"
+    - name: Get current value of DHCP LAN ignore option
+      uci:
+        command: get
+        key: dhcp.lan.ignore
+      register: existing_dhcp_ignore
+      when: has_existing_dhcp_ignore
+    - name: Set the DHCP LAN ignore option
+      uci:
+        command: set
+        key: dhcp.lan.ignore
+        value: '1'
+      notify: UCI Commit
+      when: "not has_existing_dhcp_ignore or existing_dhcp_ignore.result != '1'"
+
   handlers:
     - name: UCI Commit
       uci:
