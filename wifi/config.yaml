@@ -11,3 +11,8 @@
         owner: root
         group: root
         mode: "0600"
+
+    # uci add_list network.lan.dns='10.86.14.1'
+    # - name: Disable local DHCP server on LAN interface
+    #   uci:
+    #     command: add_list
