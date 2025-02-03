@@ -74,7 +74,37 @@
       notify: UCI Commit
       when: "not has_existing_dhcp_ignore or existing_dhcp_ignore.result != '1'"
 
+    # uci set 'system.@system[0].hostname=test'
+    - name: Get list of existing system options
+      uci:
+        command: show
+        key: system
+      register: existing_system_config
+    - name: Check if the hostname is already set
+      set_fact:
+        has_existing_hostname: "{{ 'system.@system[0].hostname' in existing_system_config.result }}"
+    - name: Get current value of hostname
+      uci:
+        command: get
+        key: "system.@system[0].hostname"
+      register: existing_hostname
+      when: has_existing_hostname
+    - name: Set the hostname
+      uci:
+        command: set
+        key: "system.@system[0].hostname"
+        value: "{{ inventory_hostname }}"
+      notify:
+        - UCI Commit
+        - Restart System Service
+      when: "not has_existing_hostname or existing_hostname.result != inventory_hostname"
+
   handlers:
     - name: UCI Commit
       uci:
         command: commit
+
+    - name: Restart System Service
+      service:
+        name: system
+        state: restarted
