@@ -12,7 +12,42 @@
         group: root
         mode: "0600"
 
+    - name: Revert any uncommittted UCI changes
+      uci:
+        command: revert
+
     # uci add_list network.lan.dns='10.86.14.1'
-    # - name: Disable local DHCP server on LAN interface
-    #   uci:
-    #     command: add_list
+    - name: Get list of exisitng LAN config options
+      uci:
+        command: show
+        key: network.lan
+      register: existing_lan_config
+    - name: Check if any non-default DNS servers are already configured
+      set_fact:
+        has_existing_dns: "{{ 'network.lan.dns' in existing_lan_config.result }}"
+    - name: Get exisitng non-default DNS servers
+      uci:
+        command: get
+        key: network.lan.dns
+      register: existing_dns
+      when: has_existing_dns
+    - name: Delete any unwanted non-default DNS servers
+      uci:
+        command: del_list
+        key: network.lan.dns
+        value: "{{ item }}"
+      loop: "{{ existing_dns.result_list }}"
+      when: "has_existing_dns and item != '10.86.14.1'"
+      notify: UCI Commit
+    - name: Add the desired non-default DNS server
+      uci:
+        command: add_list
+        key: network.lan.dns
+        value: '10.86.14.1'
+        unique: true
+      notify: UCI Commit
+
+  handlers:
+    - name: UCI Commit
+      uci:
+        command: commit
