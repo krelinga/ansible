@@ -1,5 +1,9 @@
 - name: Config Wifi APs
   hosts: wifi
+
+  vars:
+    dns_server: '10.86.14.1'
+
   roles:
     - gekmihesg.openwrt
 
@@ -37,13 +41,13 @@
         key: network.lan.dns
         value: "{{ item }}"
       loop: "{{ existing_dns.result_list }}"
-      when: "has_existing_dns and item != '10.86.14.1'"
+      when: "has_existing_dns and item != dns_server"
       notify: UCI Commit
     - name: Add the desired non-default DNS server
       uci:
         command: add_list
         key: network.lan.dns
-        value: '10.86.14.1'
+        value: "{{ dns_server }}"
         unique: true
       notify: UCI Commit
 
