@@ -49,6 +49,7 @@
       community.docker.docker_container:
         name: "makeMKV-{{ item.number }}"
         image: jlesage/makemkv
+        pull: yes
         ports:
           - "580{{ item.number }}:5800"
         devices:
