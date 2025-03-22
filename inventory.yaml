@@ -55,3 +55,10 @@ openwrt:
     ansible_user: root
   children:
     wifi:
+
+pve:
+  vars:
+    ansible_user: root
+  hosts:
+    nas-pve:
+      ansible_host: nas-pve.i.krel.ing
