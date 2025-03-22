@@ -1,0 +1,31 @@
+- name: Config
+  hosts: nas-pve
+
+  tasks:
+    - name: Enable IOMMU
+      ansible.builtin.lineinfile:
+        path: "/etc/default/grub"
+        regexp: '^GRUB_CMDLINE_LINUX_DEFAULT='
+        line: 'GRUB_CMDLINE_LINUX_DEFAULT="quiet intel_iommu=on"'
+        state: present
+      notify: Update grub
+
+    - name: Update Grub and Reboot if Necessary
+      ansible.builtin.meta: flush_handlers
+
+    - name: Download TrueNAS ISO
+      ansible.builtin.command:
+        cmd: "wget -O /var/lib/vz/template/iso/TrueNAS-13.0-U6.7.iso https://download-core.sys.truenas.net/13.0/STABLE/U6.7/x64/TrueNAS-13.0-U6.7.iso"
+      args:
+        creates: /var/lib/vz/template/iso/TrueNAS-13.0-U6.7.iso
+
+  handlers:
+    - name: Update grub
+      ansible.builtin.command:
+        cmd: "update-grub"
+      notify: Reboot
+
+    - name: Reboot
+      ansible.builtin.reboot:
+        reboot_timeout: 300
+        test_command: uptime
