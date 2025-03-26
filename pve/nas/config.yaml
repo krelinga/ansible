@@ -19,40 +19,6 @@
       args:
         creates: /var/lib/vz/template/iso/TrueNAS-13.0-U6.7.iso
 
-    # - name: Create VM for TrueNAS
-    #   community.general.proxmox:
-    #     api_host: "nas-pve.i.krel.ing"  # TODO: use inventory_hostname?
-    #     api_user: "root@pam"
-    #     api_password: "{{ lookup('bitwarden.secrets.lookup', 'fdce36ca-8c9f-42d6-8343-b2a801787fad') }}"
-    #     password: "{{ lookup('bitwarden.secrets.lookup', 'fdce36ca-8c9f-42d6-8343-b2a801787fad') }}"
-    #     hostname: "truenas"
-    #     node: "nas"
-    #     vmid: 100
-    #     memory: 65536
-    #     cores: 10
-    #     disk: "local-lvm:100G"
-    #     #net: "virtio,bridge=vmbr0"
-    #     # cdrom: "local:iso/TrueNAS-13.0-U6.7.iso"
-    #     # boot: "cd"
-    #     onboot: true
-    #     state: present
-    #   delegate_to: localhost
-    #   notify: restart TrueNAS VM
-
-    # - name: Add CDROM to TrueNAS VM
-    #   community.general.proxmox_disk:
-    #     api_host: "nas-pve.i.krel.ing"
-    #     api_user: "root@pam"
-    #     api_password: "{{ lookup('bitwarden.secrets.lookup', 'fdce36ca-8c9f-42d6-8343-b2a801787fad') }}"
-    #     password: "{{ lookup('bitwarden.secrets.lookup', 'fdce36ca-8c9f-42d6-8343-b2a801787fad') }}"
-    #     vmid: 100
-    #     disk: ide2
-    #     media: cdrom
-    #     iso_image: "local:iso/TrueNAS-13.0-U6.7.iso"
-    #     state: present
-    #   delegate_to: localhost
-    #   notify: restart TrueNAS VM
-
     - name: Detect SATA Controller
       ansible.builtin.shell:
         cmd: 'lspci -nnk | grep -i sata | grep -e "^[[:digit:]]" | cut -d " " -f 1'
@@ -103,21 +69,6 @@
         cpu: 'x86-64-v2-AES'
         hostpci: "{{ sata_controller_map }}"
       delegate_to: localhost
-    
-
-
-
-
-
-    # - name: Configure PCI passthrough for TrueNAS
-    #   ansible.builtin.lineinfile:
-    #     path: "/etc/pve/qemu-server/100.conf"
-    #     line: "hostpci{{ pcinum }}: {{ item }}"
-    #     state: present
-    #   loop: "{{ sata_controller_list.result_list }}"
-    #   loop_control:
-    #     index_var: pcinum
-    #   notify: restart TrueNAS VM
 
   handlers:
     - name: Update grub
