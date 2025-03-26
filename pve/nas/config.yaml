@@ -33,7 +33,7 @@
       ansible.builtin.set_fact:
         sata_controller_values: "{{ sata_controller.stdout_lines | map('regex_replace', '^(.*)', '0000:\\1') }}"
 
-    - name: Split SATA Controller info into lines
+    - name: Define SATA Controller Passthrough Map
       ansible.builtin.set_fact:
         sata_controller_map: >-
           {{ sata_controller_values |
