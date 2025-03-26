@@ -1,3 +1,4 @@
+# Note: this needs to be run with --ask-pass, as we assume that the root password is set to something temporary.
 - name: Bootstrap
   hosts: nas-pve
 
@@ -7,4 +8,10 @@
         dest: "/root/.ssh/authorized_keys"
         content: "{{ lookup('ansible.builtin.url', 'https://github.com/krelinga.keys', split_lines=false) }}"
         mode: "0600"
+      
+    - name: Set Root Password
+      ansible.builtin.user:
+        name: root
+        password: "{{ lookup('bitwarden.secrets.lookup', 'fdce36ca-8c9f-42d6-8343-b2a801787fad') | password_hash('sha512') }}"
+        state: present
   
