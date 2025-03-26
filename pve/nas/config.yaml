@@ -61,7 +61,7 @@
           sata0: 'local-lvm:100'
           sata1: 'local:iso/TrueNAS-13.0-U6.7.iso,media=cdrom'
         net:
-          net0: "virtio,bridge=vmbr0,firewall=1"
+          net0: "virtio={{ mac_address }},bridge=vmbr0,firewall=1"
         cores: 10
         memory: 65536
         onboot: true

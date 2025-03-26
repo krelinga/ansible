@@ -62,3 +62,4 @@ pve:
   hosts:
     nas-pve:
       ansible_host: nas-pve.i.krel.ing
+      mac_address: BC:24:11:28:F3:E1
