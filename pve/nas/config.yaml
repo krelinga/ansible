@@ -78,7 +78,7 @@
 
     - name: Reboot
       ansible.builtin.reboot:
-        reboot_timeout: 300
+        reboot_timeout: 600
         test_command: uptime
 
     - name: Manual Setup
