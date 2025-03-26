@@ -19,6 +19,102 @@
       args:
         creates: /var/lib/vz/template/iso/TrueNAS-13.0-U6.7.iso
 
+    # - name: Create VM for TrueNAS
+    #   community.general.proxmox:
+    #     api_host: "nas-pve.i.krel.ing"  # TODO: use inventory_hostname?
+    #     api_user: "root@pam"
+    #     api_password: "{{ lookup('bitwarden.secrets.lookup', 'fdce36ca-8c9f-42d6-8343-b2a801787fad') }}"
+    #     password: "{{ lookup('bitwarden.secrets.lookup', 'fdce36ca-8c9f-42d6-8343-b2a801787fad') }}"
+    #     hostname: "truenas"
+    #     node: "nas"
+    #     vmid: 100
+    #     memory: 65536
+    #     cores: 10
+    #     disk: "local-lvm:100G"
+    #     #net: "virtio,bridge=vmbr0"
+    #     # cdrom: "local:iso/TrueNAS-13.0-U6.7.iso"
+    #     # boot: "cd"
+    #     onboot: true
+    #     state: present
+    #   delegate_to: localhost
+    #   notify: restart TrueNAS VM
+
+    # - name: Add CDROM to TrueNAS VM
+    #   community.general.proxmox_disk:
+    #     api_host: "nas-pve.i.krel.ing"
+    #     api_user: "root@pam"
+    #     api_password: "{{ lookup('bitwarden.secrets.lookup', 'fdce36ca-8c9f-42d6-8343-b2a801787fad') }}"
+    #     password: "{{ lookup('bitwarden.secrets.lookup', 'fdce36ca-8c9f-42d6-8343-b2a801787fad') }}"
+    #     vmid: 100
+    #     disk: ide2
+    #     media: cdrom
+    #     iso_image: "local:iso/TrueNAS-13.0-U6.7.iso"
+    #     state: present
+    #   delegate_to: localhost
+    #   notify: restart TrueNAS VM
+
+    - name: Detect SATA Controller
+      ansible.builtin.shell:
+        cmd: 'lspci -nnk | grep -i sata | grep -e "^[[:digit:]]" | cut -d " " -f 1'
+      register: sata_controller
+      changed_when: false
+
+    - name: Define SATA Controller Passthrough Keys
+      ansible.builtin.set_fact:
+        sata_controller_keys: "{{ range(0, sata_controller.stdout_lines | length) | map('string') | map('regex_replace', '^(.*)', 'hostpci\\1') }}"
+
+    - name: Print SATA Controller Passthrough Keys
+      ansible.builtin.debug:
+        msg: "SATA Controller Passthrough Keys: {{ sata_controller_keys }}"
+
+    - name: Split SATA Controller info into lines
+      ansible.builtin.set_fact:
+        sata_controller_list: >-
+          {{ sata_controller.stdout_lines |
+             zip(sata_controller_keys) |
+             map('reverse') |
+             community.general.dict }}
+    
+    - name: print SATA Controller
+      ansible.builtin.debug:
+        msg: "SATA Controller: {{ sata_controller_list }}"
+
+    # - name: Create VM for TrueNAS
+    #   community.general.proxmox_kvm:
+    #     api_host: "nas-pve.i.krel.ing"  # TODO: use inventory_hostname?
+    #     api_user: "root@pam"
+    #     api_password: "{{ lookup('bitwarden.secrets.lookup', 'fdce36ca-8c9f-42d6-8343-b2a801787fad') }}"
+    #     name: truenas
+    #     node: nas
+    #     vmid: 100
+    #     sata:
+    #       sata0: 'local-lvm:100'
+    #       sata1: 'local:iso/TrueNAS-13.0-U6.7.iso,media=cdrom'
+    #     net:
+    #       net0: "virtio,bridge=vmbr0,firewall=1"
+    #     cores: 10
+    #     memory: 65536
+    #     onboot: true
+    #     ostype: other
+    #     cpu: 'x86-64-v2-AES'
+    #     hostpci: 
+    #   delegate_to: localhost
+    
+
+
+
+
+
+    # - name: Configure PCI passthrough for TrueNAS
+    #   ansible.builtin.lineinfile:
+    #     path: "/etc/pve/qemu-server/100.conf"
+    #     line: "hostpci{{ pcinum }}: {{ item }}"
+    #     state: present
+    #   loop: "{{ sata_controller_list.result_list }}"
+    #   loop_control:
+    #     index_var: pcinum
+    #   notify: restart TrueNAS VM
+
   handlers:
     - name: Update grub
       ansible.builtin.command:
@@ -29,3 +125,13 @@
       ansible.builtin.reboot:
         reboot_timeout: 300
         test_command: uptime
+
+    - name: restart TrueNAS VM
+      community.general.proxmox:
+        api_host: "nas-pve.i.krel.ing"
+        api_user: "root@pam"
+        api_password: "{{ lookup('bitwarden.secrets.lookup', 'fdce36ca-8c9f-42d6-8343-b2a801787fad') }}"
+        password: "{{ lookup('bitwarden.secrets.lookup', 'fdce36ca-8c9f-42d6-8343-b2a801787fad') }}"
+        vmid: 100
+        state: restarted
+      delegate_to: localhost
