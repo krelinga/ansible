@@ -1,0 +1,15 @@
+- name: Bootstrap
+  hosts: truenas
+
+  tasks:
+    - name: Copy allowed SSH Public keys from Github
+      ansible.builtin.copy:
+        dest: "/root/.ssh/authorized_keys"
+        content: "{{ lookup('ansible.builtin.url', 'https://github.com/krelinga.keys', split_lines=false) }}"
+        mode: "0600"
+
+    - name: Set Root Password
+      ansible.builtin.user:
+        name: root
+        password: "{{ lookup('bitwarden.secrets.lookup', '9758bac1-7e6e-4e4c-98f3-b2ac017f0d7d') | password_hash('sha512') }}"
+        state: present
