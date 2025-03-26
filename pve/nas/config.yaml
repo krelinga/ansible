@@ -63,6 +63,10 @@
       ansible.builtin.set_fact:
         sata_controller_keys: "{{ range(0, sata_controller.stdout_lines | length) | map('string') | map('regex_replace', '^(.*)', 'hostpci\\1') }}"
 
+    - name: Define SATA Controller Passthrough Values
+      ansible.builtin.set_fact:
+        sata_controller_values: "{{ sata_controller.stdout_lines | map('regex_replace', '^(.*)', '0000:\\1') }}"
+
     - name: Print SATA Controller Passthrough Keys
       ansible.builtin.debug:
         msg: "SATA Controller Passthrough Keys: {{ sata_controller_keys }}"
@@ -70,7 +74,7 @@
     - name: Split SATA Controller info into lines
       ansible.builtin.set_fact:
         sata_controller_map: >-
-          {{ sata_controller.stdout_lines |
+          {{ sata_controller_values |
              zip(sata_controller_keys) |
              map('reverse') |
              community.general.dict }}
@@ -97,7 +101,7 @@
     #     onboot: true
     #     ostype: other
     #     cpu: 'x86-64-v2-AES'
-    #     hostpci: 
+    #     hostpci: "{{ sata_controller_map }}"
     #   delegate_to: localhost
     
 
