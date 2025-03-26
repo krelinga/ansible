@@ -69,7 +69,7 @@
 
     - name: Split SATA Controller info into lines
       ansible.builtin.set_fact:
-        sata_controller_list: >-
+        sata_controller_map: >-
           {{ sata_controller.stdout_lines |
              zip(sata_controller_keys) |
              map('reverse') |
@@ -77,7 +77,7 @@
     
     - name: print SATA Controller
       ansible.builtin.debug:
-        msg: "SATA Controller: {{ sata_controller_list }}"
+        msg: "SATA Controller Map: {{ sata_controller_map }}"
 
     # - name: Create VM for TrueNAS
     #   community.general.proxmox_kvm:
