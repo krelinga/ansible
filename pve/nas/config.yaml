@@ -66,7 +66,9 @@
         ostype: other
         cpu: 'x86-64-v2-AES'
         hostpci: "{{ sata_controller_map }}"
+        state: started
       delegate_to: localhost
+      notify: Manual Setup
 
   handlers:
     - name: Update grub
@@ -79,12 +81,7 @@
         reboot_timeout: 300
         test_command: uptime
 
-    - name: restart TrueNAS VM
-      community.general.proxmox:
-        api_host: "nas-pve.i.krel.ing"
-        api_user: "root@pam"
-        api_password: "{{ lookup('bitwarden.secrets.lookup', 'fdce36ca-8c9f-42d6-8343-b2a801787fad') }}"
-        password: "{{ lookup('bitwarden.secrets.lookup', 'fdce36ca-8c9f-42d6-8343-b2a801787fad') }}"
-        vmid: 100
-        state: restarted
-      delegate_to: localhost
+    - name: Manual Setup
+      ansible.builtin.pause:
+        prompt: "Please manually set up the TrueNAS VM, then press Enter to continue."
+        echo: yes
