@@ -83,26 +83,26 @@
       ansible.builtin.debug:
         msg: "SATA Controller Map: {{ sata_controller_map }}"
 
-    # - name: Create VM for TrueNAS
-    #   community.general.proxmox_kvm:
-    #     api_host: "nas-pve.i.krel.ing"  # TODO: use inventory_hostname?
-    #     api_user: "root@pam"
-    #     api_password: "{{ lookup('bitwarden.secrets.lookup', 'fdce36ca-8c9f-42d6-8343-b2a801787fad') }}"
-    #     name: truenas
-    #     node: nas
-    #     vmid: 100
-    #     sata:
-    #       sata0: 'local-lvm:100'
-    #       sata1: 'local:iso/TrueNAS-13.0-U6.7.iso,media=cdrom'
-    #     net:
-    #       net0: "virtio,bridge=vmbr0,firewall=1"
-    #     cores: 10
-    #     memory: 65536
-    #     onboot: true
-    #     ostype: other
-    #     cpu: 'x86-64-v2-AES'
-    #     hostpci: "{{ sata_controller_map }}"
-    #   delegate_to: localhost
+    - name: Create VM for TrueNAS
+      community.general.proxmox_kvm:
+        api_host: "nas-pve.i.krel.ing"  # TODO: use inventory_hostname?
+        api_user: "root@pam"
+        api_password: "{{ lookup('bitwarden.secrets.lookup', 'fdce36ca-8c9f-42d6-8343-b2a801787fad') }}"
+        name: truenas
+        node: nas
+        vmid: 100
+        sata:
+          sata0: 'local-lvm:100'
+          sata1: 'local:iso/TrueNAS-13.0-U6.7.iso,media=cdrom'
+        net:
+          net0: "virtio,bridge=vmbr0,firewall=1"
+        cores: 10
+        memory: 65536
+        onboot: true
+        ostype: other
+        cpu: 'x86-64-v2-AES'
+        hostpci: "{{ sata_controller_map }}"
+      delegate_to: localhost
     
 
 
