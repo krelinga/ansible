@@ -15,3 +15,26 @@
       loop:
         - "media_readonly"
         - "media_readwrite"
+
+    - name: create users
+      arensb.truenas.user:
+        name: "{{ item.user }}"
+        password: "{{ lookup('bitwarden.secrets.lookup', item.password_id) | password_hash('sha512')}}"
+        groups: "{{ item.groups | default([]) }}"
+        home: "/nonexistent"
+        shell: "/usr/local/bin/bash"
+        state: present
+      loop:
+        - user: mbair
+          password_id: 369cbb03-0d0e-40fb-a0b9-b2b100189aea
+          groups:
+            - media_readwrite
+        - user: ripper
+          password_id: 23b52464-2823-4a8c-b12d-b226005e1616
+          groups:
+            - media_readwrite
+        - user: kodi
+          password_id: 9181f7ff-7e6a-4038-8e08-b2b1001a066c
+          groups:
+            - media_readonly
+        
