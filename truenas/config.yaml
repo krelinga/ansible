@@ -19,7 +19,8 @@
     - name: create users
       arensb.truenas.user:
         name: "{{ item.user }}"
-        password: "{{ lookup('bitwarden.secrets.lookup', item.password_id) | password_hash('sha512')}}"
+        comment: "{{ item.user }}"
+        password: "{{ lookup('bitwarden.secrets.lookup', item.password_id) }}"
         groups: "{{ item.groups | default([]) }}"
         home: "/nonexistent"
         shell: "/usr/local/bin/bash"
