@@ -61,6 +61,7 @@
           DISPLAY_HEIGHT: "720"
           MAKEMKV_KEY: "{{ makemkv_key }}"
         restart_policy: "unless-stopped"
+        recreate: yes
         mounts:
           - type: bind
             target: /config
@@ -76,6 +77,6 @@
             volume_driver: local
             volume_options:
               type: cifs
-              device: "//10.86.14.55/media/Rip"
-              o: "username={{ smb_user }},password={{ smb_password }},file_mode=0666,dir_mode=0777"
+              device: "//truenas.i.krel.ing/media/Rip"
+              o: "username={{ smb_user }},password={{ smb_password }},file_mode=0666,dir_mode=0777,addr=truenas.i.krel.ing"
       with_items: "{{ devices }}"
