@@ -1,0 +1,28 @@
+- name: Configure PVE Repositories
+  ansible.builtin.apt_repository:
+    repo: "{{ item.repo }}"
+    filename: "{{ item.filename }}"
+    state: "{{ item.state }}"
+    update_cache: false
+  loop:
+    - repo: "deb http://download.proxmox.com/debian/pve bookworm pve-no-subscription"
+      filename: "pve-no-subscription"
+      state: present
+    - repo: "deb https://enterprise.proxmox.com/debian/pve bookworm pve-enterprise"
+      filename: "pve-enterprise"
+      state: absent
+    - repo: "deb http://download.proxmox.com/debian/ceph-quincy bookworm no-subscription"
+      filename: "ceph-no-subscription"
+      state: present
+    - repo: "deb https://enterprise.proxmox.com/debian/ceph-quincy bookworm enterprise"
+      filename: "ceph-enterprise"
+      state: absent
+      
+- name: Update Apt Cache
+  ansible.builtin.apt:
+    update_cache: yes
+
+- name: Apt Upgrade
+  ansible.builtin.apt:
+    name: "*"
+    state: latest
