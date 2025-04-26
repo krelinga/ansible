@@ -3,7 +3,6 @@
 
   roles:
     - pve_server
-    - ssh_server
 
   tasks:
     - name: Enable IOMMU
