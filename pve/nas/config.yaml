@@ -2,7 +2,7 @@
   hosts: nas-pve
 
   roles:
-    - pve_repos
+    - pve_server
     - ssh_server
 
   tasks:
