@@ -1,3 +1,11 @@
+- name: Ensure required caller-provided variables are set
+  ansible.builtin.assert:
+    that:
+      - pve_api_host != ""
+      - pve_root_password != ""
+      - pve_node != ""
+    fail_msg: "Required variables are not set. Please check your configuration."
+
 - name: Configure PVE Repositories
   ansible.builtin.apt_repository:
     repo: "{{ item.repo }}"
@@ -26,3 +34,10 @@
   ansible.builtin.apt:
     name: "*"
     state: latest
+
+- name: "Set up VMs"
+  ansible.builtin.include_tasks: vm.yaml
+  loop: "{{ pve_vms }}"
+  loop_control:
+    label: "{{ vm.name }}"
+    loop_var: vm

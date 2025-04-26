@@ -1,0 +1,50 @@
+- name: "Ensure required caller-provided variables are set for {{ vm.name }}"
+  ansible.builtin.assert:
+    that:
+      - vm.name is defined
+      - vm.iso_url is defined
+      - vm.vmid is defined
+      - vm.mac_address is defined
+      - vm.cores is defined
+      - vm.memory_mb is defined
+      - vm.disk_gb is defined
+    fail_msg: "Required variables are not set. Please check your configuration."
+
+- name: "Download {{ vm.name }} ISO"
+  ansible.builtin.command:
+    cmd: "wget -O {{ pve_iso_dir }}/{{ vm.iso_url | basename }} {{ vm.iso_url }}"
+  args:
+    creates: "{{ pve_iso_dir }}/{{ vm.iso_url | basename }}"
+
+- name: "Create {{ vm.name }} VM"
+  community.general.proxmox_kvm:
+    api_host: "{{ pve_api_host }}"
+    api_user: "root@pam"
+    api_password: "{{ pve_root_password }}"
+    name: "{{ vm.name }}"
+    node: "{{ pve_node }}"
+    vmid: "{{ vm.vmid }}"
+    sata:
+      sata0: 'local-lvm:{{ vm.disk_gb }}'
+      sata1: 'local:iso/{{ vm.iso_url | basename }},media=cdrom'
+    net:
+      net0: "virtio={{ vm.mac_address }},bridge=vmbr0,firewall=1"
+    cores: "{{ vm.cores }}"
+    memory: "{{ vm.memory_mb }}"
+    onboot: true
+    ostype: other
+    cpu: 'x86-64-v2-AES'
+    hostpci: "{{ vm.hostpci | default({}) }}"  # Optional
+    state: present
+  delegate_to: localhost
+
+- name: "Start {{ vm.name }} VM"
+  community.general.proxmox_kvm:
+    api_host: "{{ pve_api_host }}"
+    api_user: "root@pam"
+    api_password: "{{ pve_root_password }}"
+    name: "{{ vm.name }}"
+    node: "{{ pve_node }}"
+    vmid: "{{ vm.vmid }}"
+    state: started
+  delegate_to: localhost

@@ -1,0 +1,21 @@
+- name: Config
+  hosts: dev-pve
+
+  roles:
+    - role: pve_server
+      vars:
+        pve_api_host: "dev-pve.i.krel.ing" # TODO: use invenotry_hostname?
+        pve_root_password: "{{ lookup('bitwarden.secrets.lookup', 'df724695-18be-4f52-ace9-b2cb0044c97d') }}"
+        pve_node: dev-pve
+        pve_vms:
+          - name: dev
+            iso_url: "https://mirror.pilotfiber.com/ubuntu-iso/24.04.2/ubuntu-24.04.2-live-server-amd64.iso"
+            vmid: 100
+            mac_address: "BC:24:11:67:F3:B8"
+            cores: 23
+            memory_mb: 112640
+            disk_gb: 500
+            
+        
+
+
