@@ -11,5 +11,5 @@
   register: git_user_name
 
 - name: Set Git user name
-  command: 'git config user.name "{{ lookup("bitwarden.secrets.lookup", "46de9373-b1ba-4334-8e0d-b2cb0187d562") }}"''
+  command: 'git config user.name "{{ lookup("bitwarden.secrets.lookup", "46de9373-b1ba-4334-8e0d-b2cb0187d562") }}"'
   when: git_user_name.stdout == ""
