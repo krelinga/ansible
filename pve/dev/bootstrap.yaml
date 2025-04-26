@@ -1,0 +1,7 @@
+# Note: this needs to be run with --ask-pass, as we assume that the root password is set to something temporary.
+- name: Bootstrap
+  hosts: dev-pve
+
+  roles:
+    - ssh_server
+  
