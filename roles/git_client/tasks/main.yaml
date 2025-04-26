@@ -1,0 +1,15 @@
+- name: Check if Git user email is already set
+  command: 'git config user.email'
+  register: git_user_email
+
+- name: Set Git user email
+  command: 'git config user.email "{{ lookup("bitwarden.secrets.lookup", "0399d176-38cf-4591-a096-b2cb0187c42d") }}"'
+  when: git_user_email.stdout == ""
+
+- name: Check if Git user name is already set
+  command: 'git config user.name'
+  register: git_user_name
+
+- name: Set Git user name
+  command: 'git config user.name "{{ lookup("bitwarden.secrets.lookup", "46de9373-b1ba-4334-8e0d-b2cb0187d562") }}"''
+  when: git_user_name.stdout == ""
