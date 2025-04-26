@@ -11,13 +11,11 @@
 
   hosts: '{{ host_to_bootstrap }}'
   gather_facts: false
-  tasks:
-    - name: Copy SSH Key
-      ansible.posix.authorized_key:
-        user: root
-        state: present
-        key: "{{ lookup('file', '/home/krelinga/.ssh/id_rsa_kodi_root.pub') }}"
 
+  roles:
+    - ssh_server
+
+  tasks:
     - name: Set Root Password
       # Not using ansible.builtin.user because it seems to not support changing passwords in busybox.
       ansible.builtin.shell:

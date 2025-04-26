@@ -1,13 +1,10 @@
 - name: Config
   hosts: truenas
 
-  tasks:
-    - name: Copy allowed SSH Public keys from Github
-      ansible.builtin.copy:
-        dest: "/root/.ssh/authorized_keys"
-        content: "{{ lookup('ansible.builtin.url', 'https://github.com/krelinga.keys', split_lines=false) }}"
-        mode: "0600"
+  roles:
+    - ssh_server
 
+  tasks:
     - name: create groups
       arensb.truenas.group:
         name: "{{ item }}"

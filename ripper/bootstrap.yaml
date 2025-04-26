@@ -26,13 +26,12 @@
       vars:
         docker_users:
           - "{{ pb_user }}"
-
     - role: geerlingguy.pip
       vars:
         pip_install_packages:
           - name: docker
             state: present
-
+    - role: ssh_server
 
   tasks:
     - name: Create makeMKV directories

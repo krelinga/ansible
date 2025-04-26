@@ -1,0 +1,2 @@
+# Ignore roles that are downloaded from Ansible Galaxy.
+roles/*.*/

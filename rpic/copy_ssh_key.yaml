@@ -1,10 +1,6 @@
 - name: Copy SSH Key
   hosts: rpic
   gather_facts: false
-  tasks:
-    - name: Copy SSH Key
-      ansible.posix.authorized_key:
-        user: krelinga
-        state: present
-        key: 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICtJUwp8OISxPLaekC9cD9DBi6j6JXoMAll6dUeoH+uK'
-
+  
+  roles:
+    - ssh_server

@@ -1,0 +1,5 @@
+- name: Copy allowed SSH Public keys from Github
+  ansible.builtin.copy:
+    dest: "{{ ssh_authorized_keys_path }}"
+    content: "{{ lookup('ansible.builtin.url', 'https://github.com/krelinga.keys', split_lines=false) }}"
+    mode: "0600"
