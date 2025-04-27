@@ -12,6 +12,7 @@
       loop:
         - "media_readonly"
         - "media_readwrite"
+        - "dev_readwrite"
 
     - name: create users
       arensb.truenas.user:
@@ -35,4 +36,8 @@
           password_id: 9181f7ff-7e6a-4038-8e08-b2b1001a066c
           groups:
             - media_readonly
+        - user: dev
+          password_id: 1f341f46-846e-450f-8938-b2cc011bb849
+          groups:
+            - dev_readwrite
         
