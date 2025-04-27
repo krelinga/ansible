@@ -11,17 +11,13 @@
           - "{{ ansible_user }}"
 
   tasks:
-    - name: create or update permissions on ~/.bws
-      ansible.builtin.file:
-        path: ~/.bws
-        state: touch
+    - name: ensure ~/.bws has the correct contents
+      ansible.builtin.copy:
+        content: |
+          export BWS_ACCESS_TOKEN={{ lookup('bitwarden.secrets.lookup', '42b7b009-7eb6-4c88-a41b-b2cc004be88c') }}
+          export DEV_SMB_PASSWORD={{ lookup('bitwarden.secrets.lookup', '1f341f46-846e-450f-8938-b2cc011bb849') }}
+        dest: ~/.bws
         mode: '0600'
-
-    - name: ensure access token is in ~/.bws
-      ansible.builtin.lineinfile:
-        path: ~/.bws
-        line: "export BWS_ACCESS_TOKEN={{ lookup('bitwarden.secrets.lookup', '42b7b009-7eb6-4c88-a41b-b2cc004be88c') }}"
-        state: present
 
     - name: ensure .bashrc sources ~/.bws
       ansible.builtin.lineinfile:
