@@ -9,3 +9,22 @@
       vars:
         docker_users:
           - "{{ ansible_user }}"
+
+  tasks:
+    - name: create or update permissions on ~/.bws
+      ansible.builtin.file:
+        path: ~/.bws
+        state: touch
+        mode: '0600'
+
+    - name: ensure access token is in ~/.bws
+      ansible.builtin.lineinfile:
+        path: ~/.bws
+        line: "export BWS_ACCESS_TOKEN={{ lookup('bitwarden.secrets.lookup', '42b7b009-7eb6-4c88-a41b-b2cc004be88c') }}"
+        state: present
+
+    - name: ensure .bashrc sources ~/.bws
+      ansible.builtin.lineinfile:
+        path: ~/.bashrc
+        line: "source ~/.bws"
+        state: present
