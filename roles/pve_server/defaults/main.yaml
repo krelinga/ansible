@@ -1,3 +1,4 @@
 pve_api_host: ""  # caller must set this.
 pve_root_password: ""  # caller must set this.
 pve_node: ""  # caller must set this.
+pve_vms: []
