@@ -1,0 +1,6 @@
+- name: Config
+  hosts: dev
+
+  roles:
+    - ssh_server
+    - git_client
