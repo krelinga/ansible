@@ -89,6 +89,7 @@
         - { dest: "host/macbin", src: "/Users/{{ ansible_user }}/macbin/" }
         - { dest: "host/test", src: "/Users/{{ ansible_user }}/test/" }
         - { dest: "nas/media", src: "/Volumes/media/" }
+        - { dest: "nas/dev", src: "/Volumes/dev/" }
 
     - name: Write links to root filesystem
       become: true
