@@ -24,3 +24,20 @@
         path: ~/.bashrc
         line: "source ~/.bws"
         state: present
+
+    - name: ensure CIFS is installed
+      become: true
+      ansible.builtin.apt:
+        name: cifs-utils
+        state: present
+        update_cache: true
+
+    - name: ensure dev smb share is mounted
+      become: true
+      ansible.posix.mount:
+        boot: true
+        fstype: cifs
+        src: //truenas.i.krel.ing/dev
+        path: /mnt/dev
+        opts: "username=dev,password={{ lookup('bitwarden.secrets.lookup', '1f341f46-846e-450f-8938-b2cc011bb849') }},file_mode=0666,dir_mode=0777,rw"
+        state: mounted
