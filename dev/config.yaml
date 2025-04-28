@@ -41,3 +41,17 @@
         path: /mnt/dev
         opts: "username=dev,password={{ lookup('bitwarden.secrets.lookup', '1f341f46-846e-450f-8938-b2cc011bb849') }},file_mode=0666,dir_mode=0777,rw"
         state: mounted
+
+    - name: ensure /nas directory exists
+      become: true
+      ansible.builtin.file:
+        path: /nas
+        state: directory
+        mode: '0755'
+
+    - name: create /nas/dev symbolic link
+      become: true
+      ansible.builtin.file:
+        src: /mnt/dev
+        dest: /nas/dev
+        state: link
