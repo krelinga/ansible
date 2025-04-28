@@ -20,11 +20,18 @@
 	// "forwardPorts": [],
 
 	// Use 'postCreateCommand' to run commands after the container is created.
-	"postCreateCommand": ".devcontainer/setup.sh"
+	"postCreateCommand": ".devcontainer/setup.sh",
 
 	// Configure tool-specific properties.
 	// "customizations": {},
 
 	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
 	// "remoteUser": "root"
+
+	"mounts": [
+		// This isn't strictly necessary for ansible, but it is a good test for other
+		// containers that will need this mount.  There is automation configured to
+		// set up this mount in various workstations.
+		"source=/nas/dev,target=/nas/dev,type=bind,consistency=cached"
+	]
 }
