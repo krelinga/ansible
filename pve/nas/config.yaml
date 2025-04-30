@@ -51,6 +51,13 @@
             memory_mb: 65536
             disk_gb: 100
             hostpci: "{{ sata_controller_map }}"
+          - name: nas-docker
+            iso_url: "https://mirror.pilotfiber.com/ubuntu-iso/24.04.2/ubuntu-24.04.2-live-server-amd64.iso"
+            vmid: 200
+            mac_address: "BC:24:11:28:F7:E1"
+            cores: 2
+            memory_mb: 8192
+            disk_gb: 100
 
   handlers:
     - name: Update grub
