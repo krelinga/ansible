@@ -1,0 +1,6 @@
+- name: ensure CIFS is installed
+  become: true
+  ansible.builtin.apt:
+    name: cifs-utils
+    state: present
+    update_cache: true

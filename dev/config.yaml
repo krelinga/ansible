@@ -9,6 +9,7 @@
       vars:
         docker_users:
           - "{{ ansible_user }}"
+    - cifs
 
   tasks:
     - name: ensure ~/.bws has the correct contents
@@ -24,13 +25,6 @@
         path: ~/.bashrc
         line: "source ~/.bws"
         state: present
-
-    - name: ensure CIFS is installed
-      become: true
-      ansible.builtin.apt:
-        name: cifs-utils
-        state: present
-        update_cache: true
 
     - name: ensure dev smb share is mounted
       become: true
