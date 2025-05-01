@@ -13,6 +13,8 @@
         - "media_readonly"
         - "media_readwrite"
         - "dev_readwrite"
+        - "certs_readwrite"
+        - "certs_readonly"
 
     - name: create users
       arensb.truenas.user:
@@ -41,4 +43,12 @@
           password_id: 1f341f46-846e-450f-8938-b2cc011bb849
           groups:
             - dev_readwrite
+        - user: certbot
+          password_id: 177d591f-fc2f-466b-9f7c-b2d0003349d0
+          groups:
+            - certs_readwrite
+        - user: certs_deploy
+          password_id: cf980f96-40bb-4cb6-bdf9-b2d00033795b
+          groups:
+            - certs_readonly
         
