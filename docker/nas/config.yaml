@@ -12,7 +12,7 @@
 
   tasks:
     - name: Ensure certbot_certs volume exists
-      docker_volume:
+      community.docker.docker_volume:
         name: certbot_certs
         state: present
         driver: local
