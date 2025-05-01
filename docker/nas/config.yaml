@@ -21,3 +21,8 @@
           device: "//truenas.i.krel.ing/certs"
           o: "username=certbot,password={{ lookup('bitwarden.secrets.lookup', '177d591f-fc2f-466b-9f7c-b2d0003349d0') }},file_mode=0660,dir_mode=0770,rw"
 
+    - name: Ensure certbot.ini file exists
+      ansible.builtin.copy:
+        dest: "$HOME/certbot.ini"
+        content: "dns_cloudflare_api_token = {{ lookup('bitwarden.secrets.lookup', '6165a285-5afb-48bc-b34b-b2d000e77007') }}"
+        mode: '0600'
