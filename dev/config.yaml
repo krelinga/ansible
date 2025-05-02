@@ -49,3 +49,14 @@
         src: /mnt/dev
         dest: /nas/dev
         state: link
+
+    - name: Ensure certbot_certs volume exists
+      community.docker.docker_volume:
+        name: certbot_certs
+        state: present
+        driver: local
+        driver_options:
+          type: cifs
+          device: "//truenas.i.krel.ing/certs"
+          # mfsymlinks is needed because certbot creates symlinks in this volume
+          o: "username=dev,password={{ lookup('bitwarden.secrets.lookup', '1f341f46-846e-450f-8938-b2cc011bb849') }},file_mode=0400,dir_mode=0500,ro,vers=3.0,mfsymlinks"
