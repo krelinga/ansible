@@ -29,10 +29,11 @@ def find_certificate(certs):
 
 
 class Wrapper(object):
-    def __init__(self, client):
+    def __init__(self, client, verbose):
         self._changed = False
         self._client = client
         self._notes = {}
+        self._verbose = verbose
 
     @property
     def changed(self):
@@ -50,6 +51,8 @@ class Wrapper(object):
         self._changed = True
 
     def note(self, key, value):
+        if not self._verbose:
+            return
         assert key not in self._notes, "Key already exists in notes"
         self._notes[key] = value
 
@@ -166,18 +169,20 @@ def main():
             api_key=dict(type='str', required=True),
             certificate=dict(type='str', required=True),
             private_key=dict(type='str', required=True),
+            verbose=dict(type='bool', default=False),
         )
     )
 
     certificate = module.params['certificate']
     private_key = module.params['private_key']
     api_key = module.params['api_key']
+    verbose = module.params['verbose']
 
     w = None
     try:
         # https://forums.truenas.com/t/getting-error-trying-to-connect-via-truenas-api-client-to-websockets-api-endpoint-api-current/28152
         with Client("wss://truenas.i.krel.ing/websocket", verify_ssl=False) as c:
-            w = Wrapper(c)
+            w = Wrapper(c, verbose)
             login(w, api_key)
             cert_id = ensure_cert_exists(w, certificate, private_key)
             ensure_cert_in_use(w, cert_id)
