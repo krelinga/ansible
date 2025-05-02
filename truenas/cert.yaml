@@ -4,4 +4,4 @@
   tasks:
     - name: Upload Certificate
       truenas_cert_upload:
-        # my_arg: taters
+      delegate_to: localhost
