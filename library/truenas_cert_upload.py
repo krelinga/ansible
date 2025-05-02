@@ -13,8 +13,9 @@ def main():
 
     # https://forums.truenas.com/t/getting-error-trying-to-connect-via-truenas-api-client-to-websockets-api-endpoint-api-current/28152
     with Client("wss://truenas.i.krel.ing/websocket", verify_ssl=False) as c:
-        resp = c.call("auth.login_with_api_key", module.params['api_key'])
-        assert resp
+        if c.call("auth.login_with_api_key", module.params['api_key']) == False:
+            module.fail_json(msg="Failed to authenticate with API key")
+            return
         resp = c.call("system.general.country_choices")
         msg = str(resp)
 
