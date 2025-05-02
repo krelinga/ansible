@@ -55,9 +55,9 @@
       ansible.posix.mount:
         boot: true
         fstype: cifs
-        src: //truenas.i.krel.ing/dev
+        src: //truenas.i.krel.ing/certs
         path: /mnt/certs
-        opts: "username=dev,password={{ lookup('bitwarden.secrets.lookup', '1f341f46-846e-450f-8938-b2cc011bb849') }},file_mode=0400,dir_mode=0500,ro"
+        opts: "username=dev,password={{ lookup('bitwarden.secrets.lookup', '1f341f46-846e-450f-8938-b2cc011bb849') }},file_mode=0666,dir_mode=0777,ro,"
         state: mounted
 
     - name: create /nas/certs symbolic link
