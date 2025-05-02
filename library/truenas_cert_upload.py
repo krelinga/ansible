@@ -28,34 +28,6 @@ def find_certificate(certs):
     return None
 
 
-# def add_certificate(module, custom_results, client, certificate, private_key):
-#     result = client.call("certificate.create", dict(
-#         create_type="CERTIFICATE_CREATE_IMPORTED",
-#         name=CERT_NAME,
-#         certificate=certificate,
-#         privatekey=private_key,
-#     ))
-#     custom_results['added'] = result
-#     updated = get_certificates(client)
-#     custom_results['updated_certificates'] = updated
-#     found = find_certificate(updated)
-#     assert found is not None, "Failed to find the certificate after adding it"
-#     custom_results['new_certificate'] = found
-#     use_certificate(module, custom_results, client, found["id"])
-
-
-# def use_certificate(module, custom_results, client, cert_id):
-#     config = client.call("system.general.config")
-#     custom_results['current_config'] = config
-#     if config['ui_certificate'] == cert_id:
-#         module.exit_json(changed=False, msg="Certificate already in use", **custom_results)
-#         return
-#     result = client.call("system.general.update", dict(
-#         ui_certificate=cert_id,
-#     ))
-#     custom_results['ui_update_result'] = result
-
-
 class Wrapper(object):
     def __init__(self, client):
         self._changed = False
