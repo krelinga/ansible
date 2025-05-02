@@ -2,14 +2,6 @@
   hosts: truenas
 
   tasks:
-    - name: print certificate
-      debug:
-        msg: "{{ lookup('file', '/nas/certs/live/i.krel.ing/fullchain.pem') }}"
-
-    - name: print private key
-      debug:
-        msg: "{{ lookup('file', '/nas/certs/live/i.krel.ing/privkey.pem') }}"
-
     - name: Upload Certificate
       truenas_cert_upload:
         api_key: "{{ lookup('bitwarden.secrets.lookup', '74662f7f-26b7-4538-af7e-b2d1004355a1') }}"
