@@ -33,5 +33,12 @@
 		// containers that will need this mount.  There is automation configured to
 		// set up this mount in various workstations.
 		"source=/nas/dev,target=/nas/dev,type=bind,consistency=cached"
-	]
+	],
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"ms-python.python"
+			]
+		}
+	}
 }
