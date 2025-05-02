@@ -14,8 +14,8 @@ class ActionModule(ActionBase):
 
         # Call the actual module, e.g., debug
         result = self._execute_module(
-            module_name='debug',
-            module_args={'msg': f"You said: {my_arg}"},
+            module_name='truenas_cert_upload',
+            #module_args={'msg': f"You said: {my_arg}"},
             task_vars=task_vars,
             tmp=tmp
         )

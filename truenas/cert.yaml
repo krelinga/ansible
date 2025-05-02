@@ -1,0 +1,7 @@
+- name: Bootstrap
+  hosts: truenas
+
+  tasks:
+    - name: Upload Certificate
+      truenas_cert_upload:
+        # my_arg: taters
