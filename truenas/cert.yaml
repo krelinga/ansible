@@ -4,4 +4,10 @@
   tasks:
     - name: Upload Certificate
       truenas_cert_upload:
+        api_key: "{{ lookup('bitwarden.secrets.lookup', '74662f7f-26b7-4538-af7e-b2d1004355a1') }}"
       delegate_to: localhost
+      register: cert_upload
+
+    - name: print cert_upload
+      debug:
+        var: cert_upload
