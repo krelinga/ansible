@@ -170,6 +170,7 @@ def main():
             certificate=dict(type='str', required=True),
             private_key=dict(type='str', required=True),
             verbose=dict(type='bool', default=False),
+            host=dict(type='str', required=True),
         )
     )
 
