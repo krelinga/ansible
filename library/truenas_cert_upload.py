@@ -188,8 +188,7 @@ def main():
             ensure_cert_in_use(w, cert_id)
             module.exit_json(changed=w.changed, **w.notes)
     except (Error, ClientException) as e:
-        # notes = w.notes if w else {}
-        notes = {}
+        notes = w.notes if w else {}
         module.fail_json(msg="Failed to add certificate: %s" % str(e), **notes)
         return
 
