@@ -2,13 +2,22 @@
   hosts: localhost
 
   tasks:
-    - name: Try talking to gateway over http
+    - name: Try creating a cert with API
       ansible.builtin.uri:
-        url: "https://gateway.i.krel.ing/api/trust/cert/ca_list"
+        url: "https://gateway.i.krel.ing/api/trust/cert/add"
         url_username: "{{ lookup('bitwarden.secrets.lookup', '20615609-4d51-472f-bb43-b2d40029e520') }}"
         url_password: "{{ lookup('bitwarden.secrets.lookup', '89d647a1-fde8-447c-88a9-b2d40029fc0c') }}"
         force_basic_auth: yes
-        method: GET
+        method: POST
+        body_format: json
+        body:
+          cert:
+            action: import
+            cert_type: usr_cert
+            descr: certbot
+            crt_payload: "{{ lookup('file', '/nas/certs/live/i.krel.ing/fullchain.pem') }}"
+            prv_payload: "{{ lookup('file', '/nas/certs/live/i.krel.ing/privkey.pem') }}"
+            private_key_location: firewall
         return_content: yes
         validate_certs: no
       ignore_errors: true
