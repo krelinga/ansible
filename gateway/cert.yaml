@@ -20,8 +20,23 @@
         return_content: yes
         validate_certs: no
       ignore_errors: true
-      register: http_response
+      register: new_cert_response
 
-    - name: show http_response
+    - name: show new_cert_response
       debug:
-        var: http_response
+        var: new_cert_response
+
+    - name: list certs
+      ansible.builtin.uri:
+        url: "https://gateway.i.krel.ing/api/trust/cert/search"
+        url_username: "{{ lookup('bitwarden.secrets.lookup', '20615609-4d51-472f-bb43-b2d40029e520') }}"
+        url_password: "{{ lookup('bitwarden.secrets.lookup', '89d647a1-fde8-447c-88a9-b2d40029fc0c') }}"
+        force_basic_auth: yes
+        method: GET
+        return_content: yes
+        validate_certs: no
+      register: cert_list_response
+
+    - name: show cert_list_response
+      debug:
+        var: cert_list_response
