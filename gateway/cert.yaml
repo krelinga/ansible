@@ -48,4 +48,9 @@
         api_secret: "{{ lookup('bitwarden.secrets.lookup', '89d647a1-fde8-447c-88a9-b2d40029fc0c') }}"
         certificate: "{{ lookup('file', '/nas/certs/live/i.krel.ing/fullchain.pem') }}"
         private_key: "{{ lookup('file', '/nas/certs/live/i.krel.ing/privkey.pem') }}"
+      register: cert_upload
+
+    - name: print cert_upload
+      debug:
+        var: cert_upload
 
