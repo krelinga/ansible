@@ -17,7 +17,6 @@
             descr: certbot
             crt_payload: "{{ lookup('file', '/nas/certs/live/i.krel.ing/fullchain.pem') }}"
             prv_payload: "{{ lookup('file', '/nas/certs/live/i.krel.ing/privkey.pem') }}"
-            private_key_location: firewall
         return_content: yes
         validate_certs: no
       ignore_errors: true
