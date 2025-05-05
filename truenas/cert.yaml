@@ -1,4 +1,4 @@
-- name: Bootstrap
+- name: Cert Upload to TrueNAS
   hosts: truenas
 
   tasks:
