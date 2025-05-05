@@ -3,3 +3,15 @@
     name: nginx
     state: restarted
     daemon_reload: true
+
+- name: delete temp_dir
+  ansible.builtin.file:
+    path: "{{ temp_dir.path }}"
+    state: absent
+  changed_when: false
+
+- name: restart pveproxy
+  ansible.builtin.systemd:
+    name: pveproxy
+    state: restarted
+  notify: restart nginx
