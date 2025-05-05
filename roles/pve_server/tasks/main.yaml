@@ -35,6 +35,49 @@
     name: "*"
     state: latest
 
+# Set up nginx as a reverse proxy to Proxmox VE Web Interface.
+# This makes it possible to access the web ui without adding :8006 to the URL.
+# per https://pve.proxmox.com/wiki/Web_Interface_Via_Nginx_Proxy
+- name: Install nginx
+  ansible.builtin.apt:
+    name: nginx
+    state: present
+
+- name: Remove default nginx configuration
+  ansible.builtin.file:
+    state: absent
+    path: "{{ item }}"
+  loop:
+    - /etc/nginx/conf.d/default
+    - /etc/nginx/sites-enabled/default
+  notify: restart nginx
+
+- name: Copy nginx configuration for PVE
+  ansible.builtin.template:
+    src: proxmox.conf.j2
+    dest: /etc/nginx/conf.d/proxmox.conf
+    owner: root
+    group: root
+    mode: '0644'
+  notify: restart nginx
+
+- name: Create nginx systemd service override directory
+  ansible.builtin.file:
+    path: /etc/systemd/system/nginx.service.d
+    state: directory
+    mode: '0755'
+  notify: restart nginx
+
+- name: Create nginx systemd service override file
+  ansible.builtin.blockinfile:
+    path: /etc/systemd/system/nginx.service.d/override.conf
+    block: |
+      [Unit]
+      Requires=pve-cluster.service
+      After=pve-cluster.service
+    create: yes
+  notify: restart nginx
+
 - name: "Set up VMs"
   ansible.builtin.include_tasks: vm.yaml
   loop: "{{ pve_vms }}"
