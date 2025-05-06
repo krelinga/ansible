@@ -33,6 +33,7 @@
         name: certbot
         image: certbot/dns-cloudflare:latest
         state: present
+        pull: always
         volumes:
           - certbot_certs:/etc/letsencrypt
           - "/home/{{ ansible_user }}/certbot.ini:/tmp/cloudflare.ini:ro"
