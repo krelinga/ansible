@@ -195,7 +195,6 @@ def ensure_cert_in_use(ctx, web_user_name, web_password, cert_refid):
         admin_url = requests.compat.urljoin(admin_page.url, admin_action)
         update_response = s.post(admin_url, data=admin_inputs, **ctx.params)
         update_response.raise_for_status()
-        # ctx.note("update_response", update_response.text)
         if "The changes have been applied successfully." not in update_response.text:
             raise Error("Failed to update the certificate in use on the OPNsense server")
 
