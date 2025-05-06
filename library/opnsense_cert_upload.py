@@ -203,7 +203,17 @@ def ensure_cert_in_use(ctx, web_user_name, web_password, cert_refid):
     
 
 def delete_certificate(ctx, cert_uuid):
-    pass
+    """
+    Delete the specified certificate from the OPNsense server.
+    """
+    uri = ctx.urifmt(f"api/trust/cert/del/{cert_uuid}")
+    try:
+        ctx.change()
+        response = requests.post(uri, **ctx.params)
+        response.raise_for_status()
+        return response.json().get('success', False)
+    except requests.exceptions.RequestException as e:
+        raise Error(f"Failed to delete certificate: {str(e)}")
 
 
 def main():
