@@ -1,9 +1,12 @@
 #! /usr/local/bin/python
 
+import time
+
 from ansible.module_utils.basic import AnsibleModule
 
 import requests
 from requests.auth import HTTPBasicAuth
+from bs4 import BeautifulSoup
 
 
 CERT_NAME = "certbot"
@@ -141,7 +144,7 @@ def ensure_cert_exists(ctx, certificate, private_key):
     return CertInfo(old_uuid=None, new_uuid=new_cert_uuid)
 
 
-def ensure_cert_in_use(ctx, cert_uuid):
+def ensure_cert_in_use(ctx, web_user_name, web_password, cert_uuid):
     """
     Ensure that the specified certificate is in use on the OPNsense server.
     This function assumes that the certificate is already uploaded.
@@ -151,7 +154,23 @@ def ensure_cert_in_use(ctx, cert_uuid):
     try:
         login_page = s.get(uri, **ctx.params)
         login_page.raise_for_status()
-        ctx.note("login_page", login_page.text)
+        soup = BeautifulSoup(login_page.text, "html.parser")
+        form = soup.find("form")
+        action = form.get("action")
+        inputs = {tag['name']: tag.get('value', '') for tag in form.find_all("input")}
+        inputs.update(dict(
+            usernamefld=web_user_name,
+            passwordfld=web_password,
+            login="1"  # This comes from the submit button.
+        ))
+        ctx.note("login_form_data", inputs)
+        submit_url = requests.compat.urljoin(login_page.url, action)
+        time.sleep(1)  # Optional: wait a bit before submitting the form
+        response = s.post(submit_url, data=inputs, **ctx.params)
+        response.raise_for_status()
+        ctx.note("login_response", response.text)
+        ctx.note("login_response_cookies", s.cookies.get_dict())
+
     except requests.exceptions.RequestException as e:
         raise Error(f"Failed to fetch system advanced admin page: {str(e)}")
     
@@ -168,6 +187,8 @@ def main():
             certificate=dict(type='str', required=True),
             private_key=dict(type='str', required=True),
             host=dict(type='str', required=True),
+            web_user_name=dict(type='str', required=True),
+            web_password=dict(type='str', required=True, no_log=True)
         )
     )
 
@@ -176,6 +197,8 @@ def main():
     api_key = module.params['api_key']
     api_secret = module.params['api_secret']
     host = module.params['host']
+    web_user_name = module.params['web_user_name']
+    web_password = module.params['web_password']
 
     params = dict(
         auth=HTTPBasicAuth(api_key, api_secret),
@@ -188,7 +211,7 @@ def main():
 
     try:
         info = ensure_cert_exists(ctx, certificate, private_key)
-        ensure_cert_in_use(ctx, info.new_uuid)
+        ensure_cert_in_use(ctx, web_user_name, web_password, info.new_uuid)
         if info.old_uuid is not None:
             delete_certificate(ctx, info.old_uuid)
         module.exit_json(changed=ctx.changed, **ctx.notes)
