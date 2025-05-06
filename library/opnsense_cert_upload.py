@@ -20,6 +20,7 @@ class Context(object):
         self._urifmt = urifmt
         self._params = params
         self._changed = False
+        self._notes = {}
 
     @property
     def urifmt(self):
@@ -33,8 +34,17 @@ class Context(object):
     def changed(self):
         return self._changed
     
+    @property
+    def notes(self):
+        return self._notes
+    
     def change(self):
         self._changed = True
+
+    def note(self, key, value):
+        if key in self._notes:
+            raise Error(f"Key '{key}' already exists in notes")
+        self._notes[key] = value
 
 
 def get_certificates(ctx):
@@ -136,18 +146,14 @@ def ensure_cert_in_use(ctx, cert_uuid):
     Ensure that the specified certificate is in use on the OPNsense server.
     This function assumes that the certificate is already uploaded.
     """
-    return
-    uri = ctx.urifmt("api/system/certmanager/set")
-    data = dict(
-        cert_uuid=cert_uuid
-    )
+    s = requests.Session()
+    uri = ctx.urifmt("system_advanced_admin.php")
     try:
-        ctx.change()
-        response = requests.post(uri, json=data, **ctx.params)
-        response.raise_for_status()
-        return response.json()
+        login_page = s.get(uri, **ctx.params)
+        login_page.raise_for_status()
+        ctx.note("login_page", login_page.text)
     except requests.exceptions.RequestException as e:
-        raise Error(f"Failed to set certificate in use: {str(e)}")
+        raise Error(f"Failed to fetch system advanced admin page: {str(e)}")
     
 
 def delete_certificate(ctx, cert_uuid):
@@ -185,7 +191,7 @@ def main():
         ensure_cert_in_use(ctx, info.new_uuid)
         if info.old_uuid is not None:
             delete_certificate(ctx, info.old_uuid)
-        module.exit_json(changed=ctx.changed)
+        module.exit_json(changed=ctx.changed, **ctx.notes)
     except requests.exceptions.RequestException as e:
         module.fail_json(msg=f"HTTP GET request encountered an error: {str(e)}")
 
