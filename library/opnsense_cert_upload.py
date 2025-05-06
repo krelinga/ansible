@@ -165,7 +165,6 @@ def ensure_cert_in_use(ctx, web_user_name, web_password, cert_uuid):
         ))
         ctx.note("login_form_data", inputs)
         submit_url = requests.compat.urljoin(login_page.url, action)
-        time.sleep(1)  # Optional: wait a bit before submitting the form
         response = s.post(submit_url, data=inputs, **ctx.params)
         response.raise_for_status()
         ctx.note("login_response", response.text)
