@@ -41,7 +41,7 @@ def get_certificates(ctx):
     """
     Get the list of certificates from the OPNsense server.
     """
-    uri = ctx.urifmt("trust/cert/search")
+    uri = ctx.urifmt("api/trust/cert/search")
     try:
         response = requests.get(uri, **ctx.params)
         response.raise_for_status()
@@ -67,7 +67,7 @@ def get_certificate_body(ctx, cert_uuid):
     """
     Get the certificate body from the OPNsense server.
     """
-    uri = ctx.urifmt(f"trust/cert/get/{cert_uuid}")
+    uri = ctx.urifmt(f"api/trust/cert/get/{cert_uuid}")
     try:
         response = requests.get(uri, **ctx.params)
         response.raise_for_status()
@@ -80,7 +80,7 @@ def push_new_certificate(ctx, certificate, private_key):
     """
     Push a new certificate to the OPNsense server.
     """
-    uri = ctx.urifmt("trust/cert/add")
+    uri = ctx.urifmt("api/trust/cert/add")
     data = dict(
         cert=dict(
             action='import',
@@ -137,7 +137,7 @@ def ensure_cert_in_use(ctx, cert_uuid):
     This function assumes that the certificate is already uploaded.
     """
     return
-    uri = ctx.urifmt("system/certmanager/set")
+    uri = ctx.urifmt("api/system/certmanager/set")
     data = dict(
         cert_uuid=cert_uuid
     )
@@ -176,7 +176,7 @@ def main():
         verify=False,  # Disable SSL verification for testing; consider enabling in production
     )
 
-    urifmt = lambda endpoint: f"https://{host}/api/{endpoint}"
+    urifmt = lambda endpoint: f"https://{host}/{endpoint}"
 
     ctx = Context(urifmt, params)
 
