@@ -60,3 +60,19 @@
         hour: "3"
         user: "{{ ansible_user }}"
         job: "docker container start certbot"
+
+    - name: Create docker container for semaphore
+      community.docker.docker_container:
+        name: semaphore
+        image: semaphoreui/semaphore:latest
+        state: started
+        pull: always
+        ports:
+          - "0.0.0.0:3000:3000"
+        env:
+          SEMAPHORE_DB_DIALECT: bolt
+          SEMAPHORE_ADMIN: admin
+          SEMAPHORE_ADMIN_PASSWORD: "{{ lookup('bitwarden.secrets.lookup', '83cbcc37-e60f-414e-a538-b2d5010bae26') }}"
+          SEMAPHORE_ADMIN_NAME: Admin
+          SEMAPHORE_ADMIN_EMAIL: "admin@localhost"
+          SEMAPHORE_WEB_ROOT: http://10.86.14.88:3000
