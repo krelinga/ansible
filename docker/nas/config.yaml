@@ -53,4 +53,10 @@
           - "--dns-cloudflare-credentials"
           - "/tmp/cloudflare.ini"
 
-
+    - name: set up certbot cron job
+      ansible.builtin.cron:
+        name: "certbot renew"
+        minute: "0"
+        hour: "3"
+        user: "{{ ansible_user }}"
+        job: "docker container start certbot"
