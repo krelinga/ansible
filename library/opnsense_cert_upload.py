@@ -252,8 +252,8 @@ def main():
         if info.old_uuid is not None:
             delete_certificate(ctx, info.old_uuid)
         module.exit_json(changed=ctx.changed, **ctx.notes)
-    except requests.exceptions.RequestException as e:
-        module.fail_json(msg=f"HTTP GET request encountered an error: {str(e)}")
+    except Error as e:
+        module.fail_json(msg=f"Failure: {str(e)}")
 
 
 if __name__ == '__main__':
