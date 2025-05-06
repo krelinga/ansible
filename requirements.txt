@@ -1,0 +1,6 @@
+bitwarden-sdk
+proxmoxer
+requests
+passlib
+git+https://github.com/truenas/api_client.git
+beautifulsoup4
