@@ -1,7 +1,5 @@
 #! /usr/local/bin/python
 
-import time
-
 from ansible.module_utils.basic import AnsibleModule
 
 import requests
