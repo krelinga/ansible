@@ -87,6 +87,16 @@ def get_certificate_body(ctx, cert_uuid):
         raise Error(f"Failed to fetch certificate body: {str(e)}")
     
 
+def get_certificate_refid(ctx, cert_uuid):
+    """
+    Get the certificate refid from the OPNsense server.
+    """
+    body = get_certificate_body(ctx, cert_uuid)
+    if "refid" not in body:
+        raise Error(f"Certificate with UUID '{cert_uuid}' does not have a refid")
+    return body["refid"]
+    
+
 def push_new_certificate(ctx, certificate, private_key):
     """
     Push a new certificate to the OPNsense server.
@@ -111,9 +121,9 @@ def push_new_certificate(ctx, certificate, private_key):
     
 
 class CertInfo(object):
-    def __init__(self, old_uuid, new_uuid):
+    def __init__(self, old_uuid, new_refid):
         self.old_uuid = old_uuid
-        self.new_uuid = new_uuid
+        self.new_refid = new_refid
 
 
 def ensure_cert_exists(ctx, certificate, private_key):
@@ -131,18 +141,18 @@ def ensure_cert_exists(ctx, certificate, private_key):
         
         if existing_cert_body["crt_payload"] == certificate and existing_cert_body["prv_payload"] == private_key:
             # Certificate matches, no need to update
-            return CertInfo(old_uuid=None, new_uuid=cert_uuid)
+            return CertInfo(old_uuid=None, new_refid=get_certificate_refid(ctx, cert_uuid))
 
         # Certificate does not match, we need to update it
         new_cert_uuid = push_new_certificate(ctx, certificate, private_key)
-        return CertInfo(old_uuid=cert_uuid, new_uuid=new_cert_uuid)
+        return CertInfo(old_uuid=cert_uuid, new_refid=get_certificate_refid(ctx, new_cert_uuid))
     
     # Certificate does not exist, we need to create it
     new_cert_uuid = push_new_certificate(ctx, certificate, private_key)
-    return CertInfo(old_uuid=None, new_uuid=new_cert_uuid)
+    return CertInfo(old_uuid=None, new_refid=get_certificate_refid(ctx, new_cert_uuid))
 
 
-def ensure_cert_in_use(ctx, web_user_name, web_password, cert_uuid):
+def ensure_cert_in_use(ctx, web_user_name, web_password, cert_refid):
     """
     Ensure that the specified certificate is in use on the OPNsense server.
     This function assumes that the certificate is already uploaded.
@@ -152,21 +162,42 @@ def ensure_cert_in_use(ctx, web_user_name, web_password, cert_uuid):
     try:
         login_page = s.get(uri, **ctx.params)
         login_page.raise_for_status()
-        soup = BeautifulSoup(login_page.text, "html.parser")
-        form = soup.find("form")
-        action = form.get("action")
-        inputs = {tag['name']: tag.get('value', '') for tag in form.find_all("input")}
-        inputs.update(dict(
+        login_soup = BeautifulSoup(login_page.text, "html.parser")
+        login_form = login_soup.find("form")
+        login_action = login_form.get("action")
+        login_inputs = {tag['name']: tag.get('value', '') for tag in login_form.find_all("input")}
+        login_inputs.update(dict(
             usernamefld=web_user_name,
             passwordfld=web_password,
             login="1"  # This comes from the submit button.
         ))
-        ctx.note("login_form_data", inputs)
-        submit_url = requests.compat.urljoin(login_page.url, action)
-        response = s.post(submit_url, data=inputs, **ctx.params)
-        response.raise_for_status()
-        ctx.note("login_response", response.text)
-        ctx.note("login_response_cookies", s.cookies.get_dict())
+        login_url = requests.compat.urljoin(login_page.url, login_action)
+        admin_page = s.post(login_url, data=login_inputs, **ctx.params)
+        admin_page.raise_for_status()
+
+        admin_soup = BeautifulSoup(admin_page.text, "html.parser")
+        admin_form = admin_soup.find("form", {"id": "iform"})
+        if admin_form.find("select", dict(name="ssl-certref")).find("option", dict(selected="selected"))['value'] == cert_refid:
+            # Certificate is already in use, no need to update
+            return
+        ctx.change()
+        admin_action = admin_form.get("action")
+        relevant_names = [
+            "webguiproto",  # Needed because of a weirdness in how OPNsense handles this form.
+            "ssl-certref",
+        ]
+        relevant_inputs = lambda tag: tag.get("type") in ["hidden", "submit"] or tag.get("name") in relevant_names
+        admin_inputs = {tag['name']: tag.get('value', '') for tag in admin_form.find_all(relevant_inputs)}
+        admin_inputs.update({
+            "ssl-certref": cert_refid
+        })
+        ctx.note("admin_inputs", admin_inputs)
+        admin_url = requests.compat.urljoin(admin_page.url, admin_action)
+        update_response = s.post(admin_url, data=admin_inputs, **ctx.params)
+        update_response.raise_for_status()
+        # ctx.note("update_response", update_response.text)
+        if "The changes have been applied successfully." not in update_response.text:
+            raise Error("Failed to update the certificate in use on the OPNsense server")
 
     except requests.exceptions.RequestException as e:
         raise Error(f"Failed to fetch system advanced admin page: {str(e)}")
@@ -208,7 +239,7 @@ def main():
 
     try:
         info = ensure_cert_exists(ctx, certificate, private_key)
-        ensure_cert_in_use(ctx, web_user_name, web_password, info.new_uuid)
+        ensure_cert_in_use(ctx, web_user_name, web_password, info.new_refid)
         if info.old_uuid is not None:
             delete_certificate(ctx, info.old_uuid)
         module.exit_json(changed=ctx.changed, **ctx.notes)
