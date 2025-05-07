@@ -84,7 +84,7 @@
     - name: Create docker container for semaphore
       community.docker.docker_container:
         name: semaphore
-        image: semaphoreui/semaphore:latest
+        image: krelinga/semaphoreui-rust:latest
         state: started
         restart: "{{'yes' if git_repo.changed else 'no'}}"
         pull: always
