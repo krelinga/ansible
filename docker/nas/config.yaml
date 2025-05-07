@@ -70,11 +70,23 @@
         - semaphore_config
         - semaphore_tmp
 
+    # It's a little annoying that this needs to happen outside of semaphore's capability of reading repos
+    # on its own, but probably not a big deal.
+    # per https://docs.semaphoreui.com/administration-guide/installation/#installing-additional-python-packages
+    - name: clone ansible repo
+      ansible.builtin.git:
+        repo: "https://github.com/krelinga/ansible.git"
+        dest: "/home/{{ ansible_user }}/ansible"
+        force: yes
+        update: yes
+      register: git_repo
+
     - name: Create docker container for semaphore
       community.docker.docker_container:
         name: semaphore
         image: semaphoreui/semaphore:latest
         state: started
+        restart: "{{'yes' if git_repo.changed else 'no'}}"
         pull: always
         ports:
           - "0.0.0.0:3000:3000"
@@ -90,3 +102,4 @@
           - semaphore_data:/var/lib/semaphore
           - semaphore_config:/etc/semaphore
           - semaphore_tmp:/tmp/semaphore
+          - "/home/{{ ansible_user }}/ansible/requirements.txt:/etc/semaphore/requirements.txt:ro"
