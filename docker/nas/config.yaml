@@ -107,7 +107,7 @@
           SEMAPHORE_ADMIN_PASSWORD: "{{ lookup('bitwarden.secrets.lookup', '83cbcc37-e60f-414e-a538-b2d5010bae26') }}"
           SEMAPHORE_ADMIN_NAME: Admin
           SEMAPHORE_ADMIN_EMAIL: "admin@localhost"
-          SEMAPHORE_WEB_ROOT: http://10.86.14.88:3000
+          SEMAPHORE_WEB_ROOT: https://sem.i.krel.ing
           BWS_ACCESS_TOKEN: "{{ lookup('bitwarden.secrets.lookup', 'e5fbd2b0-f101-4c1c-a0bc-b2d5015bcda0') }}"
           SEMAPHORE_FORWARDED_ENV_VARS: '["BWS_ACCESS_TOKEN"]'
         volumes:
@@ -116,3 +116,52 @@
           - semaphore_tmp:/tmp/semaphore
           - "/home/{{ ansible_user }}/ansible/requirements.txt:/etc/semaphore/requirements.txt:ro"
           - semaphore_certs:/nas/certs:ro
+
+    - name: Create Caddy volumes
+      community.docker.docker_volume:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - caddy_data
+        - caddy_config
+
+    - name: Ensure caddy_certs volume exists
+      community.docker.docker_volume:
+        name: caddy_certs
+        state: present
+        driver: local
+        driver_options:
+          type: cifs
+          device: "//truenas.i.krel.ing/certs"
+          # mfsymlinks is needed because certbot creates symlinks in this volume
+          o: "username=certs_deploy,password={{ lookup('bitwarden.secrets.lookup', 'cf980f96-40bb-4cb6-bdf9-b2d00033795b') }},file_mode=0440,dir_mode=0550,ro,vers=3.0,mfsymlinks"
+
+    - name: Create Caddyfile
+      ansible.builtin.template:
+        src: Caddyfile.j2
+        dest: "/home/{{ ansible_user }}/Caddyfile"
+        mode: '0644'
+      vars:
+        proxies:
+          - fqdn: sem.i.krel.ing
+            real_host: nas-docker.i.krel.ing
+            real_port: 3000
+        cert_path: "/nas/certs/live/i.krel.ing/fullchain.pem"
+        private_key_path: "/nas/certs/live/i.krel.ing/privkey.pem"
+      register: caddyfile
+
+    - name: Create docker container for Caddy
+      community.docker.docker_container:
+        name: caddy
+        image: caddy:latest
+        state: started
+        restart: "{{'yes' if caddyfile.changed else 'no'}}"
+        pull: always
+        ports:
+          - 80:80
+          - 443:443
+        volumes:
+          - caddy_data:/data
+          - caddy_config:/config
+          - "/home/{{ ansible_user }}/Caddyfile:/etc/caddy/Caddyfile:ro"
+          - caddy_certs:/nas/certs:ro
