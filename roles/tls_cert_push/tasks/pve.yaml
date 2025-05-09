@@ -1,0 +1,49 @@
+# These next few steps are needed because ansible.builin.copy does not support FUSE filesystems very well.
+# PVE stores its configuration on a FUSE filesystem.
+- name: Create temporary directory for TLS cert
+  ansible.builtin.tempfile:
+    state: directory
+  register: temp_dir
+  notify: delete temp_dir
+  changed_when: false
+
+- name: Copy TLS cert to temporary directory
+  ansible.builtin.copy:
+    src: "{{ item.src }}"
+    dest: "{{ temp_dir.path }}/{{ item.dest }}"
+    mode: "{{ item.mode }}"
+  loop:
+    - src: /nas/certs/live/i.krel.ing/fullchain.pem
+      dest: pve-ssl.pem
+      mode: '0644'
+    - src: /nas/certs/live/i.krel.ing/privkey.pem
+      dest: pve-ssl.key
+      mode: '0600'
+  changed_when: false
+
+- name: Copy TLS cert to final destination
+  ansible.builtin.shell: |
+    readonly src="{{ temp_dir.path }}/{{ item }}"
+    readonly dst="/etc/pve/local/{{ item }}"
+    if cmp -s "$src" "$dst"; then
+      exit 0
+    fi
+    cp "$src" "$dst"
+    echo "ANSIBLE: CHANGED"
+  loop:
+    - pve-ssl.pem
+    - pve-ssl.key
+  register: tls_final_copy
+  changed_when: "'ANSIBLE: CHANGED' in tls_final_copy.stdout"
+
+- name: restart pveproxy
+  ansible.builtin.systemd:
+    name: pveproxy
+    state: restarted
+  when: tls_final_copy.changed
+
+- name: restart nginx
+  ansible.builtin.systemd:
+    name: nginx
+    state: restarted
+  when: tls_final_copy.changed
