@@ -30,3 +30,7 @@
     tls_cert_push_opnsense_web_password: "{{ lookup('bitwarden.secrets.lookup', '43a0ff9b-5a9e-4167-842b-b2d5002ec71a') }}"
   roles:
     - tls_cert_push
+
+# TODO: restart caddy to pick up the new certs?  The problem is that caddy will be proxying to
+# semaphore, which will be running this playbook sometimes.  What will happen to the semaphore run if
+# caddy restarts in the middle?
