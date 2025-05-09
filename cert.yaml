@@ -1,0 +1,4 @@
+- name: Pull a new cert
+  hosts: nas-docker
+  roles:
+    - tls_cert_fetch

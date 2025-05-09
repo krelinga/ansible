@@ -9,7 +9,6 @@
         docker_users:
           - "{{ ansible_user }}"
     - cifs
-    - tls_cert_fetch
 
   tasks:
     - name: Create docker volumes for Semaphore
