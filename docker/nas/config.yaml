@@ -9,58 +9,9 @@
         docker_users:
           - "{{ ansible_user }}"
     - cifs
+    - tls_cert_fetch
 
   tasks:
-    - name: Ensure certbot_certs volume exists
-      community.docker.docker_volume:
-        name: certbot_certs
-        state: present
-        driver: local
-        driver_options:
-          type: cifs
-          device: "//truenas.i.krel.ing/certs"
-          # mfsymlinks is needed because certbot creates symlinks in this volume
-          o: "username=certbot,password={{ lookup('bitwarden.secrets.lookup', '177d591f-fc2f-466b-9f7c-b2d0003349d0') }},file_mode=0660,dir_mode=0770,rw,vers=3.0,mfsymlinks"
-
-    - name: Ensure certbot.ini file exists
-      ansible.builtin.copy:
-        dest: "/home/{{ ansible_user }}/certbot.ini"
-        content: "dns_cloudflare_api_token = {{ lookup('bitwarden.secrets.lookup', '6165a285-5afb-48bc-b34b-b2d000e77007') }}"
-        mode: '0600'
-
-    - name: Create a Docker container for certbot
-      community.docker.docker_container:
-        name: certbot
-        image: certbot/dns-cloudflare:latest
-        state: present
-        pull: always
-        volumes:
-          - certbot_certs:/etc/letsencrypt
-          - "/home/{{ ansible_user }}/certbot.ini:/tmp/cloudflare.ini:ro"
-        command:
-          - "certonly"
-          - "-w"
-          - "/etc/letsencrypt"
-          - "-d"
-          - "i.krel.ing"
-          - "-d"
-          - "*.i.krel.ing"
-          - "--email"
-          - "{{ lookup('bitwarden.secrets.lookup', '0399d176-38cf-4591-a096-b2cb0187c42d') }}"
-          - "--agree-tos"
-          - "--non-interactive"
-          - "--dns-cloudflare"
-          - "--dns-cloudflare-credentials"
-          - "/tmp/cloudflare.ini"
-
-    - name: set up certbot cron job
-      ansible.builtin.cron:
-        name: "certbot renew"
-        minute: "0"
-        hour: "3"
-        user: "{{ ansible_user }}"
-        job: "docker container start certbot"
-
     - name: Create docker volumes for Semaphore
       community.docker.docker_volume:
         name: "{{ item }}"
