@@ -1,0 +1,15 @@
+- name: Check required variables
+  ansible.builtin.assert:
+    that:
+      - "tls_cert_push_platform | length > 0"
+    fail_msg: "The variable 'tls_cert_push_platform' must be defined and not empty."
+
+- name: Check that certs are accessible
+  ansible.builtin.assert:
+    that:
+      - "lookup('file', '/nas/certs/live/i.krel.ing/fullchain.pem') | length > 0"
+      - "lookup('file', '/nas/certs/live/i.krel.ing/privkey.pem') | length > 0"
+    fail_msg: "The certificate files must be accessible."
+
+- name: Run per-platform logic
+  ansible.builtin.include_tasks: "{{ tls_cert_push_platform }}.yaml"

@@ -1,0 +1,5 @@
+tls_cert_push_platform: ""  # Caller must set this.
+
+# Variables that must be set for tls_cert_push_platform == truenas
+tls_cert_push_truenas_host: ""
+tls_cert_push_truenas_api_key: ""

@@ -1,4 +1,18 @@
-- name: Pull a new cert
-  hosts: nas-docker
-  roles:
-    - tls_cert_fetch
+- name: Update TLS certs
+  hosts: localhost
+  tasks:
+    - name: Fetch cert
+      args:
+        apply:
+          delegate_to: nas-docker
+      ansible.builtin.include_role:
+        name: tls_cert_fetch
+
+    - name: Push cert to truenas
+      # when: tls_cert_fetch.changed
+      ansible.builtin.include_role:
+        name: tls_cert_push
+      vars:
+        tls_cert_push_platform: truenas
+        tls_cert_push_truenas_host: "truenas.i.krel.ing"
+        tls_cert_push_truenas_api_key: "{{ lookup('bitwarden.secrets.lookup', '74662f7f-26b7-4538-af7e-b2d1004355a1') }}"

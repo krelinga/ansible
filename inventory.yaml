@@ -70,6 +70,7 @@ servers:
     truenas:
       ansible_host: truenas.i.krel.ing
       ansible_user: root
+      tls_cert_push_platform: truenas
     dev:
       ansible_host: dev.i.krel.ing
       ansible_user: krelinga
