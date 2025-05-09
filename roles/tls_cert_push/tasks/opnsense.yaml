@@ -1,0 +1,21 @@
+- name: Check required variables
+  ansible.builtin.assert:
+    that:
+      - "item | length > 0"
+    fail_msg: "The variable '{{ item }}' must be defined and not empty."
+  loop:
+    - tls_cert_push_opnsense_host
+    - tls_cert_push_opnsense_api_key
+    - tls_cert_push_opnsense_api_secret
+    - tls_cert_push_opnsense_web_user_name
+    - tls_cert_push_opnsense_web_password
+
+- name: Upload certs to OPNsense
+  opnsense_cert_upload:
+    host: "{{ tls_cert_push_opnsense_host }}"
+    api_key: "{{ tls_cert_push_opnsense_api_key}}"
+    api_secret: "{{ tls_cert_push_opnsense_api_secret }}"
+    certificate: "{{ lookup('file', '/nas/certs/live/i.krel.ing/fullchain.pem') }}"
+    private_key: "{{ lookup('file', '/nas/certs/live/i.krel.ing/privkey.pem') }}"
+    web_user_name: "{{ tls_cert_push_opnsense_web_user_name }}"
+    web_password: "{{ tls_cert_push_opnsense_web_password }}"
