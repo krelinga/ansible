@@ -31,6 +31,12 @@
   roles:
     - tls_cert_push
 
-# TODO: restart caddy to pick up the new certs?  The problem is that caddy will be proxying to
-# semaphore, which will be running this playbook sometimes.  What will happen to the semaphore run if
-# caddy restarts in the middle?
+- name: Restart Caddy
+  hosts: nas-docker
+  tasks:
+    - name: Restart caddy
+      community.docker.docker_container:
+        name: caddy
+        state: started
+        restart: yes
+      # when: tls_cert_fetch.changed
