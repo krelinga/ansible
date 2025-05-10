@@ -13,3 +13,4 @@
     api_key: "{{ tls_cert_push_truenas_api_key }}"
     certificate: "{{ lookup('file', '/nas/certs/live/i.krel.ing/fullchain.pem') }}"
     private_key: "{{ lookup('file', '/nas/certs/live/i.krel.ing/privkey.pem') }}"
+  delegate_to: localhost

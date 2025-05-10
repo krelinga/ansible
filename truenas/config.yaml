@@ -3,6 +3,7 @@
 
   roles:
     - ssh_server
+    - tls_cert_push
 
   tasks:
     - name: create groups
