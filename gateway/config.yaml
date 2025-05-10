@@ -1,0 +1,5 @@
+- name: Config Gateway
+  hosts: gateway
+  gather_facts: false  # TODO: it would be nice to have this at inventory level.
+  roles:
+    - tls_cert_push

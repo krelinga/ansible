@@ -3,3 +3,10 @@ tls_cert_push_platform: ""  # Caller must set this.
 # Variables that must be set for tls_cert_push_platform == truenas
 tls_cert_push_truenas_host: ""
 tls_cert_push_truenas_api_key: ""
+
+# Variables that must be set for tls_cert_push_platform == opnsense
+tls_cert_push_opnsense_host: ""
+tls_cert_push_opnsense_api_key: ""
+tls_cert_push_opnsense_api_secret: ""
+tls_cert_push_opnsense_web_user_name: ""
+tls_cert_push_opnsense_web_password: ""

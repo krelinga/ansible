@@ -65,6 +65,17 @@ pve:
       ansible_host: nas-pve.i.krel.ing
     dev-pve:
       ansible_host: dev-pve.i.krel.ing
+
+opnsense:
+  vars:
+    tls_cert_push_platform: opnsense
+    tls_cert_push_opnsense_host: "gateway.i.krel.ing"
+    tls_cert_push_opnsense_api_key: "{{ lookup('bitwarden.secrets.lookup', '20615609-4d51-472f-bb43-b2d40029e520') }}"
+    tls_cert_push_opnsense_api_secret: "{{ lookup('bitwarden.secrets.lookup', '89d647a1-fde8-447c-88a9-b2d40029fc0c') }}"
+    tls_cert_push_opnsense_web_user_name: krelinga
+    tls_cert_push_opnsense_web_password: "{{ lookup('bitwarden.secrets.lookup', '43a0ff9b-5a9e-4167-842b-b2d5002ec71a') }}"
+  hosts:
+    gateway:
       
 servers:
   hosts:

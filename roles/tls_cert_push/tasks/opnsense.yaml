@@ -19,3 +19,4 @@
     private_key: "{{ lookup('file', '/nas/certs/live/i.krel.ing/privkey.pem') }}"
     web_user_name: "{{ tls_cert_push_opnsense_web_user_name }}"
     web_password: "{{ tls_cert_push_opnsense_web_password }}"
+  delegate_to: localhost
