@@ -59,6 +59,7 @@ openwrt:
 pve:
   vars:
     ansible_user: root
+    tls_cert_push_platform: pve
   hosts:
     nas-pve:
       ansible_host: nas-pve.i.krel.ing

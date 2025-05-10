@@ -1,6 +1,9 @@
 - name: Config
   hosts: nas-pve
 
+  roles:
+    - tls_cert_push
+
   tasks:
     - name: Enable IOMMU
       ansible.builtin.lineinfile:

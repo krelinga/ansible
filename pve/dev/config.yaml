@@ -2,6 +2,7 @@
   hosts: dev-pve
 
   roles:
+    - tls_cert_push
     - role: pve_server
       vars:
         pve_api_host: "dev-pve.i.krel.ing" # TODO: use invenotry_hostname?

@@ -10,8 +10,6 @@
 
 - name: Push TLS cert to pve
   hosts: pve
-  vars:
-    tls_cert_push_platform: pve
   roles:
     - tls_cert_push
 
