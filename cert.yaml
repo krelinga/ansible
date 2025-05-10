@@ -31,6 +31,8 @@
   roles:
     - tls_cert_push
 
+# TODO: when this playbook is run manually from semaphore, restarting the caddy container causes the UI to hang.
+# I should sweep this up when I consolidate critical infrastructure onto my infra pi.
 - name: Restart Caddy
   hosts: nas-docker
   tasks:
