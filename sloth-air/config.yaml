@@ -45,6 +45,7 @@
     - geerlingguy.mac.homebrew
     - geerlingguy.mac.mas
     - ssh_server
+    - mac_terminal
 
   tasks:
     - name: Set up Java symlink
