@@ -96,6 +96,12 @@
           - fqdn: sem.i.krel.ing
             real_host: nas-docker.i.krel.ing
             real_port: 3000
+          - fqdn: videoin.i.krel.ing
+            real_host: nas-docker.i.krel.ing
+            real_port: 25005
+          - fqdn: videoin-be.i.krel.ing
+            real_host: nas-docker.i.krel.ing
+            real_port: 25004
         cert_path: "/nas/certs/live/i.krel.ing/fullchain.pem"
         private_key_path: "/nas/certs/live/i.krel.ing/privkey.pem"
       register: caddyfile
@@ -115,3 +121,55 @@
           - caddy_config:/config
           - "/home/{{ ansible_user }}/Caddyfile:/etc/caddy/Caddyfile:ro"
           - caddy_certs:/nas/certs:ro
+
+    - name: Create docker volume for videoin media mount
+      community.docker.docker_volume:
+        name: videoin_media
+        state: present
+        driver: local
+        driver_options:
+          type: cifs
+          device: "//truenas.i.krel.ing/media"
+          o: "username=videoin,password={{ lookup('bitwarden.secrets.lookup', '61cfbcc9-8b98-4af2-9553-b2e2016f087b') }},file_mode=0660,dir_mode=0770,rw,vers=3.0"
+
+    - name: Create other volumes for videoin
+      community.docker.docker_volume:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - videoin_state
+        - videoin_thumbs
+
+    - name: Create docker container for videoin backend
+      community.docker.docker_container:
+        name: videoin-be
+        image: krelinga/video-in-be:latest
+        state: started
+        restart: yes
+        pull: always
+        ports:
+          - 25004:25004
+        volumes:
+          - videoin_media:/nas/media
+          - videoin_state:/state
+          - videoin_thumbs:/thumbs
+        env:
+          VIDEOIN_PROJECTDIR: /nas/media/videoin/projects
+          VIDEOIN_STATEDIR: /state
+          VIDEOIN_THUMBSDIR: /thumbs
+          VIDEOIN_UNCLAIMEDDIR: /nas/media/Rip
+          VIDEOIN_LIBRARYDIR: /nas/media/Movies
+          VIDEOIN_TMDBKEY: "{{ lookup('bitwarden.secrets.lookup', '010be8a7-c36b-4e83-813c-b2e20171a01e') }}"
+
+    - name: Create docker container for videoin frontend
+      community.docker.docker_container:
+        name: videoin-fe
+        image: krelinga/video-in-fe:latest
+        state: started
+        restart: yes
+        pull: always
+        ports:
+          - 25005:3000
+        env:
+          NEXT_PUBLIC_IMG_URL_PREFIX: http://videoin-be.i.krel.ing
+          NEXT_PUBLIC_BACKEND_URL: http://nas-docker.i.krel.ing:25004
