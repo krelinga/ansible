@@ -145,7 +145,6 @@
         name: videoin-be
         image: krelinga/video-in-be:latest
         state: started
-        restart: yes
         pull: always
         ports:
           - 25004:25004
@@ -166,7 +165,6 @@
         name: videoin-fe
         image: krelinga/video-in-fe:latest
         state: started
-        restart: yes
         pull: always
         ports:
           - 25005:3000
