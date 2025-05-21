@@ -66,3 +66,20 @@
         src: /mnt/certs
         dest: /nas/certs
         state: link
+
+    - name: ensure media smb share is mounted
+      become: true
+      ansible.posix.mount:
+        boot: true
+        fstype: cifs
+        src: //truenas.i.krel.ing/media
+        path: /mnt/media
+        opts: "username=dev,password={{ lookup('bitwarden.secrets.lookup', '1f341f46-846e-450f-8938-b2cc011bb849') }},file_mode=0666,dir_mode=0777,rw,vers=3.0"
+        state: mounted
+
+    - name: create /nas/media symbolic link
+      become: true
+      ansible.builtin.file:
+        src: /mnt/media
+        dest: /nas/media
+        state: link
