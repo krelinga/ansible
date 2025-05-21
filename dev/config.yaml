@@ -83,3 +83,7 @@
         src: /mnt/media
         dest: /nas/media
         state: link
+
+    - name: Create dev-network
+      community.docker.docker_network:
+        name: dev-network
