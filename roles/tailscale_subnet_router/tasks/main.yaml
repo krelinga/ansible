@@ -1,0 +1,60 @@
+- name: Import Tailscale GPG key
+  become: yes
+  ansible.builtin.shell: >
+    curl -fsSL https://pkgs.tailscale.com/stable/{{ ansible_distribution | lower }}/{{ ansible_distribution_release | lower }}.noarmor.gpg > /usr/share/keyrings/tailscale-archive-keyring.gpg
+  args:
+    creates: /usr/share/keyrings/tailscale-archive-keyring.gpg
+  register: tailscale_gpg_key
+
+- name: Install Tailscale apt repo
+  become: yes
+  ansible.builtin.shell: >
+    curl -fsSL https://pkgs.tailscale.com/stable/{{ ansible_distribution | lower }}/{{ ansible_distribution_release | lower }}.tailscale-keyring.list | sudo tee /etc/apt/sources.list.d/tailscale.list
+  args:
+    creates: /etc/apt/sources.list.d/tailscale.list
+  register: tailscale_repo
+
+- name: Update apt cache
+  become: yes
+  ansible.builtin.apt:
+    update_cache: yes
+  when: tailscale_repo.changed or tailscale_gpg_key.changed
+
+- name: Install Tailscale
+  become: yes
+  ansible.builtin.apt:
+    name: tailscale
+    update_cache: yes
+    state: present
+
+- name: Enable IP forwarding (IPv4)
+  become: yes
+  ansible.posix.sysctl:
+    name: net.ipv4.ip_forward
+    value: '1'
+    state: present
+    reload: yes
+
+- name: Enable IP forwarding (IPv6)
+  become: yes
+  ansible.posix.sysctl:
+    name: net.ipv6.conf.all.forwarding
+    value: '1'
+    state: present
+    reload: yes
+
+- name: Start and authenticate Tailscale
+  become: yes
+  ansible.builtin.shell: >
+    tailscale up --authkey={{ lookup('bitwarden.secrets.lookup', 'b97ff3f7-a3b7-4020-83e0-b2e501433667') }}
+    --advertise-routes=10.86.14.0/24
+    --hostname={{ inventory_hostname }}
+  args:
+    creates: /var/lib/tailscale/tailscaled.state
+
+- name: Enable and start tailscaled service
+  become: yes
+  ansible.builtin.systemd:
+    name: tailscaled
+    enabled: yes
+    state: started
