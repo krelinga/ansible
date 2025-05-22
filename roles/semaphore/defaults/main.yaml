@@ -1,0 +1,3 @@
+# It is up to the caller to provide reasonable values for these variables.
+semaphore_port: -1
+semaphore_web_root: ""

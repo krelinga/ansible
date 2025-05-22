@@ -1,3 +1,10 @@
+- name: Check variables
+  ansible.builtin.assert:
+    that:
+      - semaphore_port > 0
+      - semaphore_web_root | length > 0
+    fail_msg: "The variable 'semaphore_port' must be defined and greater than 0. The variable 'semaphore_web_root' must be defined and not empty."
+
 - name: Create docker volumes for Semaphore
   community.docker.docker_volume:
     name: "{{ item }}"
@@ -37,14 +44,14 @@
     restart: "{{'yes' if git_repo.changed else 'no'}}"
     pull: always
     ports:
-      - "0.0.0.0:3000:3000"
+      - "0.0.0.0:{{ semaphore_port }}:3000"
     env:
       SEMAPHORE_DB_DIALECT: bolt
       SEMAPHORE_ADMIN: admin
       SEMAPHORE_ADMIN_PASSWORD: "{{ lookup('bitwarden.secrets.lookup', '83cbcc37-e60f-414e-a538-b2d5010bae26') }}"
       SEMAPHORE_ADMIN_NAME: Admin
       SEMAPHORE_ADMIN_EMAIL: "admin@localhost"
-      SEMAPHORE_WEB_ROOT: https://sem.i.krel.ing
+      SEMAPHORE_WEB_ROOT: "{{ semaphore_web_root }}"
       BWS_ACCESS_TOKEN: "{{ lookup('bitwarden.secrets.lookup', 'e5fbd2b0-f101-4c1c-a0bc-b2d5015bcda0') }}"
       SEMAPHORE_FORWARDED_ENV_VARS: '["BWS_ACCESS_TOKEN"]'
     volumes:
