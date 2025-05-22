@@ -13,34 +13,9 @@
       vars:
         semaphore_port: 3000
         semaphore_web_root: "https://sem.i.krel.ing"
-
-  tasks:
-    - name: Create Caddy volumes
-      community.docker.docker_volume:
-        name: "{{ item }}"
-        state: present
-      loop:
-        - caddy_data
-        - caddy_config
-
-    - name: Ensure caddy_certs volume exists
-      community.docker.docker_volume:
-        name: caddy_certs
-        state: present
-        driver: local
-        driver_options:
-          type: cifs
-          device: "//truenas.i.krel.ing/certs"
-          # mfsymlinks is needed because certbot creates symlinks in this volume
-          o: "username=certs_deploy,password={{ lookup('bitwarden.secrets.lookup', 'cf980f96-40bb-4cb6-bdf9-b2d00033795b') }},file_mode=0440,dir_mode=0550,ro,vers=3.0,mfsymlinks"
-
-    - name: Create Caddyfile
-      ansible.builtin.template:
-        src: Caddyfile.j2
-        dest: "/home/{{ ansible_user }}/Caddyfile"
-        mode: '0644'
+    - role: caddy
       vars:
-        proxies:
+        caddy_proxies:
           - fqdn: sem.i.krel.ing
             real_host: nas-docker.i.krel.ing
             real_port: 3000
@@ -50,26 +25,8 @@
           - fqdn: videoin-be.i.krel.ing
             real_host: nas-docker.i.krel.ing
             real_port: 25004
-        cert_path: "/nas/certs/live/i.krel.ing/fullchain.pem"
-        private_key_path: "/nas/certs/live/i.krel.ing/privkey.pem"
-      register: caddyfile
 
-    - name: Create docker container for Caddy
-      community.docker.docker_container:
-        name: caddy
-        image: caddy:latest
-        state: started
-        restart: "{{'yes' if caddyfile.changed else 'no'}}"
-        pull: always
-        ports:
-          - 80:80
-          - 443:443
-        volumes:
-          - caddy_data:/data
-          - caddy_config:/config
-          - "/home/{{ ansible_user }}/Caddyfile:/etc/caddy/Caddyfile:ro"
-          - caddy_certs:/nas/certs:ro
-
+  tasks:
     - name: Create docker volume for videoin media mount
       community.docker.docker_volume:
         name: videoin_media
