@@ -9,64 +9,9 @@
         docker_users:
           - "{{ ansible_user }}"
     - cifs
+    - semaphore
 
   tasks:
-    - name: Create docker volumes for Semaphore
-      community.docker.docker_volume:
-        name: "{{ item }}"
-        state: present
-      loop:
-        - semaphore_data
-        - semaphore_config
-        - semaphore_tmp
-
-    - name: Ensure semaphore_certs volume exists
-      community.docker.docker_volume:
-        name: semaphore_certs
-        state: present
-        driver: local
-        driver_options:
-          type: cifs
-          device: "//truenas.i.krel.ing/certs"
-          # mfsymlinks is needed because certbot creates symlinks in this volume
-          o: "username=certs_deploy,password={{ lookup('bitwarden.secrets.lookup', 'cf980f96-40bb-4cb6-bdf9-b2d00033795b') }},file_mode=0440,dir_mode=0550,ro,vers=3.0,mfsymlinks"
-
-    # It's a little annoying that this needs to happen outside of semaphore's capability of reading repos
-    # on its own, but probably not a big deal.
-    # per https://docs.semaphoreui.com/administration-guide/installation/#installing-additional-python-packages
-    - name: clone ansible repo
-      ansible.builtin.git:
-        repo: "https://github.com/krelinga/ansible.git"
-        dest: "/home/{{ ansible_user }}/ansible"
-        force: yes
-        update: yes
-      register: git_repo
-
-    - name: Create docker container for semaphore
-      community.docker.docker_container:
-        name: semaphore
-        image: krelinga/semaphoreui-rust:latest
-        state: started
-        restart: "{{'yes' if git_repo.changed else 'no'}}"
-        pull: always
-        ports:
-          - "0.0.0.0:3000:3000"
-        env:
-          SEMAPHORE_DB_DIALECT: bolt
-          SEMAPHORE_ADMIN: admin
-          SEMAPHORE_ADMIN_PASSWORD: "{{ lookup('bitwarden.secrets.lookup', '83cbcc37-e60f-414e-a538-b2d5010bae26') }}"
-          SEMAPHORE_ADMIN_NAME: Admin
-          SEMAPHORE_ADMIN_EMAIL: "admin@localhost"
-          SEMAPHORE_WEB_ROOT: https://sem.i.krel.ing
-          BWS_ACCESS_TOKEN: "{{ lookup('bitwarden.secrets.lookup', 'e5fbd2b0-f101-4c1c-a0bc-b2d5015bcda0') }}"
-          SEMAPHORE_FORWARDED_ENV_VARS: '["BWS_ACCESS_TOKEN"]'
-        volumes:
-          - semaphore_data:/var/lib/semaphore
-          - semaphore_config:/etc/semaphore
-          - semaphore_tmp:/tmp/semaphore
-          - "/home/{{ ansible_user }}/ansible/requirements.txt:/etc/semaphore/requirements.txt:ro"
-          - semaphore_certs:/nas/certs:ro
-
     - name: Create Caddy volumes
       community.docker.docker_volume:
         name: "{{ item }}"

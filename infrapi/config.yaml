@@ -9,3 +9,4 @@
         docker_users:
           - "{{ ansible_user }}"
     - cifs
+    - semaphore
