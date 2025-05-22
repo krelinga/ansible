@@ -30,11 +30,13 @@
           -w /etc/letsencrypt
           -d i.krel.ing
           -d "*.i.krel.ing"
+          -d "*.dev.i.krel.ing"
           --email {{ lookup('bitwarden.secrets.lookup', '0399d176-38cf-4591-a096-b2cb0187c42d') }}
           --agree-tos
           --non-interactive
           --dns-cloudflare
           --dns-cloudflare-credentials /tmp/cloudflare.ini
+          --expand
       register: tls_cert_fetch
       changed_when: "'Successfully received certificate.' in tls_cert_fetch.stdout"
 
