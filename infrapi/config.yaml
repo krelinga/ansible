@@ -1,2 +1,11 @@
 - name: Config
   hosts: infrapi
+
+  roles:
+    - ssh_server
+    - role: geerlingguy.docker
+      become: true
+      vars:
+        docker_users:
+          - "{{ ansible_user }}"
+    - cifs
