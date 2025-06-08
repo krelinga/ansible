@@ -52,4 +52,9 @@
           password_id: cf980f96-40bb-4cb6-bdf9-b2d00033795b
           groups:
             - certs_readonly
+        - user: gamespc
+          password_id: 469c6ab1-24ac-4efc-8bf6-b2f6006239a2
+          groups:
+            - media_readwrite
+
         
