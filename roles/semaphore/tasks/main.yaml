@@ -41,6 +41,7 @@
     name: semaphore
     image: krelinga/semaphoreui-rust:latest
     state: started
+    restart_policy: unless-stopped
     restart: "{{'yes' if git_repo.changed else 'no'}}"
     pull: always
     ports:

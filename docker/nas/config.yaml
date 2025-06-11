@@ -9,16 +9,9 @@
         docker_users:
           - "{{ ansible_user }}"
     - cifs
-    - role: semaphore
-      vars:
-        semaphore_port: 3000
-        semaphore_web_root: "https://sem.i.krel.ing"
     - role: caddy
       vars:
         caddy_proxies:
-          - fqdn: sem.i.krel.ing
-            real_host: nas-docker.i.krel.ing
-            real_port: 3000
           - fqdn: videoin.i.krel.ing
             real_host: nas-docker.i.krel.ing
             real_port: 25005
@@ -50,6 +43,7 @@
         name: videoin-be
         image: krelinga/video-in-be:latest
         state: started
+        restart_policy: unless-stopped
         pull: always
         ports:
           - 25004:25004
@@ -70,6 +64,7 @@
         name: videoin-fe
         image: krelinga/video-in-fe:latest
         state: started
+        restart_policy: unless-stopped
         pull: always
         ports:
           - 25005:3000

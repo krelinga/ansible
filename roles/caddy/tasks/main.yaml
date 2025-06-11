@@ -33,6 +33,7 @@
     name: caddy
     image: caddy:latest
     state: started
+    restart_policy: unless-stopped
     restart: "{{'yes' if caddyfile.changed else 'no'}}"
     pull: always
     ports:
