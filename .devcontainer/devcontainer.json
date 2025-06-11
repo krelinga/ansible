@@ -32,8 +32,8 @@
 		// This isn't strictly necessary for ansible, but it is a good test for other
 		// containers that will need this mount.  There is automation configured to
 		// set up this mount in various workstations.
-		"source=/nas/dev,target=/nas/dev,type=bind,consistency=cached",
-		"source=/nas/certs,target=/nas/certs,type=bind,consistency=cached"
+		"source=/nas/dev,target=/nas/dev,type=bind,consistency=cached"
+		// "source=/nas/certs,target=/nas/certs,type=bind,consistency=cached"
 	],
 	"customizations": {
 		"vscode": {
