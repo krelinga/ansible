@@ -9,12 +9,6 @@
         docker_users:
           - "{{ ansible_user }}"
     - cifs
-    - role: caddy
-      vars:
-        caddy_proxies:
-          - fqdn: tcserver.i.krel.ing
-            real_host: dev-docker.i.krel.ing
-            real_port: 25000
 
   tasks:
     - name: Create docker volume for tcserver media mount
