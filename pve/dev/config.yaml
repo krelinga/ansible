@@ -14,8 +14,17 @@
             vmid: 100
             mac_address: "BC:24:11:67:F3:B8"
             cores: 23
+            cpuunits: 90  # take priority over the dev-docker vm if CPU gets busy.
             memory_mb: 112640
             disk_gb: 500
+          - name: dev-docker
+            iso_url: "https://mirror.pilotfiber.com/ubuntu-iso/24.04.2/ubuntu-24.04.2-live-server-amd64.iso"
+            vmid: 101
+            mac_address: "BC:24:11:67:F3:B9"
+            cores: 23
+            memory_mb: 112640
+            disk_gb: 300
+            cpuunits: 10  # defer to the dev vm if CPU gets busy.
             
         
 
