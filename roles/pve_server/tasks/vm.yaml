@@ -30,6 +30,7 @@
     net:
       net0: "virtio={{ vm.mac_address }},bridge=vmbr0,firewall=1"
     cores: "{{ vm.cores }}"
+    cpuunits: "{{ vm.cpuunits | default(100) }}"
     memory: "{{ vm.memory_mb }}"
     onboot: true
     ostype: other
