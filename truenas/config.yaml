@@ -58,5 +58,9 @@
           password_id: 469c6ab1-24ac-4efc-8bf6-b2f6006239a2
           groups:
             - media_readwrite
+        - user: tcserver
+          password_id: ed3010e9-815f-4c5b-a846-b2fb0017355f
+          groups:
+            - media_readwrite
 
         
