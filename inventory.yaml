@@ -89,6 +89,10 @@ servers:
       ansible_host: dev.i.krel.ing
       ansible_user: krelinga
       ansible_become_password: "{{ lookup('bitwarden.secrets.lookup', 'd2527fa2-4c49-4009-bd41-b2cc0003a8d2') }}"
+    dev-docker:
+      ansible_host: dev-docker.i.krel.ing
+      ansible_user: krelinga
+      ansible_become_password: "{{ lookup('bitwarden.secrets.lookup', 'd2527fa2-4c49-4009-bd41-b2cc0003a8d2') }}"
     nas-docker:
       ansible_host: nas-docker.i.krel.ing
       ansible_user: krelinga
