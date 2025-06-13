@@ -1,2 +1,46 @@
 - name: Config
   hosts: dev-docker
+
+  roles:
+    - ssh_server
+    - role: geerlingguy.docker
+      become: true
+      vars:
+        docker_users:
+          - "{{ ansible_user }}"
+    - cifs
+
+  tasks:
+    - name: Create docker volume for tcserver media mount
+      community.docker.docker_volume:
+        name: tcserver_media
+        state: present
+        driver: local
+        driver_options:
+          type: cifs
+          device: "//truenas.i.krel.ing/media"
+          o: "username=tcserver,password={{ lookup('bitwarden.secrets.lookup', 'ed3010e9-815f-4c5b-a846-b2fb0017355f') }},file_mode=0660,dir_mode=0770,rw,vers=3.0"
+
+    - name: Create state volume for tcserver
+      community.docker.docker_volume:
+        name: tcserver_state
+        state: present
+
+    - name: Create docker container for tcserver
+      community.docker.docker_container:
+        name: tcserver
+        image: krelinga/video-tool-box-tcserver:buildx-latest
+        state: started
+        restart_policy: unless-stopped
+        pull: always
+        ports:
+          - 25000:25000
+        volumes:
+          - tcserver_media:/nas/media
+          - tcserver_state:/state
+        env:
+          VTB_TCSERVER_STATE_PATH: /state/state
+          # 23 cores available on the server, 3 cores per-worker, so 7 total workers.
+          VTB_TCSERVER_FILE_WORKERS: "7"
+          VTB_TCSERVER_SHOW_WORKERS: "2"
+          VTB_TCSERVER_SPREAD_WORKERS: "2"
