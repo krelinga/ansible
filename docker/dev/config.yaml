@@ -40,7 +40,9 @@
           - tcserver_state:/state
         env:
           VTB_TCSERVER_STATE_PATH: /state/state
-          # 23 cores available on the server, 3 cores per-worker, so 7 total workers.
-          VTB_TCSERVER_FILE_WORKERS: "7"
+          # TODO: pass flags to ffmpeg to use more threads.  After that is done, consider
+          # reducing to 1 worker (which will yield lower latancy for each file, hopefully
+          # without a significant impact on throughput).
+          VTB_TCSERVER_FILE_WORKERS: "2"
           VTB_TCSERVER_SHOW_WORKERS: "2"
           VTB_TCSERVER_SPREAD_WORKERS: "2"
