@@ -14,7 +14,8 @@ def get_certificates(w, note):
     certs = w.client.call("certificate.query", [], dict(
         prefix=CERT_NAME,
     ))
-    w.note(note, certs)
+    cert_ids = [cert['id'] for cert in certs]
+    w.note(note, cert_ids)
     return certs
 
 
