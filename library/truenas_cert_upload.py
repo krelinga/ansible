@@ -69,7 +69,7 @@ def login(w, api_key):
     """
     result = w.client.call("auth.login_with_api_key", api_key)
     w.note("login", result)
-    if result == False:
+    if result != True:
         raise Error("Failed to authenticate with API key")
 
 
@@ -103,7 +103,7 @@ def delete_certificate(w, cert_id):
         id=cert_id,
     ))
     w.note("delete_certificate", result)
-    if result == False:
+    if result != True:
         raise Error("Failed to delete certificate")
     
 
