@@ -3,7 +3,8 @@
 
   roles:
     - ssh_server
-    - tls_cert_push
+    - role: tls_cert_push
+      tags: ["tls_cert_push"]
 
   tasks:
     - name: create groups
