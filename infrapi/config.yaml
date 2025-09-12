@@ -13,6 +13,7 @@
       vars:
         semaphore_port: 3000
         semaphore_web_root: "https://sem.i.krel.ing"
+      tags: ["semaphore"]
     - role: caddy
       vars:
         caddy_proxies:
