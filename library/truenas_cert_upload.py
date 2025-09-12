@@ -99,7 +99,8 @@ def delete_certificate(w, cert_id):
     Delete the certificate from the TrueNAS server.
     """
     w.change()
-    result = w.client.call("certificate.delete", cert_id)
+    force = True
+    result = w.client.call("certificate.delete", cert_id, force)
     w.note("delete_certificate", result)
     if result != True:
         raise Error("Failed to delete certificate")
