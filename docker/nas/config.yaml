@@ -58,6 +58,7 @@
           VIDEOIN_UNCLAIMEDDIR: /nas/media/Rip
           VIDEOIN_LIBRARYDIR: /nas/media/Movies
           VIDEOIN_TMDBKEY: "{{ lookup('bitwarden.secrets.lookup', '010be8a7-c36b-4e83-813c-b2e20171a01e') }}"
+          VIDEOIN_FANARTAPIKEY: "{{ lookup('bitwarden.secrets.lookup', 'c79eb454-ced6-414b-a145-b354002cc5ba') }}"
 
     - name: Create docker container for videoin frontend
       community.docker.docker_container:
