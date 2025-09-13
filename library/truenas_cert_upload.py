@@ -83,6 +83,7 @@ def rename_cert(w, cert_id, new_name):
         name=new_name,
     ))
     w.note("rename_cert", result)
+    w.note("rename_cert_result_type", type(result).__name__)
     if result != True:
         raise Error("Failed to rename certificate")
 
