@@ -122,9 +122,8 @@ def delete_certificate(w, cert_id):
     w.change()
     result = w.client.call("certificate.delete", cert_id, job=True)
     w.note("delete_certificate", result)
-    # TODO: update this once we get a sense of what the reply looks like.
-    # if result != True:
-    #     raise Error("Failed to delete certificate")
+    if result != True:
+        raise Error("Failed to delete certificate")
     
 
 def create_certificate(w, certificate, private_key):
@@ -157,12 +156,9 @@ def ensure_cert_in_use(w, cert_id):
     result = w.client.call("system.general.update", dict(
         ui_certificate=cert_id,
     ))
-    w.note("update_ui_certificate", result)
-
-    time.sleep(5)  # Wait for the update to take effect
-
-    new_config = get_config(w, "new_config")
-    if new_config['ui_certificate']['id'] != cert_id:
+    got_id = result.get('ui_certificate', {}).get('id', None)
+    w.note("update_ui_certificate", got_id)
+    if got_id != cert_id:
         raise Error("Failed to update UI certificate")
     
     restart_result = w.client.call("system.general.ui_restart")
