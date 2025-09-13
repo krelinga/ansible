@@ -120,11 +120,11 @@ def delete_certificate(w, cert_id):
     Delete the certificate from the TrueNAS server.
     """
     w.change()
-    # TODO: change this to use a job.
-    result = w.client.call("certificate.delete", cert_id)
+    result = w.client.call("certificate.delete", cert_id, job=True)
     w.note("delete_certificate", result)
-    if result != True:
-        raise Error("Failed to delete certificate")
+    # TODO: update this once we get a sense of what the reply looks like.
+    # if result != True:
+    #     raise Error("Failed to delete certificate")
     
 
 def create_certificate(w, certificate, private_key):
@@ -138,20 +138,11 @@ def create_certificate(w, certificate, private_key):
         certificate=certificate,
         privatekey=private_key,
     ), job=True)
-    w.note("create_certificate", result)
-    # TODO: remove this once I get a look at the job result.
-    raise Error("Temporary failure creating certificate")
-    if result != True:
+    got_name = result.get('name', None)
+    w.note("create_certificate_new_name", got_name)
+    if got_name != CERT_NAME:
         raise Error("Failed to create certificate")
-
-    time.sleep(5)  # Wait for the certificate to be created
-
-    # Check if the certificate was created successfully
-    new_certs = get_certificates(w, "new_certificates")
-    new_cert = find_certificate(new_certs)
-    if new_cert is None:
-        raise Error("Failed to create certificate")
-    return new_cert['id']
+    return result['id']
 
 
 def ensure_cert_in_use(w, cert_id):
