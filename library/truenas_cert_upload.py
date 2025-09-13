@@ -71,7 +71,7 @@ def login(w, api_key):
     result = w.client.call("auth.login_with_api_key", api_key)
     w.note("login", result)
     if result != True:
-        raise Error("Failed to authenticate with API key")
+        raise Error("Failed to authenticate with API key, got result %r" % result)
 
 
 def rename_cert(w, cert_id, new_name):
@@ -82,10 +82,10 @@ def rename_cert(w, cert_id, new_name):
     result = w.client.call("certificate.update", cert_id, dict(
         name=new_name,
     ), job=True)
-    got_name = result.get('name', None)
+    got_name = result.get('name', None) if isinstance(result, dict) else None
     w.note("rename_cert_new_name", got_name)
     if got_name != new_name:
-        raise Error("Failed to rename certificate")
+        raise Error("Failed to rename certificate, got result %r" % result)
 
 
 def ensure_cert_exists(w, certificate, private_key):
@@ -123,7 +123,7 @@ def delete_certificate(w, cert_id):
     result = w.client.call("certificate.delete", cert_id, job=True)
     w.note("delete_certificate", result)
     if result != True:
-        raise Error("Failed to delete certificate")
+        raise Error("Failed to delete certificate, got result %r" % result)
     
 
 def create_certificate(w, certificate, private_key):
@@ -137,10 +137,10 @@ def create_certificate(w, certificate, private_key):
         certificate=certificate,
         privatekey=private_key,
     ), job=True)
-    got_name = result.get('name', None)
+    got_name = result.get('name', None) if isinstance(result, dict) else None
     w.note("create_certificate_new_name", got_name)
     if got_name != CERT_NAME:
-        raise Error("Failed to create certificate")
+        raise Error("Failed to create certificate, got result %r" % result)
     return result['id']
 
 
@@ -156,10 +156,10 @@ def ensure_cert_in_use(w, cert_id):
     result = w.client.call("system.general.update", dict(
         ui_certificate=cert_id,
     ))
-    got_id = result.get('ui_certificate', {}).get('id', None)
+    got_id = result.get('ui_certificate', {}).get('id', None) if isinstance(result, dict) else None
     w.note("update_ui_certificate", got_id)
     if got_id != cert_id:
-        raise Error("Failed to update UI certificate")
+        raise Error("Failed to update UI certificate, got result %r" % result)
     
     restart_result = w.client.call("system.general.ui_restart")
     w.note("restart_ui", restart_result)
