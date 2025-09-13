@@ -74,6 +74,19 @@ def login(w, api_key):
         raise Error("Failed to authenticate with API key")
 
 
+def rename_cert(w, cert_id, new_name):
+    """
+    Rename the certificate on the TrueNAS server.
+    """
+    w.change()
+    result = w.client.call("certificate.update", cert_id, dict(
+        name=new_name,
+    ))
+    w.note("rename_cert", result)
+    if result != True:
+        raise Error("Failed to rename certificate")
+
+
 # Returns a two-tuple of (cert_id, cert_id_to_delete)
 # If cert_id_to_delete is not None, it should be deleted after cert_id is in use.
 def ensure_cert_exists(w, certificate, private_key):
@@ -88,6 +101,9 @@ def ensure_cert_exists(w, certificate, private_key):
             # Certificate already exists with the same content
             return existing_id, None
         else:
+            # We need to rename the existing certificate before we can create a new
+            # one with the same name.
+            rename_cert(w, existing_id, CERT_NAME + "-old")
             return create_certificate(w, certificate, private_key), existing_id
     else:
         return create_certificate(w, certificate, private_key), None
