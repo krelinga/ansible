@@ -120,6 +120,8 @@ def create_certificate(w, certificate, private_key):
         privatekey=private_key,
     ))
     w.note("create_certificate", result)
+    if result != True:
+        raise Error("Failed to create certificate")
 
     time.sleep(5)  # Wait for the certificate to be created
 
