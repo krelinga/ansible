@@ -74,6 +74,8 @@ def login(w, api_key):
         raise Error("Failed to authenticate with API key")
 
 
+# Returns a two-tuple of (cert_id, cert_id_to_delete)
+# If cert_id_to_delete is not None, it should be deleted after cert_id is in use.
 def ensure_cert_exists(w, certificate, private_key):
     """
     Ensure that the certificate exists on the TrueNAS server.
@@ -84,11 +86,11 @@ def ensure_cert_exists(w, certificate, private_key):
         existing_id = existing['id']
         if check_certificate(existing, certificate, private_key):
             # Certificate already exists with the same content
-            return existing_id
+            return existing_id, None
         else:
-            delete_certificate(w, existing_id)
-
-    return create_certificate(w, certificate, private_key)
+            return create_certificate(w, certificate, private_key), existing_id
+    else:
+        return create_certificate(w, certificate, private_key), None
 
 
 def check_certificate(existing, certificate, private_key):
@@ -184,8 +186,10 @@ def main():
         with Client("wss://truenas.i.krel.ing/websocket", verify_ssl=False) as c:
             w = Wrapper(c, verbose)
             login(w, api_key)
-            cert_id = ensure_cert_exists(w, certificate, private_key)
+            cert_id, cert_id_to_delete = ensure_cert_exists(w, certificate, private_key)
             ensure_cert_in_use(w, cert_id)
+            if cert_id_to_delete is not None:
+                delete_certificate(w, cert_id_to_delete)
             module.exit_json(changed=w.changed, **w.notes)
     except (Error, ClientException) as e:
         notes = w.notes if w else {}
