@@ -81,7 +81,7 @@ def rename_cert(w, cert_id, new_name):
     w.change()
     result = w.client.call("certificate.update", cert_id, dict(
         name=new_name,
-    ))
+    ), job=True)
     w.note("rename_cert", result)
     w.note("rename_cert_result_type", type(result).__name__)
     if result != True:
