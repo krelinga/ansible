@@ -87,11 +87,12 @@ def rename_cert(w, cert_id, new_name):
         raise Error("Failed to rename certificate")
 
 
-# Returns a two-tuple of (cert_id, cert_id_to_delete)
-# If cert_id_to_delete is not None, it should be deleted after cert_id is in use.
 def ensure_cert_exists(w, certificate, private_key):
     """
     Ensure that the certificate exists on the TrueNAS server.
+
+    Returns a two-tuple of (cert_id, cert_id_to_delete).
+    If cert_id_to_delete is not None, it should be deleted after cert_id is in use.
     """
     certs = get_certificates(w, "existing_certificates")
     existing = find_certificate(certs)
