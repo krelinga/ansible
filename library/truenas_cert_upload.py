@@ -82,9 +82,9 @@ def rename_cert(w, cert_id, new_name):
     result = w.client.call("certificate.update", cert_id, dict(
         name=new_name,
     ), job=True)
-    w.note("rename_cert", result)
-    w.note("rename_cert_result_type", type(result).__name__)
-    if result != True:
+    got_name = result.getdefault('name', None)
+    w.note("rename_cert_new_name", got_name)
+    if got_name != new_name:
         raise Error("Failed to rename certificate")
 
 
