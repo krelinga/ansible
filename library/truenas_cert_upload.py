@@ -160,7 +160,8 @@ def get_config(w, key):
     Get the current configuration from the TrueNAS server.
     """
     config = w.client.call("system.general.config")
-    w.note(key, config)
+    id = config['ui_certificate']['id']
+    w.note(key, id)
     return config
 
 
