@@ -1,0 +1,27 @@
+- name: Create Gotify volumes
+  community.docker.docker_volume:
+    name: gotify_data
+    state: present
+
+- name: Create Gotify config file
+  ansible.builtin.template:
+    src: config.yml
+    dest: "/home/{{ ansible_user }}/gotify.yml"
+  vars:
+    infrapi_ip_address: "10.86.14.101"
+    gotify_admin_password: "{{ lookup('bitwarden.secrets.lookup', '22baefe3-5928-4991-a19d-b35b0051b579') }}"
+  register: gotify_config_file
+
+- name: Create docker container for Gotify
+  community.docker.docker_container:
+    name: gotify
+    image: gotify/server:latest
+    state: started
+    restart_policy: unless-stopped
+    restart: "{{ 'yes' if gotify_config_file.changed else 'no'}}"
+    pull: always
+    ports: 
+      - 25006:80
+    volumes:
+      - gotify_data:/app/data
+      - "/home/{{ ansible_user }}/gotify.yml:ro"
