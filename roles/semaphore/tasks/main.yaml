@@ -55,8 +55,9 @@
       SEMAPHORE_WEB_ROOT: "{{ semaphore_web_root }}"
       BWS_ACCESS_TOKEN: "{{ lookup('bitwarden.secrets.lookup', 'e5fbd2b0-f101-4c1c-a0bc-b2d5015bcda0') }}"
       SEMAPHORE_FORWARDED_ENV_VARS: '["BWS_ACCESS_TOKEN"]'
-      SEMAPHORE_SLACK_ALERT: "True"
-      SEMAPHORE_SLACK_URL: "{{ lookup('bitwarden.secrets.lookup', '783cd34e-024d-4237-b30a-b35801384afd') }}"
+      SEMAPHORE_GOTIFY_ALERT: "true"
+      SEMAPHORE_GOTIFY_URL: "https://gotify.i.krel.ing"
+      SEMAPHORE_GOTIFY_TOKEN: "{{ lookup('bitwarden.secrets.lookup', '9c86c4b3-3937-4fff-9e8f-b35b0062fd75') }}"
     volumes:
       - semaphore_data:/var/lib/semaphore
       - semaphore_config:/etc/semaphore
