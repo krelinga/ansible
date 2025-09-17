@@ -14,6 +14,8 @@
         semaphore_port: 3000
         semaphore_web_root: "https://sem.i.krel.ing"
       tags: ["semaphore"]
+    - role: gotify
+      tags: ["gotify"]
     - role: caddy
       vars:
         caddy_proxies:
@@ -23,5 +25,5 @@
           - fqdn: gotify.i.krel.ing
             real_host: infrapi.i.krel.ing
             real_port: 25006
-      tags: ["semaphore"]
+      tags: ["semaphore", "gotify"]
     - tailscale_subnet_router
