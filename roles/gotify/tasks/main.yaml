@@ -24,4 +24,4 @@
       - 25006:80
     volumes:
       - gotify_data:/app/data
-      - "/home/{{ ansible_user }}/gotify.yml:ro"
+      - "/home/{{ ansible_user }}/gotify.yml:/etc/gotify/config.yml:ro"
