@@ -1,0 +1,5 @@
+- hosts: localhost
+  tasks:
+    - name: Always fail
+      fail:
+        msg: "This task always fails"
