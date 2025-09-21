@@ -21,8 +21,8 @@
     - name: ensure ~/.bws has the correct contents
       ansible.builtin.copy:
         content: |
-          export BWS_ACCESS_TOKEN={{ lookup('bitwarden.secrets.lookup', '42b7b009-7eb6-4c88-a41b-b2cc004be88c') }}
-          export DEV_SMB_PASSWORD={{ lookup('bitwarden.secrets.lookup', '1f341f46-846e-450f-8938-b2cc011bb849') }}
+          export BWS_ACCESS_TOKEN={{ vault.bws_access_token }}
+          export DEV_SMB_PASSWORD={{ vault.dev_smb_password }}
         dest: ~/.bws
         mode: '0600'
 
@@ -39,7 +39,7 @@
         fstype: cifs
         src: //truenas.i.krel.ing/dev
         path: /mnt/dev
-        opts: "username=dev,password={{ lookup('bitwarden.secrets.lookup', '1f341f46-846e-450f-8938-b2cc011bb849') }},file_mode=0777,dir_mode=0777,rw"
+        opts: "username=dev,password={{ vault.dev_smb_password }},file_mode=0777,dir_mode=0777,rw"
         state: mounted
 
     - name: ensure /nas directory exists
@@ -63,7 +63,7 @@
         fstype: cifs
         src: //truenas.i.krel.ing/certs
         path: /mnt/certs
-        opts: "username=dev,password={{ lookup('bitwarden.secrets.lookup', '1f341f46-846e-450f-8938-b2cc011bb849') }},file_mode=0444,dir_mode=0555,ro,vers=3.0,mfsymlinks"
+        opts: "username=dev,password={{ vault.dev_smb_password }},file_mode=0444,dir_mode=0555,ro,vers=3.0,mfsymlinks"
         state: mounted
 
     - name: create /nas/certs symbolic link
@@ -80,7 +80,7 @@
         fstype: cifs
         src: //truenas.i.krel.ing/media
         path: /mnt/media
-        opts: "username=dev,password={{ lookup('bitwarden.secrets.lookup', '1f341f46-846e-450f-8938-b2cc011bb849') }},file_mode=0666,dir_mode=0777,rw,vers=3.0"
+        opts: "username=dev,password={{ vault.dev_smb_password }},file_mode=0666,dir_mode=0777,rw,vers=3.0"
         state: mounted
 
     - name: create /nas/media symbolic link

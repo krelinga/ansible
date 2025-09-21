@@ -23,7 +23,7 @@
       type: cifs
       device: "//truenas.i.krel.ing/certs"
       # mfsymlinks is needed because certbot creates symlinks in this volume
-      o: "username=certs_deploy,password={{ lookup('bitwarden.secrets.lookup', 'cf980f96-40bb-4cb6-bdf9-b2d00033795b') }},file_mode=0440,dir_mode=0550,ro,vers=3.0,mfsymlinks"
+      o: "username=certs_deploy,password={{ vault.certs_deploy_smb_password }},file_mode=0440,dir_mode=0550,ro,vers=3.0,mfsymlinks"
 
 # It's a little annoying that this needs to happen outside of semaphore's capability of reading repos
 # on its own, but probably not a big deal.
@@ -49,17 +49,17 @@
     env:
       SEMAPHORE_DB_DIALECT: bolt
       SEMAPHORE_ADMIN: admin
-      SEMAPHORE_ADMIN_PASSWORD: "{{ lookup('bitwarden.secrets.lookup', '83cbcc37-e60f-414e-a538-b2d5010bae26') }}"
+      SEMAPHORE_ADMIN_PASSWORD: "{{ vault.semaphore_admin_password }}"
       SEMAPHORE_ADMIN_NAME: Admin
       SEMAPHORE_ADMIN_EMAIL: "admin@localhost"
       SEMAPHORE_WEB_ROOT: "{{ semaphore_web_root }}"
-      BWS_ACCESS_TOKEN: "{{ lookup('bitwarden.secrets.lookup', 'e5fbd2b0-f101-4c1c-a0bc-b2d5015bcda0') }}"
+      BWS_ACCESS_TOKEN: "{{ vault.semaphore_ui_bws_access_token }}"
       SEMAPHORE_FORWARDED_ENV_VARS: '["BWS_ACCESS_TOKEN"]'
       SEMAPHORE_GOTIFY_ALERT: "true"
       SEMAPHORE_GOTIFY_URL: "https://gotify.i.krel.ing"
-      SEMAPHORE_GOTIFY_TOKEN: "{{ lookup('bitwarden.secrets.lookup', '9c86c4b3-3937-4fff-9e8f-b35b0062fd75') }}"
+      SEMAPHORE_GOTIFY_TOKEN: "{{ vault.gotify_semaphore_app_token }}"
       SEMAPHORE_SLACK_ALERT: "true"
-      SEMAPHORE_SLACK_URL: "{{ lookup('bitwarden.secrets.lookup', '783cd34e-024d-4237-b30a-b35801384afd') }}"
+      SEMAPHORE_SLACK_URL: "{{ vault.grafana_irm_web_socket_for_semaphore }}"
     volumes:
       - semaphore_data:/var/lib/semaphore
       - semaphore_config:/etc/semaphore

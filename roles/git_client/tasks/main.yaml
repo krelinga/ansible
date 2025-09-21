@@ -5,7 +5,7 @@
   changed_when: false
 
 - name: Set Git user email
-  command: 'git config --global user.email "{{ lookup("bitwarden.secrets.lookup", "0399d176-38cf-4591-a096-b2cb0187c42d") }}"'
+  command: 'git config --global user.email "{{ vault.my_email }}"'
   when: git_user_email.stdout == ""
 
 - name: Check if Git user name is already set
@@ -15,5 +15,5 @@
   changed_when: false
 
 - name: Set Git user name
-  command: 'git config --global user.name "{{ lookup("bitwarden.secrets.lookup", "46de9373-b1ba-4334-8e0d-b2cb0187d562") }}"'
+  command: 'git config --global user.name "{{ vault.my_name }}"'
   when: git_user_name.stdout == ""

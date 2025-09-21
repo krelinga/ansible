@@ -6,7 +6,7 @@
     - role: pve_server
       vars:
         pve_api_host: "dev-pve.i.krel.ing" # TODO: use invenotry_hostname?
-        pve_root_password: "{{ lookup('bitwarden.secrets.lookup', 'df724695-18be-4f52-ace9-b2cb0044c97d') }}"
+        pve_root_password: "{{ vault.dev_pve_root_password }}"
         pve_node: dev-pve
         pve_vms:
           - name: dev

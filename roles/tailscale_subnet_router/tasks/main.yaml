@@ -46,7 +46,7 @@
 - name: Start and authenticate Tailscale
   become: yes
   ansible.builtin.shell: >
-    tailscale up --authkey={{ lookup('bitwarden.secrets.lookup', 'b97ff3f7-a3b7-4020-83e0-b2e501433667') }}
+    tailscale up --authkey={{ vault.tailscale_auth_key }}
     --advertise-routes=10.86.14.0/24
     --hostname={{ inventory_hostname }}
   args:

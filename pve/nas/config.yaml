@@ -43,7 +43,7 @@
         name: pve_server
       vars:
         pve_api_host: "nas-pve.i.krel.ing"  # TODO: use inventory_hostname?
-        pve_root_password: "{{ lookup('bitwarden.secrets.lookup', 'fdce36ca-8c9f-42d6-8343-b2a801787fad') }}"
+        pve_root_password: "{{ vault.nas_pve_root_password }}"
         pve_node: nas
         pve_vms:
           - name: truenas

@@ -9,7 +9,7 @@
     dest: "/home/{{ ansible_user }}/gotify.yml"
   vars:
     infrapi_ip_address: "10.86.14.101"
-    gotify_admin_password: "{{ lookup('bitwarden.secrets.lookup', '22baefe3-5928-4991-a19d-b35b0051b579') }}"
+    gotify_admin_password: "{{ vault.gotify_admin_password }}"
   register: gotify_config_file
 
 - name: Create docker container for Gotify

@@ -19,7 +19,7 @@
         driver_options:
           type: cifs
           device: "//truenas.i.krel.ing/media"
-          o: "username=tcserver,password={{ lookup('bitwarden.secrets.lookup', 'ed3010e9-815f-4c5b-a846-b2fb0017355f') }},file_mode=0660,dir_mode=0770,rw,vers=3.0"
+          o: "username=tcserver,password={{ vault.truenas_tcserver_smb_password }},file_mode=0660,dir_mode=0770,rw,vers=3.0"
 
     - name: Create state volume for tcserver
       community.docker.docker_volume:

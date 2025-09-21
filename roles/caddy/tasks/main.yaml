@@ -15,7 +15,7 @@
       type: cifs
       device: "//truenas.i.krel.ing/certs"
       # mfsymlinks is needed because certbot creates symlinks in this volume
-      o: "username=certs_deploy,password={{ lookup('bitwarden.secrets.lookup', 'cf980f96-40bb-4cb6-bdf9-b2d00033795b') }},file_mode=0440,dir_mode=0550,ro,vers=3.0,mfsymlinks"
+      o: "username=certs_deploy,password={{ vault.certs_deploy_smb_password }},file_mode=0440,dir_mode=0550,ro,vers=3.0,mfsymlinks"
 
 - name: Create Caddyfile
   ansible.builtin.template:

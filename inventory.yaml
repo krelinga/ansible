@@ -70,10 +70,10 @@ opnsense:
   vars:
     tls_cert_push_platform: opnsense
     tls_cert_push_opnsense_host: "gateway.i.krel.ing"
-    tls_cert_push_opnsense_api_key: "{{ lookup('bitwarden.secrets.lookup', '20615609-4d51-472f-bb43-b2d40029e520') }}"
-    tls_cert_push_opnsense_api_secret: "{{ lookup('bitwarden.secrets.lookup', '89d647a1-fde8-447c-88a9-b2d40029fc0c') }}"
+    tls_cert_push_opnsense_api_key: "{{ vault.opnsense_key }}"
+    tls_cert_push_opnsense_api_secret: "{{ vault.opnsense_secret }}"
     tls_cert_push_opnsense_web_user_name: krelinga
-    tls_cert_push_opnsense_web_password: "{{ lookup('bitwarden.secrets.lookup', '43a0ff9b-5a9e-4167-842b-b2d5002ec71a') }}"
+    tls_cert_push_opnsense_web_password: "{{ vault.opnsense_krelinga_password }}"
   hosts:
     gateway:
       
@@ -84,21 +84,21 @@ servers:
       ansible_user: root
       tls_cert_push_platform: truenas
       tls_cert_push_truenas_host: "truenas.i.krel.ing"
-      tls_cert_push_truenas_api_key: "{{ lookup('bitwarden.secrets.lookup', '74662f7f-26b7-4538-af7e-b2d1004355a1') }}"
+      tls_cert_push_truenas_api_key: "{{ vault.trunas_certs_deploy_api_key }}"
     dev:
       ansible_host: dev.i.krel.ing
       ansible_user: krelinga
-      ansible_become_password: "{{ lookup('bitwarden.secrets.lookup', 'd2527fa2-4c49-4009-bd41-b2cc0003a8d2') }}"
+      ansible_become_password: "{{ vault.krelinga_default_password }}"
     dev-docker:
       ansible_host: dev-docker.i.krel.ing
       ansible_user: krelinga
-      ansible_become_password: "{{ lookup('bitwarden.secrets.lookup', 'd2527fa2-4c49-4009-bd41-b2cc0003a8d2') }}"
+      ansible_become_password: "{{ vault.krelinga_default_password }}"
     nas-docker:
       ansible_host: nas-docker.i.krel.ing
       ansible_user: krelinga
-      ansible_become_password: "{{ lookup('bitwarden.secrets.lookup', 'd2527fa2-4c49-4009-bd41-b2cc0003a8d2') }}"
+      ansible_become_password: "{{ vault.krelinga_default_password }}"
     infrapi:
       ansible_host: infrapi.i.krel.ing
       ansible_user: krelinga
-      ansible_become_password: "{{ lookup('bitwarden.secrets.lookup', 'd2527fa2-4c49-4009-bd41-b2cc0003a8d2') }}"
+      ansible_become_password: "{{ vault.krelinga_default_password }}"
 

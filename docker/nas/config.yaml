@@ -28,7 +28,7 @@
         driver_options:
           type: cifs
           device: "//truenas.i.krel.ing/media"
-          o: "username=videoin,password={{ lookup('bitwarden.secrets.lookup', '61cfbcc9-8b98-4af2-9553-b2e2016f087b') }},file_mode=0660,dir_mode=0770,rw,vers=3.0"
+          o: "username=videoin,password={{ vault.videoin_smb_password }},file_mode=0660,dir_mode=0770,rw,vers=3.0"
 
     - name: Create other volumes for videoin
       community.docker.docker_volume:
@@ -57,8 +57,8 @@
           VIDEOIN_THUMBSDIR: /thumbs
           VIDEOIN_UNCLAIMEDDIR: /nas/media/Rip
           VIDEOIN_LIBRARYDIR: /nas/media/Movies
-          VIDEOIN_TMDBKEY: "{{ lookup('bitwarden.secrets.lookup', '010be8a7-c36b-4e83-813c-b2e20171a01e') }}"
-          VIDEOIN_FANARTAPIKEY: "{{ lookup('bitwarden.secrets.lookup', 'c79eb454-ced6-414b-a145-b354002cc5ba') }}"
+          VIDEOIN_TMDBKEY: "{{ vault.tmdb_api_key }}"
+          VIDEOIN_FANARTAPIKEY: "{{ vault.fanart_tv_personal_api_key }}"
 
     - name: Create docker container for videoin frontend
       community.docker.docker_container:

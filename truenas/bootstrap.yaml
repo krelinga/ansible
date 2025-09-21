@@ -9,5 +9,5 @@
     # - name: Set Root Password
     #   ansible.builtin.user:
     #     name: root
-    #     password: "{{ lookup('bitwarden.secrets.lookup', '9758bac1-7e6e-4e4c-98f3-b2ac017f0d7d') | password_hash('sha512') }}"
+    #     password: "{{ vault.truenas_root_password | password_hash('sha512') }}"
     #     state: present

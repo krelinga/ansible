@@ -10,13 +10,13 @@
           type: cifs
           device: "//truenas.i.krel.ing/certs"
           # mfsymlinks is needed because certbot creates symlinks in this volume
-          o: "username=certbot,password={{ lookup('bitwarden.secrets.lookup', '177d591f-fc2f-466b-9f7c-b2d0003349d0') }},file_mode=0660,dir_mode=0770,rw,vers=3.0,mfsymlinks"
+          o: "username=certbot,password={{ vault.certbot_smb_password }},file_mode=0660,dir_mode=0770,rw,vers=3.0,mfsymlinks"
 
     - name: Ensure certbot.ini file exists
       changed_when: false
       ansible.builtin.copy:
         dest: "/home/{{ ansible_user }}/certbot.ini"
-        content: "dns_cloudflare_api_token = {{ lookup('bitwarden.secrets.lookup', '6165a285-5afb-48bc-b34b-b2d000e77007') }}"
+        content: "dns_cloudflare_api_token = {{ vault.cloudflare_api_token_for_certbot_dns_challnege }}"
         mode: '0600'
 
     - name: Run certbot
@@ -31,7 +31,7 @@
           -d i.krel.ing
           -d "*.i.krel.ing"
           -d "*.dev.i.krel.ing"
-          --email {{ lookup('bitwarden.secrets.lookup', '0399d176-38cf-4591-a096-b2cb0187c42d') }}
+          --email {{ vault.my_email }}
           --agree-tos
           --non-interactive
           --dns-cloudflare

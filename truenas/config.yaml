@@ -7,7 +7,7 @@
       tags: ["tls_cert_push"]
 
   tasks:
-    - name: create groups
+    - name: Create groups
       arensb.truenas.group:
         name: "{{ item }}"
         state: present
@@ -18,50 +18,48 @@
         - "certs_readwrite"
         - "certs_readonly"
 
-    - name: create users
+    - name: Create users
       arensb.truenas.user:
         name: "{{ item.user }}"
         comment: "{{ item.user }}"
-        password: "{{ lookup('bitwarden.secrets.lookup', item.password_id) }}"
+        password: "{{ item.password }}"
         groups: "{{ item.groups | default([]) }}"
         home: "/nonexistent"
         shell: "/usr/local/bin/bash"
         state: present
       loop:
         - user: mbair
-          password_id: 369cbb03-0d0e-40fb-a0b9-b2b100189aea
+          password: "{{ vault.truenas_mbair_password }}"
           groups:
             - media_readwrite
             - dev_readwrite
         - user: ripper
-          password_id: 23b52464-2823-4a8c-b12d-b226005e1616
+          password: "{{ vault.ripper_smb_password }}"
           groups:
             - media_readwrite
         - user: kodi
-          password_id: 9181f7ff-7e6a-4038-8e08-b2b1001a066c
+          password: "{{ vault.truenas_kodi_password }}"
           groups:
             - media_readonly
         - user: dev
-          password_id: 1f341f46-846e-450f-8938-b2cc011bb849
+          password: "{{ vault.dev_smb_password }}"
           groups:
             - dev_readwrite
             - certs_readwrite
             - media_readwrite
         - user: certbot
-          password_id: 177d591f-fc2f-466b-9f7c-b2d0003349d0
+          password: "{{ vault.certbot_smb_password }}"
           groups:
             - certs_readwrite
         - user: certs_deploy
-          password_id: cf980f96-40bb-4cb6-bdf9-b2d00033795b
+          password: "{{ vault.certs_deploy_smb_password }}"
           groups:
             - certs_readonly
         - user: gamespc
-          password_id: 469c6ab1-24ac-4efc-8bf6-b2f6006239a2
+          password: "{{ vault.gamespc_truenas_password }}"
           groups:
             - media_readwrite
         - user: tcserver
-          password_id: ed3010e9-815f-4c5b-a846-b2fb0017355f
+          password: "{{ vault.truenas_tcserver_smb_password }}"
           groups:
             - media_readwrite
-
-        
