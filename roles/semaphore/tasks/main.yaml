@@ -58,6 +58,8 @@
       SEMAPHORE_GOTIFY_ALERT: "true"
       SEMAPHORE_GOTIFY_URL: "https://gotify.i.krel.ing"
       SEMAPHORE_GOTIFY_TOKEN: "{{ lookup('bitwarden.secrets.lookup', '9c86c4b3-3937-4fff-9e8f-b35b0062fd75') }}"
+      SEMAPHORE_SLACK_ALERT: "true"
+      SEMAPHORE_SLACK_URL: "{{ lookup('bitwarden.secrets.lookup', '783cd34e-024d-4237-b30a-b35801384afd') }}"
     volumes:
       - semaphore_data:/var/lib/semaphore
       - semaphore_config:/etc/semaphore
