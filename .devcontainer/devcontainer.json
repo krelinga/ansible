@@ -39,7 +39,9 @@
 	"customizations": {
 		"vscode": {
 			"extensions": [
-				"ms-python.python"
+				"ms-python.python",
+				"redhat.ansible",
+				"dhoeric.ansible-vault"
 			]
 		}
 	}

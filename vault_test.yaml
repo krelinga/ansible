@@ -1,0 +1,8 @@
+---
+- name: Print vault.test variable
+  hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Show vault.test value
+      ansible.builtin.debug:
+        msg: "{{ vault.test }}"
