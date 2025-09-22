@@ -18,7 +18,7 @@
             real_port: 25004
 
   tasks:
-    - name: ensure ~/.bws has the correct contents
+    - name: Ensure ~/.bws has the correct contents
       ansible.builtin.copy:
         content: |
           export BWS_ACCESS_TOKEN={{ vault.bws_access_token }}
@@ -26,13 +26,13 @@
         dest: ~/.bws
         mode: '0600'
 
-    - name: ensure .bashrc sources ~/.bws
+    - name: Ensure .bashrc sources ~/.bws
       ansible.builtin.lineinfile:
         path: ~/.bashrc
         line: "source ~/.bws"
         state: present
 
-    - name: ensure dev smb share is mounted
+    - name: Ensure dev smb share is mounted
       become: true
       ansible.posix.mount:
         boot: true
@@ -42,21 +42,21 @@
         opts: "username=dev,password={{ vault.dev_smb_password }},file_mode=0777,dir_mode=0777,rw"
         state: mounted
 
-    - name: ensure /nas directory exists
+    - name: Ensure /nas directory exists
       become: true
       ansible.builtin.file:
         path: /nas
         state: directory
         mode: '0755'
 
-    - name: create /nas/dev symbolic link
+    - name: Create /nas/dev symbolic link
       become: true
       ansible.builtin.file:
         src: /mnt/dev
         dest: /nas/dev
         state: link
 
-    - name: ensure certs smb share is mounted
+    - name: Ensure certs smb share is mounted
       become: true
       ansible.posix.mount:
         boot: true
@@ -66,14 +66,14 @@
         opts: "username=dev,password={{ vault.dev_smb_password }},file_mode=0444,dir_mode=0555,ro,vers=3.0,mfsymlinks"
         state: mounted
 
-    - name: create /nas/certs symbolic link
+    - name: Create /nas/certs symbolic link
       become: true
       ansible.builtin.file:
         src: /mnt/certs
         dest: /nas/certs
         state: link
 
-    - name: ensure media smb share is mounted
+    - name: Ensure media smb share is mounted
       become: true
       ansible.posix.mount:
         boot: true
@@ -83,7 +83,7 @@
         opts: "username=dev,password={{ vault.dev_smb_password }},file_mode=0666,dir_mode=0777,rw,vers=3.0"
         state: mounted
 
-    - name: create /nas/media symbolic link
+    - name: Create /nas/media symbolic link
       become: true
       ansible.builtin.file:
         src: /mnt/media

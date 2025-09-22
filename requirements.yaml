@@ -9,3 +9,4 @@ collections:
   - name: arensb.truenas
   - name: community.docker
   - name: community.general
+  - name: ansible.posix
