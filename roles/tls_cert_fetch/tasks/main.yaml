@@ -37,8 +37,8 @@
           --dns-cloudflare
           --dns-cloudflare-credentials /tmp/cloudflare.ini
           --expand
-      register: tls_cert_fetch
-      changed_when: "'Successfully received certificate.' in tls_cert_fetch.stdout"
+      register: tls_cert_fetch_certbot
+      changed_when: "'Successfully received certificate.' in tls_cert_fetch_certbot.stdout"
 
   always:
     - name: Remove certbot.ini file
