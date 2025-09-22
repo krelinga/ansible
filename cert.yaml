@@ -29,4 +29,4 @@
         name: caddy
         state: started
         restart: true
-      when: tls_cert_fetch.changed # noqa: no-handler
+      when: tls_cert_fetch_certbot.changed # noqa: no-handler
