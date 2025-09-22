@@ -12,9 +12,9 @@
 
 - name: "Download ISO" # noqa: command-instead-of-module
   ansible.builtin.command:
-    cmd: "wget -O {{ pve_iso_dir }}/{{ vm.iso_url | basename }} {{ vm.iso_url }}"
+    cmd: "wget -O {{ pve_server_iso_dir }}/{{ vm.iso_url | basename }} {{ vm.iso_url }}"
   args:
-    creates: "{{ pve_iso_dir }}/{{ vm.iso_url | basename }}"
+    creates: "{{ pve_server_iso_dir }}/{{ vm.iso_url | basename }}"
 
 - name: "Create VM"
   community.general.proxmox_kvm:

@@ -1,1 +1,1 @@
-pve_iso_dir: "/var/lib/vz/template/iso"
+pve_server_iso_dir: "/var/lib/vz/template/iso"
