@@ -20,6 +20,8 @@
       ansible.builtin.shell: |
         set -o pipefail
         cmd: 'lspci -nnk | grep -i sata | grep -e "^[[:digit:]]" | cut -d " " -f 1'
+      args:
+        executable: /bin/bash
       register: sata_controller
       changed_when: false
 
