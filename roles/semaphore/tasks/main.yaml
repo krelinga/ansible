@@ -28,12 +28,12 @@
 # It's a little annoying that this needs to happen outside of semaphore's capability of reading repos
 # on its own, but probably not a big deal.
 # per https://docs.semaphoreui.com/administration-guide/installation/#installing-additional-python-packages
-- name: clone ansible repo
+- name: Clone ansible repo
   ansible.builtin.git:
     repo: "https://github.com/krelinga/ansible.git"
     dest: "/home/{{ ansible_user }}/ansible"
-    force: yes
-    update: yes
+    force: true
+    update: true
   register: git_repo
 
 - name: Create docker container for semaphore
