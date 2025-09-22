@@ -3,14 +3,14 @@
 - name: Create temporary directory for TLS cert
   ansible.builtin.tempfile:
     state: directory
-  register: temp_dir
+  register: tls_cert_push_temp_dir
   notify: delete temp_dir
   changed_when: false
 
 - name: Copy TLS cert to temporary directory
   ansible.builtin.copy:
     src: "{{ item.src }}"
-    dest: "{{ temp_dir.path }}/{{ item.dest }}"
+    dest: "{{ tls_cert_push_temp_dir.path }}/{{ item.dest }}"
     mode: "{{ item.mode }}"
   loop:
     - src: /nas/certs/live/i.krel.ing/fullchain.pem
@@ -23,7 +23,7 @@
 
 - name: Copy TLS cert to final destination
   ansible.builtin.shell: |
-    readonly src="{{ temp_dir.path }}/{{ item }}"
+    readonly src="{{ tls_cert_push_temp_dir.path }}/{{ item }}"
     readonly dst="/etc/pve/local/{{ item }}"
     if cmp -s "$src" "$dst"; then
       exit 0
