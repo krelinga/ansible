@@ -8,7 +8,7 @@
     - gekmihesg.openwrt
     - role: ssh_server
       vars:
-        ssh_authorized_keys_path: "/etc/dropbear/authorized_keys"
+        ssh_server_authorized_keys_path: "/etc/dropbear/authorized_keys"
 
   tasks:
     - name: disable DNS and DHCPD
