@@ -5,10 +5,10 @@
     - tls_cert_push
     - role: pve_server
       vars:
-        pve_api_host: "dev-pve.i.krel.ing" # TODO: use invenotry_hostname?
-        pve_root_password: "{{ vault.dev_pve_root_password }}"
-        pve_node: dev-pve
-        pve_vms:
+        pve_server_api_host: "dev-pve.i.krel.ing" # TODO: use invenotry_hostname?
+        pve_server_root_password: "{{ vault.dev_pve_root_password }}"
+        pve_server_node: dev-pve
+        pve_server_vms:
           - name: dev
             iso_url: "https://mirror.pilotfiber.com/ubuntu-iso/24.04.2/ubuntu-24.04.2-live-server-amd64.iso"
             vmid: 100

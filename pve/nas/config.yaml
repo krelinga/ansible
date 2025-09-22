@@ -42,10 +42,10 @@
       ansible.builtin.include_role:
         name: pve_server
       vars:
-        pve_api_host: "nas-pve.i.krel.ing"  # TODO: use inventory_hostname?
-        pve_root_password: "{{ vault.nas_pve_root_password }}"
-        pve_node: nas
-        pve_vms:
+        pve_server_api_host: "nas-pve.i.krel.ing"  # TODO: use inventory_hostname?
+        pve_server_root_password: "{{ vault.nas_pve_root_password }}"
+        pve_server_node: nas
+        pve_server_vms:
           - name: truenas
             iso_url: "https://download-core.sys.truenas.net/13.0/STABLE/U6.7/x64/TrueNAS-13.0-U6.7.iso"
             vmid: 100

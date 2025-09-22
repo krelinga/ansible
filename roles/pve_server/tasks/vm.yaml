@@ -18,11 +18,11 @@
 
 - name: "Create {{ vm.name }} VM"
   community.general.proxmox_kvm:
-    api_host: "{{ pve_api_host }}"
+    api_host: "{{ pve_server_api_host }}"
     api_user: "root@pam"
-    api_password: "{{ pve_root_password }}"
+    api_password: "{{ pve_server_root_password }}"
     name: "{{ vm.name }}"
-    node: "{{ pve_node }}"
+    node: "{{ pve_server_node }}"
     vmid: "{{ vm.vmid }}"
     sata:
       sata0: 'local-lvm:{{ vm.disk_gb }}'
@@ -41,11 +41,11 @@
 
 - name: "Start {{ vm.name }} VM"
   community.general.proxmox_kvm:
-    api_host: "{{ pve_api_host }}"
+    api_host: "{{ pve_server_api_host }}"
     api_user: "root@pam"
-    api_password: "{{ pve_root_password }}"
+    api_password: "{{ pve_server_root_password }}"
     name: "{{ vm.name }}"
-    node: "{{ pve_node }}"
+    node: "{{ pve_server_node }}"
     vmid: "{{ vm.vmid }}"
     state: started
   delegate_to: localhost
