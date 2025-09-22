@@ -1,6 +1,3 @@
-# Ignore roles that are downloaded from Ansible Galaxy.
-roles/*.*/
-
 # Ignore vault password file.
 vault-password.txt
 
