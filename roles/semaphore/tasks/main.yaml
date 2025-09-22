@@ -28,13 +28,13 @@
 # It's a little annoying that this needs to happen outside of semaphore's capability of reading repos
 # on its own, but probably not a big deal.
 # per https://docs.semaphoreui.com/administration-guide/installation/#installing-additional-python-packages
-- name: Clone ansible repo
+- name: Clone ansible repo # noqa latest[git]
   ansible.builtin.git:
     repo: "https://github.com/krelinga/ansible.git"
     dest: "/home/{{ ansible_user }}/ansible"
     force: true
     update: true
-  register: git_repo
+  register: semaphore_git_repo
 
 - name: Create docker container for semaphore
   community.docker.docker_container:
@@ -42,7 +42,7 @@
     image: semaphoreui/semaphore:latest
     state: started
     restart_policy: unless-stopped
-    restart: "{{'yes' if git_repo.changed else 'no'}}"
+    restart: "{{  'yes' if semaphore_git_repo.changed else 'no' }}"
     pull: always
     ports:
       - "0.0.0.0:{{ semaphore_port }}:3000"
