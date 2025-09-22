@@ -13,7 +13,6 @@
 	},
 
 	"remoteEnv": {
-		"BWS_ACCESS_TOKEN": "${localEnv:BWS_ACCESS_TOKEN:no_bws_access_token_set}",
 		"DEV_SMB_PASSWORD": "${localEnv:DEV_SMB_PASSWORD:no_dev_smb_password_set}"
 	},
 
