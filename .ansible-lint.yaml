@@ -4,3 +4,4 @@ skip_list:
 exclude_paths:
   - .ansible/
   - .github/
+  - inventory.yaml
