@@ -1,2 +1,5 @@
 # Needed because of limitations in the ansible support for openwrt
 wifi/config.yaml fqcn[action-core]
+
+# This can probably be fixed but is just too annoying right now.
+roles/git_client/tasks/main.yaml command-instead-of-module

@@ -1,19 +1,21 @@
 - name: Check if Git user email is already set
-  command: 'git config user.email'
-  register: git_user_email
+  ansible.builtin.command: 'git config user.email'
+  register: git_client_user_email
   failed_when: false
   changed_when: false
 
 - name: Set Git user email
-  command: 'git config --global user.email "{{ vault.my_email }}"'
-  when: git_user_email.stdout == ""
+  ansible.builtin.command: 'git config --global user.email "{{ vault.my_email }}"'
+  when: git_client_user_email.stdout == ""
+  changed_when: true
 
 - name: Check if Git user name is already set
-  command: 'git config user.name'
-  register: git_user_name
+  ansible.builtin.command: 'git config user.name'
+  register: git_client_user_name
   failed_when: false
   changed_when: false
 
 - name: Set Git user name
-  command: 'git config --global user.name "{{ vault.my_name }}"'
-  when: git_user_name.stdout == ""
+  ansible.builtin.command: 'git config --global user.name "{{ vault.my_name }}"'
+  when: git_client_user_name.stdout == ""
+  changed_when: true
