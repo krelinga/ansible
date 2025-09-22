@@ -70,9 +70,9 @@
       ansible.builtin.command:
         cmd: "update-grub"
       notify: Reboot
+      changed_when: true
 
     - name: Reboot
       ansible.builtin.reboot:
         reboot_timeout: 600
         test_command: uptime
-
