@@ -39,7 +39,7 @@
 - name: Create docker container for semaphore
   community.docker.docker_container:
     name: semaphore
-    image: krelinga/semaphoreui-rust:latest
+    image: semaphoreui/semaphore:latest
     state: started
     restart_policy: unless-stopped
     restart: "{{'yes' if git_repo.changed else 'no'}}"
@@ -53,8 +53,6 @@
       SEMAPHORE_ADMIN_NAME: Admin
       SEMAPHORE_ADMIN_EMAIL: "admin@localhost"
       SEMAPHORE_WEB_ROOT: "{{ semaphore_web_root }}"
-      BWS_ACCESS_TOKEN: "{{ vault.semaphore_ui_bws_access_token }}"
-      SEMAPHORE_FORWARDED_ENV_VARS: '["BWS_ACCESS_TOKEN"]'
       SEMAPHORE_GOTIFY_ALERT: "true"
       SEMAPHORE_GOTIFY_URL: "https://gotify.i.krel.ing"
       SEMAPHORE_GOTIFY_TOKEN: "{{ vault.gotify_semaphore_app_token }}"
