@@ -49,14 +49,14 @@
 
   tasks:
     - name: Set up Java symlink
-      become: yes
+      become: true
       ansible.builtin.file:
         src: /opt/homebrew/opt/openjdk/libexec/openjdk.jdk
         dest: /Library/Java/JavaVirtualMachines/openjdk.jdk
         state: link
         owner: root
         group: wheel
-        mode: 0755
+        mode: "0755"
 
     - name: Create tinyMediaManager directories
       ansible.builtin.file:

@@ -2,12 +2,14 @@
   ansible.builtin.lineinfile:
     path: ~/.zshenv
     line: 'export CLICOLOR=auto'
-    create: yes
+    create: true
+    mode: "0644"
     regexp: '^export CLICOLOR='
 
-- name: set LSCOLORS env variable
+- name: Set LSCOLORS env variable
   ansible.builtin.lineinfile:
     path: ~/.zshenv
     line: 'export LSCOLORS=Gxfxcxdxbxegedabagacad'
-    create: yes
+    create: true
+    mode: "0644"
     regexp: '^export LSCOLORS='
