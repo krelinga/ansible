@@ -3,11 +3,11 @@
   gather_facts: false
   become: true  # Run as root
   tasks:
-    - name: apt update
+    - name: Apt update
       ansible.builtin.apt:
         update_cache: true
 
-    - name: apt upgrade
+    - name: Apt upgrade
       ansible.builtin.apt:
         upgrade: full
 
@@ -18,8 +18,8 @@
 
     - name: Reboot if required
       ansible.builtin.reboot:
-      when: reboot_required_file.stat.exists == true
+      when: reboot_required_file.stat.exists
 
-    - name: apt autoremove
+    - name: Apt autoremove
       ansible.builtin.apt:
-        autoremove: yes
+        autoremove: true
