@@ -1,4 +1,4 @@
-- name: Import Tailscale GPG key
+- name: Import Tailscale GPG key # noqa: command-instead-of-module
   become: true
   ansible.builtin.shell: >
     curl -fsSL https://pkgs.tailscale.com/stable/{{ ansible_distribution | lower }}/{{ ansible_distribution_release | lower }}.noarmor.gpg > /usr/share/keyrings/tailscale-archive-keyring.gpg
@@ -6,7 +6,7 @@
     creates: /usr/share/keyrings/tailscale-archive-keyring.gpg
   register: tailscale_gpg_key
 
-- name: Install Tailscale apt repo
+- name: Install Tailscale apt repo # noqa: command-instead-of-module
   become: true
   ansible.builtin.shell: >
     curl -fsSL https://pkgs.tailscale.com/stable/{{ ansible_distribution | lower }}/{{ ansible_distribution_release | lower }}.tailscale-keyring.list | sudo tee /etc/apt/sources.list.d/tailscale.list
