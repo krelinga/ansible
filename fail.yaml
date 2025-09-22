@@ -1,5 +1,6 @@
-- hosts: localhost
+- name: "Always fail"
+  hosts: localhost
   tasks:
     - name: Always fail
-      fail:
+      ansible.builtin.fail:
         msg: "This task always fails"
