@@ -37,6 +37,7 @@
           --dns-cloudflare
           --dns-cloudflare-credentials /tmp/cloudflare.ini
           --expand
+          --dns-cloudflare-propagation-seconds 60
       register: tls_cert_fetch_certbot
       changed_when: "'Successfully received certificate.' in tls_cert_fetch_certbot.stdout"
 
