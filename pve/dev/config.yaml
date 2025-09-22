@@ -25,7 +25,3 @@
             memory_mb: 112640
             disk_gb: 300
             cpuunits: 10  # defer to the dev vm if CPU gets busy.
-            
-        
-
-

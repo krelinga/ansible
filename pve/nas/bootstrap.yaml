@@ -11,4 +11,3 @@
         name: root
         password: "{{ vault.nas_pve_root_password | password_hash('sha512') }}"
         state: present
-  
