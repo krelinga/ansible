@@ -1,0 +1,2 @@
+# Needed because of limitations in the ansible support for openwrt
+wifi/config.yaml fqcn[action-core]

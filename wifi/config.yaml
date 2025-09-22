@@ -11,10 +11,10 @@
         ssh_server_authorized_keys_path: "/etc/dropbear/authorized_keys"
 
   tasks:
-    - name: disable DNS and DHCPD
+    - name: Disable DNS and DHCPD
       service:
         name: "{{ item }}"
-        enabled: no
+        enabled: false
         state: stopped
       loop:
         - dnsmasq
