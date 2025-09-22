@@ -79,8 +79,8 @@ opnsense:
       
 servers:
   hosts:
-    - truenas
-    - dev
-    - dev-docker
-    - nas-docker
-    - infrapi
+    truenas:
+    dev:
+    dev-docker:
+    nas-docker:
+    infrapi:
