@@ -26,7 +26,7 @@
     proxies: "{{ caddy_proxies }}"
     cert_path: "/nas/certs/live/i.krel.ing/fullchain.pem"
     private_key_path: "/nas/certs/live/i.krel.ing/privkey.pem"
-  register: caddyfile
+  register: caddy_caddyfile
 
 - name: Create docker container for Caddy
   community.docker.docker_container:
@@ -34,7 +34,7 @@
     image: caddy:latest
     state: started
     restart_policy: unless-stopped
-    restart: "{{'yes' if caddyfile.changed else 'no'}}"
+    restart: "{{ 'yes' if caddy_caddyfile.changed else 'no' }}"
     pull: always
     ports:
       - 80:80

@@ -16,7 +16,7 @@
     - ssh_server
 
   tasks:
-    - name: Set Root Password
+    - name: Set Root Password # noqa: no-changed-when risky-shell-pipe
       # Not using ansible.builtin.user because it seems to not support changing passwords in busybox.
       ansible.builtin.shell:
         cmd: '{ echo "{{ new_root_password }}"; echo "{{ new_root_password }}"; } | passwd'
@@ -27,7 +27,7 @@
       ansible.builtin.copy:
         src: data/argonone-setup-libreelec.sh
         dest: /storage/argonone-setup-libreelec.sh
-        mode: 0500
+        mode: "0500"
 
     - name: Run Argone One V2 Setup Script
       ansible.builtin.shell:
@@ -38,10 +38,10 @@
 
     - name: Reboot after Argon One V2 Setup Script
       ansible.builtin.reboot:
-      when: run_setup_script is changed
+      when: run_setup_script is changed # noqa: no-handler
 
     - name: Copy Remote Zip File
       ansible.builtin.copy:
         src: data/ArgonRemote.zip
         dest: /storage/ArgonRemote.zip
-        mode: 0400
+        mode: "0400"
