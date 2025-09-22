@@ -1,3 +1,4 @@
 {
-    "ansible.python.interpreterPath": "/usr/bin/python3"
+    "ansible.python.interpreterPath": "/usr/local/py-utils/venvs/ansible-core/bin/python",
+    "python.defaultInterpreterPath": "/usr/local/py-utils/venvs/ansible-core/bin/python"
 }
