@@ -2,7 +2,7 @@
   hosts: rpic
   gather_facts: false
   tasks:
-    - name: Read uptimes
+    - name: Read uptimes # noqa: command-instead-of-shell
       ansible.builtin.shell: uptime -p
       register: uptime
       # Ansible can't detect the changed status of shell commands very
