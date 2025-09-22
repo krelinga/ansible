@@ -6,3 +6,6 @@ vault-password.txt
 
 # Ignore ansible internal files.
 .ansible/
+
+# Ignore python cache
+library/__pycache__/
