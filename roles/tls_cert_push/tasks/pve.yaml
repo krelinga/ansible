@@ -36,14 +36,14 @@
   register: tls_cert_push_final_copy
   changed_when: "'ANSIBLE: CHANGED' in tls_cert_push_final_copy.stdout"
 
-- name: restart pveproxy
+- name: Restart pveproxy
   ansible.builtin.systemd:
     name: pveproxy
     state: restarted
-  when: tls_cert_push_final_copy.changed
+  when: tls_cert_push_final_copy.changed # noqa: no-handler
 
-- name: restart nginx
+- name: Restart nginx
   ansible.builtin.systemd:
     name: nginx
     state: restarted
-  when: tls_cert_push_final_copy.changed
+  when: tls_cert_push_final_copy.changed # noqa: no-handler
