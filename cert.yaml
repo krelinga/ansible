@@ -28,5 +28,5 @@
       community.docker.docker_container:
         name: caddy
         state: started
-        restart: yes
-      when: tls_cert_fetch.changed
+        restart: true
+      when: tls_cert_fetch.changed # noqa: no-handler
