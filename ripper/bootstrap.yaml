@@ -3,23 +3,23 @@
   hosts: ripper
 
   vars:
-      pb_user: krelinga
-      smb_user: ripper
-      smb_password: "{{ vault.ripper_smb_password }}"
-      makemkv_key: "{{ vault.makemkv_registration }}"
-      makemkv_storage_dir: "/home/{{ pb_user }}/makemkv"
-      makemkv_config_dir: "{{ makemkv_storage_dir }}/config"
-      devices:
-        - number: 0
-          devnum: 0
-        - number: 1
-          devnum: 1
-        - number: 2
-          devnum: 3
-        - number: 3
-          devnum: 2
-        - number: 4
-          devnum: 4
+    pb_user: krelinga
+    smb_user: ripper
+    smb_password: "{{ vault.ripper_smb_password }}"
+    makemkv_key: "{{ vault.makemkv_registration }}"
+    makemkv_storage_dir: "/home/{{ pb_user }}/makemkv"
+    makemkv_config_dir: "{{ makemkv_storage_dir }}/config"
+    devices:
+      - number: 0
+        devnum: 0
+      - number: 1
+        devnum: 1
+      - number: 2
+        devnum: 3
+      - number: 3
+        devnum: 2
+      - number: 4
+        devnum: 4
 
   roles:
     - role: geerlingguy.docker
@@ -48,7 +48,7 @@
       community.docker.docker_container:
         name: "makeMKV-{{ item.number }}"
         image: jlesage/makemkv
-        pull: yes
+        pull: true
         ports:
           - "580{{ item.number }}:5800"
         devices:
@@ -60,7 +60,7 @@
           DISPLAY_HEIGHT: "720"
           MAKEMKV_KEY: "{{ makemkv_key }}"
         restart_policy: "unless-stopped"
-        recreate: yes
+        recreate: true
         mounts:
           - type: bind
             target: /config
