@@ -17,7 +17,7 @@
     creates: "{{ pve_server_iso_dir }}/{{ vm.iso_url | basename }}"
 
 - name: "Create VM"
-  community.general.proxmox_kvm:
+  community.proxmox.proxmox_kvm:
     api_host: "{{ pve_server_api_host }}"
     api_user: "root@pam"
     api_password: "{{ pve_server_root_password }}"
@@ -40,7 +40,7 @@
   delegate_to: localhost
 
 - name: "Start VM"
-  community.general.proxmox_kvm:
+  community.proxmox.proxmox_kvm:
     api_host: "{{ pve_server_api_host }}"
     api_user: "root@pam"
     api_password: "{{ pve_server_root_password }}"

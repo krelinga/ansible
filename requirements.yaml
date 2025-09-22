@@ -10,3 +10,4 @@ collections:
   - name: community.docker
   - name: community.general
   - name: ansible.posix
+  - name: community.proxmox
