@@ -1,4 +1,3 @@
-bitwarden-sdk
 proxmoxer
 requests
 passlib

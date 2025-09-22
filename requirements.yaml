@@ -5,6 +5,5 @@ roles:
   - name: gekmihesg.openwrt
 
 collections:
-  - name: bitwarden.secrets
   - name: geerlingguy.mac
   - name: arensb.truenas
