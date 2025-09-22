@@ -1,4 +1,4 @@
-- name: "Ensure required caller-provided variables are set for {{ vm.name }}"
+- name: "Ensure required caller-provided variables are set"
   ansible.builtin.assert:
     that:
       - vm.name is defined
@@ -10,13 +10,13 @@
       - vm.disk_gb is defined
     fail_msg: "Required variables are not set. Please check your configuration."
 
-- name: "Download {{ vm.name }} ISO"
+- name: "Download ISO" # noqa: command-instead-of-module
   ansible.builtin.command:
     cmd: "wget -O {{ pve_iso_dir }}/{{ vm.iso_url | basename }} {{ vm.iso_url }}"
   args:
     creates: "{{ pve_iso_dir }}/{{ vm.iso_url | basename }}"
 
-- name: "Create {{ vm.name }} VM"
+- name: "Create VM"
   community.general.proxmox_kvm:
     api_host: "{{ pve_server_api_host }}"
     api_user: "root@pam"
@@ -39,7 +39,7 @@
     state: present
   delegate_to: localhost
 
-- name: "Start {{ vm.name }} VM"
+- name: "Start VM"
   community.general.proxmox_kvm:
     api_host: "{{ pve_server_api_host }}"
     api_user: "root@pam"
