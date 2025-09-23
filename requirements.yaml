@@ -11,3 +11,4 @@ collections:
   - name: community.general
   - name: ansible.posix
   - name: community.proxmox
+  - name: prometheus.prometheus

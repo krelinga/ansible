@@ -32,3 +32,4 @@
             real_port: 9090
       tags: ["semaphore", "gotify", "prom_server"]
     - tailscale_subnet_router
+    - prometheus.prometheus.node_exporter
