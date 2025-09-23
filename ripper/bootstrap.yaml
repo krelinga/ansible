@@ -1,5 +1,4 @@
 - name: Bootstrap
-  become: true
   hosts: ripper
 
   vars:
@@ -26,11 +25,13 @@
       vars:
         docker_users:
           - "{{ pb_user }}"
+      become: true
     - role: geerlingguy.pip
       vars:
         pip_install_packages:
           - name: docker
             state: present
+      become: true
     - role: ssh_server
 
   tasks:
