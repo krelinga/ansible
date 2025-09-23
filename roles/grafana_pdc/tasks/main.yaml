@@ -1,0 +1,13 @@
+- name: Run Grafana PDC container
+  community.docker.docker_container:
+    name: grafana_pdc
+    image: grafana/pdc-agent:latest
+    state: started
+    restart_policy: unless-stopped
+    restart: false
+    pull: always
+    command: >
+      -token {{ vault.grafana_infrapi_pdc_token }}
+      -cluster prod-us-east-0
+      -gcloud-hosted-grafana-id 1376422
+      -ssh-flag='-o PermitRemoteOpen=prom.i.krel.ing:443'

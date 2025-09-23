@@ -36,3 +36,5 @@
       tags: ["semaphore", "gotify", "prom_server"]
     - tailscale_subnet_router
     - prometheus.prometheus.node_exporter
+    - role: grafana_pdc
+      tags: ["grafana_pdc"]
