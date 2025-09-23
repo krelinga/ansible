@@ -58,11 +58,6 @@
       SEMAPHORE_ADMIN_NAME: Admin
       SEMAPHORE_ADMIN_EMAIL: "admin@localhost"
       SEMAPHORE_WEB_ROOT: "{{ semaphore_web_root }}"
-      SEMAPHORE_GOTIFY_ALERT: "true"
-      SEMAPHORE_GOTIFY_URL: "https://gotify.i.krel.ing"
-      SEMAPHORE_GOTIFY_TOKEN: "{{ vault.gotify_semaphore_app_token }}"
-      SEMAPHORE_SLACK_ALERT: "true"
-      SEMAPHORE_SLACK_URL: "{{ vault.grafana_irm_web_socket_for_semaphore }}"
       SEMAPHORE_MAX_TASKS_PER_TEMPLATE: "100"
     volumes:
       - semaphore_data:/var/lib/semaphore

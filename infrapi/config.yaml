@@ -14,8 +14,6 @@
         semaphore_port: 3000
         semaphore_web_root: "https://sem.i.krel.ing"
       tags: ["semaphore"]
-    - role: gotify
-      tags: ["gotify"]
     - role: prom_server
       tags: ["prom_server"]
     - role: caddy
@@ -27,13 +25,10 @@
           - fqdn: exporter-sem.i.krel.ing
             real_host: infrapi.i.krel.ing
             real_port: 25007
-          - fqdn: gotify.i.krel.ing
-            real_host: infrapi.i.krel.ing
-            real_port: 25006
           - fqdn: prom.i.krel.ing
             real_host: infrapi.i.krel.ing
             real_port: 9090
-      tags: ["semaphore", "gotify", "prom_server"]
+      tags: ["semaphore", "prom_server"]
     - tailscale_subnet_router
     - prometheus.prometheus.node_exporter
     - role: grafana_pdc
