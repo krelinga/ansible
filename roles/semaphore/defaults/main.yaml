@@ -1,3 +1,6 @@
 # It is up to the caller to provide reasonable values for these variables.
 semaphore_port: -1
 semaphore_web_root: ""
+
+# If true, run the semaphore exporter as well.
+semaphore_exporter_enabled: true

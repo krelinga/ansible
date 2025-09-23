@@ -64,3 +64,26 @@
       - semaphore_tmp:/tmp/semaphore
       - "/home/{{ ansible_user }}/ansible/requirements.txt:/etc/semaphore/requirements.txt:ro"
       - semaphore_certs:/nas/certs:ro
+
+- name: Create docker container for semaphore exporter
+  when: semaphore_exporter_enabled
+  community.docker.docker_container:
+    name: semaphore_exporter
+    image: krelinga/semaphoreui-prometheus-exporter:latest
+    state: started
+    restart_policy: unless-stopped
+    restart: false
+    pull: always
+    ports:
+      - "0.0.0.0:25007:8080"
+    env:
+      SEMAPHOREUI_HOST: "localhost:{{ semaphore_port }}"
+      SEMAPHOREUI_APIKEY: "{{ vault.semaphoreui_api_key }}"
+
+- name: Stop docker container for semaphore exporter
+  when: not semaphore_exporter_enabled
+  community.docker.docker_container:
+    name: semaphore_exporter
+    state: stopped
+    restart: false
+    pull: false

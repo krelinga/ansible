@@ -24,6 +24,9 @@
           - fqdn: sem.i.krel.ing
             real_host: infrapi.i.krel.ing
             real_port: 3000
+          - fqdn: exporter-sem.i.krel.ing
+            real_host: infrapi.i.krel.ing
+            real_port: 25007
           - fqdn: gotify.i.krel.ing
             real_host: infrapi.i.krel.ing
             real_port: 25006
