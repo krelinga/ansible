@@ -16,6 +16,8 @@
       tags: ["semaphore"]
     - role: gotify
       tags: ["gotify"]
+    - role: prom_server
+      tags: ["prom_server"]
     - role: caddy
       vars:
         caddy_proxies:
@@ -25,5 +27,8 @@
           - fqdn: gotify.i.krel.ing
             real_host: infrapi.i.krel.ing
             real_port: 25006
-      tags: ["semaphore", "gotify"]
+          - fqdn: prom.i.krel.ing
+            real_host: infrapi.i.krel.ing
+            real_port: 9090
+      tags: ["semaphore", "gotify", "prom_server"]
     - tailscale_subnet_router

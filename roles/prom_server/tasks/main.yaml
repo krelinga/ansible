@@ -1,0 +1,26 @@
+- name: Create configuration file for Prometheus
+  ansible.builtin.template:
+    src: "prometheus.yaml.j2"
+    dest: "/home/{{ ansible_user }}/prometheus.yaml"
+    mode: "0644"
+  register: prom_server_config
+
+- name: Create docker volume for Prometheus data
+  community.docker.docker_volume:
+    name: prom_server_data
+    state: present
+  register: prom_server_data
+
+- name: Create docker container for Prometheus
+  community.docker.docker_container:
+    name: prom_server
+    image: prom/prometheus:latest
+    state: started
+    restart_policy: unless-stopped
+    restart: "{{ 'yes' if prom_server_config.changed or prom_server_data.changed else 'no' }}"
+    pull: always
+    ports:
+      - 9090:9090
+    volumes:
+      - prom_server_data:/prometheus
+      - "/home/{{ ansible_user }}/prometheus.yaml:/etc/prometheus/prometheus.yml"
