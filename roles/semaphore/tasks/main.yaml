@@ -86,7 +86,7 @@
     env:
       SEMAPHOREUI_HOST: "semaphore:3000"
       SEMAPHOREUI_APIKEY: "{{ vault.semaphoreui_api_key }}"
-      SEMAPHOREUI_PROTOCOL: "http"
+      SEMAPHOREUI_SCHEME: "http"
     networks:
       - name: semaphore_network
 
