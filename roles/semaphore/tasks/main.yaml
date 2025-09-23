@@ -5,6 +5,11 @@
       - semaphore_web_root | length > 0
     fail_msg: "The variable 'semaphore_port' must be defined and greater than 0. The variable 'semaphore_web_root' must be defined and not empty."
 
+- name: Create docker network for semaphore
+  community.docker.docker_network:
+    name: semaphore_network
+    state: present
+
 - name: Create docker volumes for Semaphore
   community.docker.docker_volume:
     name: "{{ item }}"
@@ -64,6 +69,8 @@
       - semaphore_tmp:/tmp/semaphore
       - "/home/{{ ansible_user }}/ansible/requirements.txt:/etc/semaphore/requirements.txt:ro"
       - semaphore_certs:/nas/certs:ro
+    networks:
+      - name: semaphore_network
 
 - name: Create docker container for semaphore exporter
   when: semaphore_exporter_enabled
@@ -77,8 +84,10 @@
     ports:
       - "0.0.0.0:25007:8080"
     env:
-      SEMAPHOREUI_HOST: "localhost:{{ semaphore_port }}"
+      SEMAPHOREUI_HOST: "semaphore:3000"
       SEMAPHOREUI_APIKEY: "{{ vault.semaphoreui_api_key }}"
+    networks:
+      - name: semaphore_network
 
 - name: Stop docker container for semaphore exporter
   when: not semaphore_exporter_enabled
