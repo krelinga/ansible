@@ -1,0 +1,43 @@
+- name: Create docker volume for Postgres data
+  community.docker.docker_volume:
+    name: postgres_data
+    state: present
+  register: postgres_data
+
+- name: Create docker network for Postgres
+  community.docker.docker_network:
+    name: postgres_network
+    state: present
+  register: postgres_network
+
+- name: Create docker container for Postgres
+  community.docker.docker_container:
+    name: postgres
+    image: postgres:latest
+    state: started
+    restart_policy: unless-stopped
+    restart: "{{ 'yes' if postgres_data.changed or postgres_network.changed else 'no' }}"
+    pull: always
+    ports: 5432:5432
+    env:
+      POSTGRES_PASSWORD: "{{ vault.postgres_password }}"
+    volumes:
+      - postgres_data:/var/lib/postgresql
+    networks:
+      - name: postgres_network
+
+- name: "Create docker container for pgadmin"
+  community.docker.docker_container:
+    name: pgadmin
+    image: dpage/pgadmin4:9
+    state: started
+    restart_policy: unless-stopped
+    restart: "{{ 'yes' if postgres_network.changed else 'no' }}"
+    pull: always
+    ports:
+      - 25008:80
+    env:
+      PGADMIN_DEFAULT_EMAIL: "{{ vault.my_email }}"
+      PGADMIN_DEFAULT_PASSWORD: "{{ vault.pgadmin_password }}"
+    networks:
+      - name: postgres_network

@@ -9,6 +9,7 @@
         docker_users:
           - "{{ ansible_user }}"
     - cifs
+    - postgres
     - role: caddy
       vars:
         caddy_proxies:
@@ -18,6 +19,9 @@
           - fqdn: videoin-be.i.krel.ing
             real_host: nas-docker.i.krel.ing
             real_port: 25004
+          - fqdn: pgadmin.i.krel.ing
+            real_host: nas-docker.i.krel.ing
+            real_port: 25008
 
   tasks:
     - name: Create docker volume for videoin media mount
