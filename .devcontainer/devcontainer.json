@@ -10,7 +10,9 @@
 			"injections": "ansible-lint"
 		},
 		// Needed for password authentication for SSH.
-		"ghcr.io/hspaans/devcontainer-features/sshpass:1": {}
+		"ghcr.io/hspaans/devcontainer-features/sshpass:1": {},
+		// Needed to avoid committing unencrypted vault.
+		"ghcr.io/devcontainers-extra/features/pre-commit:2": {}
 	},
 
 	"remoteEnv": {
