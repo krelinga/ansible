@@ -1,0 +1,9 @@
+repos:
+- repo: local
+  hooks:
+    - id: check-ansible-vault
+      name: Prevent Unencrypted Ansible Vaults
+      entry: ./.scripts/check_unencrypted_ansible_vault.sh
+      language: script
+      types: [file]
+      files: '.*vault\.yaml$'

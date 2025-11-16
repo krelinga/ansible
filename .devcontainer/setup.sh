@@ -10,3 +10,6 @@ ansible-galaxy collection install -r requirements.yaml -p ./.ansible/collections
 echo
 echo "injecting python requirements into ansible-core..."
 pipx inject ansible-core -r requirements.txt
+echo
+echo "installing pre-commit hooks..."
+pre-commit install
