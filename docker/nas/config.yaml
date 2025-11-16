@@ -10,6 +10,7 @@
           - "{{ ansible_user }}"
     - cifs
     - postgres
+    - video-manager
     - role: caddy
       vars:
         caddy_proxies:

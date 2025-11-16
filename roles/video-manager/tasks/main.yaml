@@ -1,0 +1,23 @@
+- name: Create docker volume for video-manager media mount
+  community.docker.docker_volume:
+    name: video-manager-media
+    state: present
+    driver: local
+    driver_options:
+      type: cifs
+      device: "//truenas.i.krel.ing/media"
+      o: "username=videoin,password={{ vault.videoin_smb_password }},file_mode=0660,dir_mode=0770,rw,vers=3.0"
+  register: video_manager_media
+
+- name: Create docker container for video-manager
+  community.docker.docker_container:
+    name: video-manager
+    image: krelinga/video-manager:latest
+    state: started
+    restart: "{{ 'yes' if video_manager_media.changed else 'no' }}"
+    restart_policy: unless-stopped
+    pull: always
+    ports:
+      - 25009:25009
+    volumes:
+      - video-manager-media:/nas/media
