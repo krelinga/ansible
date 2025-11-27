@@ -1,0 +1,3 @@
+---
+dependencies:
+  - role: truenas_unlock_certs
