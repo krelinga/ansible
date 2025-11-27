@@ -2,11 +2,6 @@
 
 set -e
 
-echo "Installing postgresql..."
-sudo apt-get update
-sudo apt-get install -y postgresql postgresql-contrib libpq-dev
-sudo apt-get clean && sudo rm -rf /var/lib/apt/lists/*
-echo
 echo "Installing ansible-galaxy roles..."
 ansible-galaxy role install -r requirements.yaml -p ./.ansible/roles --force
 echo

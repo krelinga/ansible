@@ -3,4 +3,4 @@ requests
 passlib
 git+https://github.com/truenas/api_client.git
 beautifulsoup4
-psycopg2
+psycopg2-binary
