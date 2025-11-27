@@ -193,6 +193,7 @@ def main():
 
     w = None
     try:
+        # TODO: take the host that was passed.
         # https://forums.truenas.com/t/getting-error-trying-to-connect-via-truenas-api-client-to-websockets-api-endpoint-api-current/28152
         with Client("wss://truenas.i.krel.ing/websocket", verify_ssl=False) as c:
             w = Wrapper(c, verbose)
