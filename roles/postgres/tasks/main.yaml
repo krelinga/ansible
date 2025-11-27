@@ -41,3 +41,43 @@
       PGADMIN_DEFAULT_PASSWORD: "{{ vault.pgadmin_password }}"
     networks:
       - name: postgres_network
+
+- name: "Wait for Postgres to be ready"
+  community.docker.docker_container_info:
+    name: postgres
+  register: postgres_info
+  until: postgres_info.container.State.Running
+  retries: 10
+  delay: 6  # seconds
+
+- name: "Ensure video_manager_prod database exists"
+  community.postgresql.postgresql_db:
+    name: video_manager_prod
+    state: present
+    login_user: postgres
+    login_password: "{{ vault.postgres_password }}"
+    login_host: "{{ inventory_hostname }}"
+  delegate_to: localhost
+
+- name: "Ensure video_manager_prod user exists"
+  community.postgresql.postgresql_user:
+    name: video_manager_prod
+    password: "{{ vault.video_manager_prod_postgres_password }}"
+    state: present
+    login_user: postgres
+    login_password: "{{ vault.postgres_password }}"
+    login_db: video_manager_prod
+    login_host: "{{ inventory_hostname }}"
+  delegate_to: localhost
+
+- name: "Grant all privileges on video_manager_prod database to video_manager_prod user"
+  community.postgresql.postgresql_privs:
+    state: present
+    privs: ALL
+    type: database
+    role: video_manager_prod
+    login_user: postgres
+    login_password: "{{ vault.postgres_password }}"
+    login_db: video_manager_prod
+    login_host: "{{ inventory_hostname }}"
+  delegate_to: localhost
