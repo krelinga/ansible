@@ -1,4 +1,4 @@
-- name: "Unlock TrueNAS pool"
+- name: "Unlock TrueNAS tank/certs dataset"
   hosts: truenas
   roles:
     - truenas_unlock_certs
