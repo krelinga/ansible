@@ -1,0 +1,11 @@
+- name: "Unlock TrueNAS pool"
+  hosts: truenas
+
+  tasks:
+    - name: "Unlock dataset tank/certs"
+      truenas_pool_unlock:
+        dataset_id: "tank/certs"
+        passphrase: "{{ vault.truenas_certs_volume_passphrase }}"
+        api_key: "{{ vault.trunas_certs_deploy_api_key }}"
+        host: "{{ inventory_hostname }}.i.krel.ing"
+      delegate_to: localhost
