@@ -2,7 +2,7 @@
   hosts: truenas
 
   tasks:
-    - name: "Unlock dataset tank/certs"
+    - name: "Ensure dataset tank/certs is unlocked"
       truenas_pool_unlock:
         dataset_id: "tank/certs"
         passphrase: "{{ vault.truenas_certs_volume_passphrase }}"
