@@ -21,3 +21,5 @@
       - 25009:25009
     volumes:
       - video-manager-media:/nas/media
+    env:
+      VIDEO_MANAGER_POSTGRES_PASSWORD: "{{ vault.video_manager_prod_postgres_password }}"
