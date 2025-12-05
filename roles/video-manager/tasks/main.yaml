@@ -27,3 +27,4 @@
       VIDEO_MANAGER_POSTGRES_DBNAME: video_manager_prod
       VIDEO_MANAGER_POSTGRES_USER: video_manager_prod
       VIDEO_MANAGER_POSTGRES_PASSWORD: "{{ vault.video_manager_prod_postgres_password }}"
+      VIDEO_MANAGER_INBOX_DVD_DIR: /nas/media/video-manager/inbox/dvds
