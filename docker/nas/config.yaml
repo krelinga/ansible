@@ -23,6 +23,7 @@
           - fqdn: pgadmin.i.krel.ing
             real_host: nas-docker.i.krel.ing
             real_port: 25008
+        caddy_serve_static_media: true
 
   tasks:
     - name: Create docker volume for videoin media mount

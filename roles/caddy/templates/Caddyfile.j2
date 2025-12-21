@@ -4,3 +4,11 @@
     reverse_proxy {{ item.real_host }}:{{ item.real_port }}
 }
 {% endfor %}
+
+{% if serve_static_media %}
+media-nas.i.krel.ing {
+    tls {{ cert_path }} {{ private_key_path }}
+    root * /nas/media
+    file_server
+}
+{% endif %}

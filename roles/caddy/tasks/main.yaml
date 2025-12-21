@@ -17,6 +17,17 @@
       # mfsymlinks is needed because certbot creates symlinks in this volume
       o: "username=certs_deploy,password={{ vault.certs_deploy_smb_password }},file_mode=0440,dir_mode=0550,ro,vers=3.0,mfsymlinks"
 
+- name: Ensure media volume exists
+  community.docker.docker_volume:
+    name: caddy_media
+    state: present
+    driver: local
+    driver_options:
+      type: cifs
+      device: "//truenas.i.krel.ing/media"
+      o: "username=kodi,password=kodi,file_mode=0440,dir_mode=0550,ro,vers=3.0"
+  when: caddy_serve_static_media
+
 - name: Create Caddyfile
   ansible.builtin.template:
     src: Caddyfile.j2
@@ -26,6 +37,7 @@
     proxies: "{{ caddy_proxies }}"
     cert_path: "/nas/certs/live/i.krel.ing/fullchain.pem"
     private_key_path: "/nas/certs/live/i.krel.ing/privkey.pem"
+    serve_static_media: "{{ caddy_serve_static_media }}"
   register: caddy_caddyfile
 
 - name: Create docker container for Caddy
@@ -44,3 +56,4 @@
       - caddy_config:/config
       - "/home/{{ ansible_user }}/Caddyfile:/etc/caddy/Caddyfile:ro"
       - caddy_certs:/nas/certs:ro
+      - "{{ 'caddy_media:/nas/media:ro' if caddy_serve_static_media else '' }}"

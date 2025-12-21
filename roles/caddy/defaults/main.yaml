@@ -1,0 +1,2 @@
+caddy_proxies: []  # List of proxy configurations for Caddy
+caddy_serve_static_media: false  # Whether to serve static media files
