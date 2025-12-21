@@ -56,4 +56,4 @@
       - caddy_config:/config
       - "/home/{{ ansible_user }}/Caddyfile:/etc/caddy/Caddyfile:ro"
       - caddy_certs:/nas/certs:ro
-      - "{{ 'caddy_media:/nas/media:ro' if caddy_serve_static_media else '' }}"
+      - "{{ 'caddy_media:/nas/media:ro' if caddy_serve_static_media else omit }}"
