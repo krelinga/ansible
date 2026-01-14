@@ -1,0 +1,5 @@
+dependencies:
+  - name: nvidia.nvidia_driver
+    vars:
+      nvidia_driver_branch: "580"
+    become: true

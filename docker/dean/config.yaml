@@ -9,7 +9,4 @@
         docker_users:
           - "{{ ansible_user }}"
     - cifs
-    - role: nvidia.nvidia_driver
-      become: true
-      vars:
-        nvidia_driver_branch: "580"
+    - nvidia_headless
