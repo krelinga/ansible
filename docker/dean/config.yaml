@@ -1,0 +1,15 @@
+- name: Config
+  hosts: dean-docker
+
+  roles:
+    - ssh_server
+    - role: geerlingguy.docker
+      become: true
+      vars:
+        docker_users:
+          - "{{ ansible_user }}"
+    - cifs
+    - role: nvidia.nvidia_driver
+      become: true
+      vars:
+        nvidia_driver_branch: "580"

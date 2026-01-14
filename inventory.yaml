@@ -82,6 +82,7 @@ opnsense:
 servers:
   hosts:
     truenas:
+    dean-docker:
     dev:
     dev-docker:
     nas-docker:

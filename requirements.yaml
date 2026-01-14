@@ -3,6 +3,7 @@ roles:
   - name: geerlingguy.pip
   - name: elliotweiser.osx-command-line-tools
   - name: gekmihesg.openwrt
+  - name: nvidia.nvidia_driver
 
 collections:
   - name: geerlingguy.mac
