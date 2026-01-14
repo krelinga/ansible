@@ -9,3 +9,11 @@
         pve_server_api_host: "dean-pve.i.krel.ing"  # TODO: use inventory_hostname?
         pve_server_root_password: "{{ vault.dean_pve_root_password }}"
         pve_server_node: dean
+        pve_server_vms:
+          - name: dean-docker
+            iso_url: "https://mirror.pilotfiber.com/ubuntu-iso/24.04/ubuntu-24.04.3-live-server-amd64.iso"
+            vmid: 200
+            mac_address: "BC:24:11:28:FD:E1"
+            cores: 46
+            memory_mb: 40960
+            disk_gb: 300
