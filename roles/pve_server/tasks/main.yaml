@@ -6,25 +6,76 @@
       - pve_server_node != ""
     fail_msg: "Required variables are not set. Please check your configuration."
 
-- name: Configure PVE Repositories
+- name: Discover ceph version
+  ansible.builtin.shell: |
+    set -o pipefail
+    ceph --version | awk '{print $5}'
+  register: pve_server_ceph_version
+  changed_when: false
+  failed_when: pve_server_ceph_version.rc != 0
+
+- name: Discover whether apt .sources or .list is being used
+  ansible.builtin.shell: |
+    if ls /etc/apt/sources.list.d/*.sources &> /dev/null; then
+      echo "sources"
+    else
+      echo "list"
+    fi
+  args:
+    executable: /bin/bash
+  register: pve_server_apt_source_type
+  changed_when: false
+  failed_when: pve_server_apt_source_type.rc != 0
+
+- name: Show pve_server_apt_source_type
+  ansible.builtin.debug:
+    msg: "Using apt source type: {{ pve_server_apt_source_type.stdout }}"
+
+- name: Configure PVE Repositories (.list)
   ansible.builtin.apt_repository:
     repo: "{{ item.repo }}"
     filename: "{{ item.filename }}"
     state: "{{ item.state }}"
     update_cache: false
   loop:
-    - repo: "deb http://download.proxmox.com/debian/pve bookworm pve-no-subscription"
+    - repo: "deb http://download.proxmox.com/debian/pve {{ ansible_distribution_release }} pve-no-subscription"
       filename: "pve-no-subscription"
       state: present
-    - repo: "deb https://enterprise.proxmox.com/debian/pve bookworm pve-enterprise"
+    - repo: "deb https://enterprise.proxmox.com/debian/pve {{ ansible_distribution_release }} pve-enterprise"
       filename: "pve-enterprise"
       state: absent
-    - repo: "deb http://download.proxmox.com/debian/ceph-quincy bookworm no-subscription"
+    - repo: "deb http://download.proxmox.com/debian/ceph-{{ pve_server_ceph_version.stdout }} {{ ansible_distribution_release }} no-subscription"
       filename: "ceph-no-subscription"
       state: present
-    - repo: "deb https://enterprise.proxmox.com/debian/ceph-quincy bookworm enterprise"
+    - repo: "deb https://enterprise.proxmox.com/debian/ceph-{{ pve_server_ceph_version.stdout }} {{ ansible_distribution_release }} enterprise"
       filename: "ceph-enterprise"
       state: absent
+  when: pve_server_apt_source_type.stdout == "list"
+
+- name: Configure PVE Repositories (.sources)
+  ansible.builtin.deb822_repository:
+    name: "{{ item.name }}"
+    types: deb
+    uris: "{{ item.uri }}"
+    suites: "{{ ansible_distribution_release }}"
+    signed_by: "/usr/share/keyrings/proxmox-archive-keyring.gpg"
+    state: "{{ item.state }}"
+    components:
+      - "{{ 'no-subscription' if 'no-subscription' in item.name else 'enterprise' }}"
+  loop:
+    - name: "pve-enterprise"
+      uri: "https://enterprise.proxmox.com/debian/pve"
+      state: absent
+    - name: "pve-no-subscription"
+      uri: "http://download.proxmox.com/debian/pve"
+      state: present
+    - name: "ceph"
+      uri: "http://download.proxmox.com/debian/ceph-{{ pve_server_ceph_version.stdout }}"
+      state: absent
+    - name: "ceph-no-subscription"
+      uri: "http://download.proxmox.com/debian/ceph-{{ pve_server_ceph_version.stdout }}"
+      state: present
+  when: pve_server_apt_source_type.stdout == "sources"
 
 - name: Update Apt Cache
   ansible.builtin.apt:

@@ -1,0 +1,11 @@
+- name: Config
+  hosts: dean-pve
+
+  tasks:
+    - name: Run pve_server role
+      ansible.builtin.include_role:
+        name: pve_server
+      vars:
+        pve_server_api_host: "dean-pve.i.krel.ing"  # TODO: use inventory_hostname?
+        pve_server_root_password: "{{ vault.dean_pve_root_password }}"
+        pve_server_node: dean
