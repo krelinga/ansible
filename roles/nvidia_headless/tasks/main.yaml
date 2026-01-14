@@ -1,0 +1,45 @@
+- name: Ensure NVIDIA GPG Key is added
+  ansible.builtin.shell: |
+    set -o pipefail
+    curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | sudo gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg
+  args:
+    creates: /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg
+    executable: /bin/bash
+  become: true
+  register: nvidia_headless_add_gpg_key
+
+- name: Ensure NVIDIA repository is added
+  ansible.builtin.shell: |
+    set -o pipefail
+    curl -s -L https://nvidia.github.io/libnvidia-container/stable/deb/nvidia-container-toolkit.list | sed 's#deb https://#deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://#g' | sudo tee /etc/apt/sources.list.d/nvidia-container-toolkit.list
+  args:
+    creates: /etc/apt/sources.list.d/nvidia-container-toolkit.list
+    executable: /bin/bash
+  become: true
+  register: nvidia_headless_add_repository
+
+- name: Update apt cache if NVIDIA repo was added
+  ansible.builtin.apt:
+    update_cache: yes
+  when: nvidia_headless_add_gpg_key.changed or nvidia_headless_add_repository.changed
+  become: true
+
+- name: Install NVIDIA container toolkit packages
+  ansible.builtin.apt:
+    name:
+      - "nvidia-container-toolkit={{ nvidia_headless_container_toolkit_version }}"
+      - "nvidia-container-toolkit-base={{ nvidia_headless_container_toolkit_version }}"
+      - "libnvidia-container-tools={{ nvidia_headless_container_toolkit_version }}"
+      - "libnvidia-container1={{ nvidia_headless_container_toolkit_version }}"
+    state: present
+  become: true
+
+- name: Configure NVIDIA container runtime for Docker
+  ansible.builtin.shell: |
+    set -o pipefail
+    sudo nvidia-ctk runtime configure --runtime=docker
+  args:
+    creates: /etc/docker/daemon.json
+    executable: /bin/bash
+  become: true
+  notify: Restart Docker
