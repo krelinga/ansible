@@ -65,6 +65,8 @@ pve:
       ansible_host: nas-pve.i.krel.ing
     dev-pve:
       ansible_host: dev-pve.i.krel.ing
+    dean-pve:
+      ansible_host: dean-pve.i.krel.ing
 
 opnsense:
   vars:
