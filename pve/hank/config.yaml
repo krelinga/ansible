@@ -13,7 +13,7 @@
           - name: hank-docker
             iso_url: "https://mirror.pilotfiber.com/ubuntu-iso/24.04/ubuntu-24.04.3-live-server-amd64.iso"
             vmid: 200
-            mac_address: "BC:24:11:28:FD:E1"
+            mac_address: "BC:24:11:28:FE:E1"
             cores: 46
             memory_mb: 40960
             disk_gb: 300
