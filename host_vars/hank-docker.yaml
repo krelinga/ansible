@@ -1,0 +1,3 @@
+ansible_host: hank-docker.i.krel.ing
+ansible_user: krelinga
+ansible_become_password: "{{ vault.krelinga_default_password }}"

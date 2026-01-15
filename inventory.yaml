@@ -87,5 +87,6 @@ servers:
     dean-docker:
     dev:
     dev-docker:
+    hank-docker:
     nas-docker:
     infrapi:
