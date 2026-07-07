@@ -90,5 +90,5 @@ servers:
     dev:
     dev-docker:
     hank-docker:
-    nas-docker:
+    billy-docker:
     infrapi:

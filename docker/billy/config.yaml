@@ -1,5 +1,5 @@
 - name: Config
-  hosts: nas-docker
+  hosts: billy-docker
 
   roles:
     - ssh_server
