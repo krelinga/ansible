@@ -1,0 +1,78 @@
+- name: Config
+  hosts: billy-pve
+
+  # roles:
+  #   - tls_cert_push
+
+  tasks:
+    # - name: Enable IOMMU
+    #   ansible.builtin.lineinfile:
+    #     path: "/etc/default/grub"
+    #     regexp: '^GRUB_CMDLINE_LINUX_DEFAULT='
+    #     line: 'GRUB_CMDLINE_LINUX_DEFAULT="quiet intel_iommu=on"'
+    #     state: present
+    #   notify: Update grub
+
+    - name: Update Grub and Reboot if Necessary
+      ansible.builtin.meta: flush_handlers
+
+    - name: Detect RAID Controller
+      ansible.builtin.shell: |
+        set -o pipefail
+        lspci -nnk | grep -i SAS2008 | grep -e "^[[:digit:]]" | cut -d " " -f 1
+      args:
+        executable: /usr/bin/bash
+      register: raid_controller
+      changed_when: false
+
+    - name: Define RAID Controller Passthrough Keys
+      ansible.builtin.set_fact:
+        raid_controller_keys: "{{ range(0, raid_controller.stdout_lines | length) | map('string') | map('regex_replace', '^(.*)', 'hostpci\\1') }}"
+
+    - name: Define RAID Controller Passthrough Values
+      ansible.builtin.set_fact:
+        raid_controller_values: "{{ raid_controller.stdout_lines | map('regex_replace', '^(.*)', '0000:\\1') }}"
+
+    - name: Define RAID Controller Passthrough Map
+      ansible.builtin.set_fact:
+        raid_controller_map: >-
+          {{ raid_controller_values |
+             zip(raid_controller_keys) |
+             map('reverse') |
+             community.general.dict }}
+
+    - name: Run pve_server role
+      ansible.builtin.include_role:
+        name: pve_server
+      vars:
+        pve_server_api_host: "billy.i.krel.ing"  # TODO: use inventory_hostname?
+        pve_server_root_password: "{{ vault.nas_pve_root_password }}"
+        pve_server_node: billy
+        pve_server_vms:
+          - name: truenas
+            iso_url: "https://download-core.sys.truenas.net/13.0/STABLE/U6.7/x64/TrueNAS-13.0-U6.7.iso"
+            vmid: 100
+            mac_address: "BC:24:11:28:F3:E1"
+            cores: 10
+            memory_mb: 65536
+            disk_gb: 100
+            hostpci: "{{ raid_controller_map }}"
+          - name: nas-docker
+            iso_url: "https://mirror.pilotfiber.com/ubuntu-iso/24.04.3/ubuntu-24.04.3-live-server-amd64.iso"
+            vmid: 200
+            mac_address: "BC:24:11:28:F7:E1"
+            cores: 2
+            memory_mb: 8192
+            disk_gb: 100
+
+  handlers:
+    - name: Update grub
+      ansible.builtin.command:
+        cmd: "update-grub"
+      notify: Reboot
+      changed_when: true
+
+    - name: Reboot
+      ansible.builtin.reboot:
+        reboot_timeout: 600
+        test_command: uptime
