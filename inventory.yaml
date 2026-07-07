@@ -69,6 +69,8 @@ pve:
       ansible_host: dean-pve.i.krel.ing
     hank-pve:
       ansible_host: hank-pve.i.krel.ing
+    billy-pve:
+      ansible_host: billy.i.krel.ing
 
 opnsense:
   vars:
