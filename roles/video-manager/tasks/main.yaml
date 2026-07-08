@@ -22,7 +22,7 @@
     volumes:
       - video-manager-media:/nas/media
     env:
-      VIDEO_MANAGER_POSTGRES_HOST: nas-docker.i.krel.ing
+      VIDEO_MANAGER_POSTGRES_HOST: billy-docker.i.krel.ing
       VIDEO_MANAGER_POSTGRES_PORT: "5432"
       VIDEO_MANAGER_POSTGRES_DBNAME: video_manager_prod
       VIDEO_MANAGER_POSTGRES_USER: video_manager_prod

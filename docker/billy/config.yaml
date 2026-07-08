@@ -15,13 +15,13 @@
       vars:
         caddy_proxies:
           - fqdn: videoin.i.krel.ing
-            real_host: nas-docker.i.krel.ing
+            real_host: billy-docker.i.krel.ing
             real_port: 25005
           - fqdn: videoin-be.i.krel.ing
-            real_host: nas-docker.i.krel.ing
+            real_host: billy-docker.i.krel.ing
             real_port: 25004
           - fqdn: pgadmin.i.krel.ing
-            real_host: nas-docker.i.krel.ing
+            real_host: billy-docker.i.krel.ing
             real_port: 25008
         caddy_serve_static_media: true
 
@@ -77,4 +77,4 @@
           - 25005:3000
         env:
           NEXT_PUBLIC_IMG_URL_PREFIX: http://videoin-be.i.krel.ing
-          NEXT_PUBLIC_BACKEND_URL: http://nas-docker.i.krel.ing:25004
+          NEXT_PUBLIC_BACKEND_URL: http://billy-docker.i.krel.ing:25004

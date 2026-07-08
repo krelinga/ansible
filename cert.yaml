@@ -1,5 +1,5 @@
 - name: Fetch TLS cert
-  hosts: nas-docker
+  hosts: billy-docker
   roles:
     - tls_cert_fetch
 
@@ -22,7 +22,7 @@
 # TODO: when this playbook is run manually from semaphore, restarting the caddy container causes the UI to hang.
 # I should sweep this up when I consolidate critical infrastructure onto my infra pi.
 - name: Restart Caddy
-  hosts: nas-docker
+  hosts: billy-docker
   tasks:
     - name: Restart caddy
       community.docker.docker_container:
