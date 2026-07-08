@@ -1,8 +1,8 @@
 - name: Config
   hosts: billy-pve
 
-  # roles:
-  #   - tls_cert_push
+  roles:
+    - tls_cert_push
 
   tasks:
     # - name: Enable IOMMU
