@@ -63,3 +63,7 @@
           password: "{{ vault.truenas_tcserver_smb_password }}"
           groups:
             - media_readwrite
+        - user: videoin
+          password: "{{ vault.videoin_smb_password }}"
+          groups:
+            - media_readwrite
