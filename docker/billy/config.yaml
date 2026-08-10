@@ -11,6 +11,9 @@
     - cifs
     - postgres
     - video-manager
+    - role: todoist_birthdays
+      vars:
+        todoist_birthdays_prometheus_port: 25010
     - role: caddy
       vars:
         caddy_proxies:

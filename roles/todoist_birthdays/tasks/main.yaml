@@ -1,0 +1,31 @@
+- name: Ensure Todoist Birthdays config directory exists
+  ansible.builtin.file:
+    path: /home/{{ ansible_user }}/todoist_birthdays
+    state: directory
+    mode: '0755'
+
+- name: Copy Todoist Birthdays config file
+  ansible.builtin.copy:
+    src: birthdays.yaml
+    dest: /home/{{ ansible_user }}/todoist_birthdays/config.yaml
+    mode: '0644'
+
+- name: Ensure Todoist Birthdays data volume exists.
+  community.docker.docker_volume:
+    name: todoist_birthdays_data
+    state: present
+
+- name: Create docker container for Todoist Birthdays
+  community.docker.docker_container:
+    name: todoist_birthdays
+    image: ghcr.io/krelinga/todoist-birthdays:1
+    restart_policy: always
+    pull: always
+    ports:
+      - "0.0.0.0:{{ todoist_birthdays_prometheus_port }}:9090"
+    env:
+      TODOIST_API_TOKEN: "{{ vault.todoist_api_token }}"
+      RUN_AT: "04:00"
+    volumes:
+      - /home/{{ ansible_user }}/todoist_birthdays/config.yaml:/config/config.yaml:ro
+      - todoist_birthdays_data:/data
