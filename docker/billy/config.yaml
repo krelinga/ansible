@@ -14,6 +14,9 @@
     - role: todoist_birthdays
       vars:
         todoist_birthdays_prometheus_port: 25010
+    - role: linear_todoist_sync
+      vars:
+        linear_todoist_sync_prometheus_port: 25011
     - role: caddy
       vars:
         caddy_proxies:

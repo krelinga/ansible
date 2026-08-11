@@ -1,0 +1,13 @@
+- name: Create docker container for Linear Todoist Sync
+  community.docker.docker_container:
+    name: linear_todoist_sync
+    image: ghcr.io/krelinga/linear-todoist-sync:1
+    restart_policy: always
+    pull: always
+    ports:
+      - "0.0.0.0:{{ linear_todoist_sync_prometheus_port }}:9464"
+    env:
+      LINEAR_API_KEY: "{{ vault.linear_api_token }}"
+      TODOIST_API_TOKEN: "{{ vault.todoist_api_token }}"
+      DIGEST_TIME: "04:00"
+      DIGEST_TIMEZONE: "America/Chicago"
