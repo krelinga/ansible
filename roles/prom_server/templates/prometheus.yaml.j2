@@ -6,3 +6,15 @@ scrape_configs:
 - job_name: 'semaphore'
   static_configs:
     - targets: ['exporter-sem.i.krel.ing']
+
+- job_name: 'todoist_birthdays'
+  static_configs:
+    - targets: ['billy-docker.i.krel.ing:25010']
+
+- job_name: 'linear_todoist_sync'
+  static_configs:
+    - targets: ['billy-docker.i.krel.ing:25011']
+
+- job_name: 'todoist_recur_tracker'
+  static_configs:
+    - targets: ['billy-docker.i.krel.ing:25012']
