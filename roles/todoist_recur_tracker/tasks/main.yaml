@@ -1,0 +1,18 @@
+- name: Ensure Todoist Recur Tracker data volume exists.
+  community.docker.docker_volume:
+    name: todoist_recur_tracker_data
+    state: present
+
+- name: Create docker container for Todoist Recur Tracker
+  community.docker.docker_container:
+    name: todoist_recur_tracker
+    image: ghcr.io/krelinga/todoist-recur-tracker:1
+    restart_policy: always
+    pull: always
+    ports:
+      - "0.0.0.0:{{ todoist_recur_tracker_prometheus_port }}:9090"
+    env:
+      TODOIST_API_TOKEN: "{{ vault.todoist_api_token }}"
+      STARTER_LABEL: "🔁"
+    volumes:
+      - todoist_recur_tracker_data:/app/data

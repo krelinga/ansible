@@ -17,6 +17,9 @@
     - role: linear_todoist_sync
       vars:
         linear_todoist_sync_prometheus_port: 25011
+    - role: todoist_recur_tracker
+      vars:
+        todoist_recur_tracker_prometheus_port: 25012
     - role: caddy
       vars:
         caddy_proxies:
