@@ -1,2 +1,5 @@
 # Callers must provide reasonable values for these variables.
 linear_todoist_sync_prometheus_port: 0
+
+# Variables with reasonable default values.
+linear_todoist_sync_poll_interval_seconds: 600
