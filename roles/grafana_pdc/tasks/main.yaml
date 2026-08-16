@@ -6,8 +6,14 @@
     restart_policy: unless-stopped
     restart: false
     pull: always
+    # -connections=3  # Redundant connections to help minimize downtime if one drops.
+    # -ssh-flag='-o ConnectTimeout=5'  # Elongate standard SSH connection timeout to help minimize effects of variable latency.
+    # -ssh-flag='-o ServerAliveInterval=15'  # Send keepalive message more-frequently to detect dead connections faster.
     command: >
       -token {{ vault.grafana_infrapi_pdc_token }}
       -cluster prod-us-east-0
       -gcloud-hosted-grafana-id 1376422
+      -connections=3
       -ssh-flag='-o PermitRemoteOpen=prom.i.krel.ing:443'
+      -ssh-flag='-o ConnectTimeout=5'
+      -ssh-flag='-o ServerAliveInterval=15'
