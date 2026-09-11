@@ -12,3 +12,4 @@
       DIGEST_TIME: "04:00"
       DIGEST_TIMEZONE: "America/Chicago"
       POLL_INTERVAL_SECONDS: "{{ linear_todoist_sync_poll_interval_seconds | string() }}"
+      TZ: "America/Chicago"
